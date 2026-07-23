@@ -1,12 +1,18 @@
 (() => {
-  const applyHomeLabels = () => {
+  const applyLabels = () => {
     const isEnglish = document.querySelector('.lang-en')?.classList.contains('is-active');
     const visualDesign = document.querySelector('[data-i18n="poster"]');
+    const visualDesignTitle = document.querySelector('[data-i18n="posterTitle"]');
     const platformOperations = document.querySelector('[data-i18n="video"]');
     const platformDescription = document.querySelector('[data-i18n="videoDesc"]');
 
-    if (visualDesign) visualDesign.textContent = isEnglish ? 'VISUAL DESIGN' : '视觉设计';
-    if (platformOperations) platformOperations.textContent = isEnglish ? 'PLATFORM OPERATIONS' : '平台运营';
+    const visualLabel = isEnglish ? 'VISUAL DESIGN' : '视觉设计';
+    if (visualDesign) visualDesign.textContent = visualLabel;
+    if (visualDesignTitle) visualDesignTitle.textContent = isEnglish ? 'Visual Design' : '视觉设计';
+
+    if (platformOperations) {
+      platformOperations.textContent = isEnglish ? 'PLATFORM OPERATIONS' : '平台运营';
+    }
     if (platformDescription) {
       platformDescription.textContent = isEnglish
         ? 'Content strategy, account operations & growth'
@@ -15,9 +21,9 @@
   };
 
   const init = () => {
-    applyHomeLabels();
+    applyLabels();
     document.querySelector('.lang-toggle')?.addEventListener('click', () => {
-      window.setTimeout(applyHomeLabels, 0);
+      window.setTimeout(applyLabels, 0);
     });
   };
 
