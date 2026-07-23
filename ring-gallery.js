@@ -21,15 +21,15 @@
     const track = viewport?.querySelector('.gallery-track');
     const previous = document.querySelector('[data-gallery-prev="poster"]');
     const next = document.querySelector('[data-gallery-next="poster"]');
-    const counter = viewport?.closest('.poster-scene')?.querySelector('.gallery-current');
-    const total = viewport?.closest('.poster-scene')?.querySelector('.gallery-total');
+    const scene = viewport?.closest('.poster-scene');
+    const counter = scene?.querySelector('.gallery-current');
+    const total = scene?.querySelector('.gallery-total');
     if (!viewport || !track || !previous || !next || !counter || !total) return;
 
     let cards = [];
     let position = 0;
     let target = 0;
     let dragging = false;
-    let dragStartX = 0;
     let lastX = 0;
     let dragDistance = 0;
     let velocity = 0;
@@ -51,18 +51,33 @@
       }
       if (title) title.textContent = isChinese() ? zh : en;
       if (date) date.textContent = year;
+      clone.dataset.extraZh = zh;
+      clone.dataset.extraEn = en;
       clone.setAttribute('aria-label', isChinese() ? zh : en);
       clone.addEventListener('click', () => source.click());
       clone.addEventListener('mouseenter', () => document.querySelector('.cursor-dot')?.classList.add('is-hover'));
       clone.addEventListener('mouseleave', () => document.querySelector('.cursor-dot')?.classList.remove('is-hover'));
     };
 
+    const refreshExtraLanguage = () => {
+      cards.slice(6).forEach(card => {
+        const title = card.querySelector('.card-copy b');
+        const label = isChinese() ? card.dataset.extraZh : card.dataset.extraEn;
+        if (title && label) title.textContent = label;
+        if (label) card.setAttribute('aria-label', label);
+      });
+    };
+
     const buildTwelve = () => {
       if (rebuilding) return;
       const existing = [...track.querySelectorAll('.gallery-card')];
-      if (!existing.length || existing.length === TOTAL) {
+      if (!existing.length) return;
+
+      if (existing.length === TOTAL) {
         cards = existing;
+        cards.forEach((card, index) => { card.dataset.ringIndex = String(index); });
         total.textContent = String(TOTAL).padStart(2, '0');
+        refreshExtraLanguage();
         return;
       }
 
@@ -76,6 +91,7 @@
         decorateClone(clone, extra, source);
         track.appendChild(clone);
       });
+
       cards = [...track.querySelectorAll('.gallery-card')];
       cards.forEach((card, index) => {
         card.dataset.ringIndex = String(index);
@@ -88,15 +104,17 @@
       rebuilding = false;
     };
 
-    const observer = new MutationObserver(() => {
-      window.requestAnimationFrame(buildTwelve);
-    });
+    const observer = new MutationObserver(() => requestAnimationFrame(buildTwelve));
     observer.observe(track, { childList: true });
     buildTwelve();
 
-    const scheduleSnap = (delay = 420) => {
-      window.clearTimeout(snapTimer);
-      snapTimer = window.setTimeout(() => {
+    document.querySelector('.lang-toggle')?.addEventListener('click', () => {
+      setTimeout(refreshExtraLanguage, 0);
+    });
+
+    const scheduleSnap = (delay = 460) => {
+      clearTimeout(snapTimer);
+      snapTimer = setTimeout(() => {
         if (!dragging && !edgeDirection) target = Math.round(target);
       }, delay);
     };
@@ -104,7 +122,7 @@
     const moveBy = amount => {
       target += amount;
       velocity = 0;
-      scheduleSnap(260);
+      scheduleSnap(280);
     };
 
     const interceptButton = (button, amount) => {
@@ -121,21 +139,21 @@
       event.preventDefault();
       event.stopImmediatePropagation();
       const delta = event.deltaY || event.deltaX;
-      target += delta * 0.0017;
-      velocity = delta * 0.00012;
-      scheduleSnap(520);
+      target += delta * 0.00135;
+      velocity = delta * 0.00008;
+      scheduleSnap(560);
     }, { capture: true, passive: false });
 
     viewport.addEventListener('pointerdown', event => {
       event.stopImmediatePropagation();
       dragging = true;
-      dragStartX = lastX = event.clientX;
+      lastX = event.clientX;
       dragDistance = 0;
       velocity = 0;
       edgeDirection = 0;
       viewport.classList.add('is-dragging');
       viewport.setPointerCapture?.(event.pointerId);
-      window.clearTimeout(snapTimer);
+      clearTimeout(snapTimer);
     }, true);
 
     viewport.addEventListener('pointermove', event => {
@@ -143,19 +161,20 @@
       const rect = viewport.getBoundingClientRect();
       if (dragging) {
         const dx = event.clientX - lastX;
-        const spacing = Math.max(210, rect.width * 0.135);
+        const spacing = Math.max(290, rect.width * 0.19);
         const step = -dx / spacing;
         target += step;
-        velocity = velocity * 0.52 + step * 0.48;
+        velocity = velocity * 0.58 + step * 0.42;
         dragDistance += Math.abs(dx);
         lastX = event.clientX;
         return;
       }
+
       if (event.pointerType === 'touch') return;
       const relativeX = (event.clientX - rect.left) / rect.width;
-      edgeDirection = relativeX < 0.16 ? -1 : relativeX > 0.84 ? 1 : 0;
-      if (edgeDirection) window.clearTimeout(snapTimer);
-      else scheduleSnap(500);
+      edgeDirection = relativeX < 0.13 ? -1 : relativeX > 0.87 ? 1 : 0;
+      if (edgeDirection) clearTimeout(snapTimer);
+      else scheduleSnap(520);
     }, true);
 
     const endDrag = event => {
@@ -164,15 +183,15 @@
       dragging = false;
       viewport.classList.remove('is-dragging');
       viewport.releasePointerCapture?.(event.pointerId);
-      target += velocity * 7.5;
-      scheduleSnap(560);
+      target += velocity * 5.2;
+      scheduleSnap(600);
     };
     viewport.addEventListener('pointerup', endDrag, true);
     viewport.addEventListener('pointercancel', endDrag, true);
     viewport.addEventListener('pointerleave', event => {
       if (!dragging) {
         edgeDirection = 0;
-        scheduleSnap(420);
+        scheduleSnap(450);
       }
       event.stopImmediatePropagation();
     }, true);
@@ -188,28 +207,39 @@
     const render = () => {
       if (!cards.length) cards = [...track.querySelectorAll('.gallery-card')];
       const width = viewport.getBoundingClientRect().width || window.innerWidth;
-      const radius = Math.min(860, Math.max(520, width * 0.45));
+      const mobile = width < 900;
+
+      /* A wide radius creates the airy inner-ring spacing seen in the reference. */
+      const radiusX = mobile
+        ? Math.max(680, width * 1.35)
+        : Math.min(1650, Math.max(1040, width * 0.84));
+      const angleStep = mobile ? 0.31 : 0.245;
 
       cards.forEach((card, index) => {
         const delta = wrappedDelta(index, position, TOTAL);
         const absolute = Math.abs(delta);
-        const angle = delta * 0.245;
-        const x = Math.sin(angle) * radius;
-        const z = -285 * Math.cos(angle);
-        const y = Math.pow(Math.min(absolute, 5), 1.35) * 5.3;
-        const scale = Math.min(1.18, 0.70 + absolute * 0.115);
-        const scaleY = Math.min(1.12, 0.76 + absolute * 0.085);
-        const rotation = -angle * 0.56 * (180 / Math.PI);
-        const opacity = absolute > 5.65 ? 0 : Math.max(0.22, 1 - Math.max(0, absolute - 4.15) * 0.52);
+        const angle = delta * angleStep;
+        const curve = 1 - Math.cos(angle);
+
+        const x = Math.sin(angle) * radiusX;
+        const z = -360 + curve * (mobile ? 760 : 1100);
+        const y = Math.pow(Math.min(absolute, 3.2), 1.45) * (mobile ? 3.5 : 5.5);
+        const scaleX = Math.min(1.09, 0.80 + absolute * 0.095);
+        const scaleY = Math.min(1.06, 0.80 + absolute * 0.085);
+        const rotation = -angle * 0.80 * (180 / Math.PI);
+
+        let opacity = 1;
+        if (absolute > 2.7) opacity = Math.max(0, 1 - (absolute - 2.7) / 0.7);
+        if (absolute > 3.4) opacity = 0;
 
         card.style.setProperty('--ring-x', `${x.toFixed(2)}px`);
         card.style.setProperty('--ring-y', `${y.toFixed(2)}px`);
         card.style.setProperty('--ring-z', `${z.toFixed(2)}px`);
         card.style.setProperty('--ring-rotate', `${rotation.toFixed(2)}deg`);
-        card.style.setProperty('--ring-scale-x', scale.toFixed(4));
+        card.style.setProperty('--ring-scale-x', scaleX.toFixed(4));
         card.style.setProperty('--ring-scale-y', scaleY.toFixed(4));
         card.style.setProperty('--ring-opacity', opacity.toFixed(3));
-        card.style.setProperty('--ring-visibility', opacity < 0.03 ? 'hidden' : 'visible');
+        card.style.setProperty('--ring-visibility', opacity < 0.02 ? 'hidden' : 'visible');
         card.style.zIndex = String(1000 + Math.round(z));
         card.dataset.ringActive = absolute < 0.5 ? 'true' : 'false';
       });
@@ -219,12 +249,12 @@
     };
 
     const animate = () => {
-      if (edgeDirection && !dragging) target += edgeDirection * 0.0125;
-      if (!dragging && Math.abs(velocity) > 0.00008) {
+      if (edgeDirection && !dragging) target += edgeDirection * 0.008;
+      if (!dragging && Math.abs(velocity) > 0.00006) {
         target += velocity;
-        velocity *= 0.94;
+        velocity *= 0.935;
       }
-      position += (target - position) * 0.095;
+      position += (target - position) * 0.075;
 
       if (Math.abs(position) > 1200 || Math.abs(target) > 1200) {
         const shift = Math.trunc(position / TOTAL) * TOTAL;
@@ -233,7 +263,7 @@
       }
 
       render();
-      window.requestAnimationFrame(animate);
+      requestAnimationFrame(animate);
     };
     animate();
   };
