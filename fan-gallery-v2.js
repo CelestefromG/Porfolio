@@ -8,9 +8,9 @@
     ['动态视觉关键帧','Motion Keyframe Study','VIS-11','2025','#d7dfe6','conic-gradient(from 40deg at 56% 48%,#3e536a 0 12%,transparent 12% 27%,#df6f73 27% 42%,transparent 42% 72%,#e9c85e 72% 82%,transparent 82%)'],
     ['个人视觉实验档案','Personal Visual Archive','VIS-12','2023–26','#dedbd6','radial-gradient(circle at 52% 48%,transparent 0 18%,#15171b 18.5% 20%,transparent 20.5%),linear-gradient(135deg,transparent 0 48%,#a8b7c5 48% 52%,transparent 52%)']
   ];
-  const lanes=[-1.18,.42,1.08,-.52,.86,-1.02,.18,-.74,1.26,-.16,.68,-1.30];
+  const lanes=[-.72,.28,.82,-.35,.58,-.62,.12,-.48,.74,-.18,.42,-.78];
   const mod=(v,n)=>((v%n)+n)%n;
-  const delta=(i,p,n)=>{let d=mod(i-p,n);if(d>n/2)d-=n;return d};
+  const wrapped=(i,p,n)=>{let d=mod(i-p,n);if(d>n/2)d-=n;return d};
 
   const init=()=>{
     const viewport=document.querySelector('[data-gallery="poster"]');
@@ -22,13 +22,13 @@
     const total=scene?.querySelector('.gallery-total');
     if(!viewport||!track||!prev||!next||!current||!total)return;
 
-    let cards=[],position=-.5,target=-.5,dragging=false,lastX=0,dragDistance=0,velocity=0,edge=0,snapTimer;
+    let cards=[], originals=[], position=-.5,target=-.5,dragging=false,lastX=0,startX=0,velocity=0,edge=0,snapTimer;
     const isZh=()=>document.querySelector('.lang-cn')?.classList.contains('is-active');
 
     const rebuild=()=>{
       const existing=[...track.querySelectorAll('.gallery-card')];
       if(!existing.length)return false;
-      const originals=existing.slice(0,6);
+      originals=existing.slice(0,6);
       track.replaceChildren(...originals);
       EXTRA.forEach((meta,i)=>{
         const source=originals[i%originals.length];
@@ -40,54 +40,66 @@
         if(art){art.dataset.code=code;art.style.setProperty('--card-bg',bg);art.style.setProperty('--card-pattern',pattern)}
         if(title)title.textContent=isZh()?zh:en;
         if(date)date.textContent=year;
-        clone.dataset.extraZh=zh;clone.dataset.extraEn=en;
-        clone.addEventListener('click',e=>{e.stopPropagation();source.click()});
+        clone.dataset.extraZh=zh;clone.dataset.extraEn=en;clone.dataset.sourceIndex=String(i%originals.length);
         track.appendChild(clone);
       });
       cards=[...track.querySelectorAll('.gallery-card')];
       total.textContent='12';
       return true;
     };
-
-    const observer=new MutationObserver(()=>{if(track.querySelectorAll('.gallery-card').length!==TOTAL)requestAnimationFrame(rebuild)});
-    observer.observe(track,{childList:true});
     if(!rebuild())return;
 
     document.querySelector('.lang-toggle')?.addEventListener('click',()=>setTimeout(()=>{
       cards.slice(6).forEach(card=>{const t=card.querySelector('.card-copy b');if(t)t.textContent=isZh()?card.dataset.extraZh:card.dataset.extraEn});
     },0));
 
-    const snap=(delay=520)=>{clearTimeout(snapTimer);snapTimer=setTimeout(()=>{if(!dragging&&!edge)target=Math.round(target+.5)-.5},delay)};
+    const snap=(delay=480)=>{clearTimeout(snapTimer);snapTimer=setTimeout(()=>{if(!dragging&&!edge)target=Math.round(target+.5)-.5},delay)};
     const move=n=>{target+=n;velocity=0;snap(260)};
     prev.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();move(-1)},true);
     next.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();move(1)},true);
 
-    viewport.addEventListener('wheel',e=>{e.preventDefault();const d=e.deltaY||e.deltaX;target+=d*.001;velocity=d*.00005;snap(620)},{passive:false});
-    viewport.addEventListener('pointerdown',e=>{dragging=true;lastX=e.clientX;dragDistance=0;velocity=0;edge=0;viewport.classList.add('is-dragging');viewport.setPointerCapture?.(e.pointerId);clearTimeout(snapTimer)});
+    viewport.addEventListener('wheel',e=>{e.preventDefault();const d=e.deltaY||e.deltaX;target+=d*.001;velocity=d*.00005;snap(600)},{passive:false});
+    viewport.addEventListener('pointerdown',e=>{dragging=true;lastX=startX=e.clientX;velocity=0;edge=0;viewport.classList.add('is-dragging');viewport.setPointerCapture?.(e.pointerId);clearTimeout(snapTimer)});
     viewport.addEventListener('pointermove',e=>{
       const rect=viewport.getBoundingClientRect();
-      if(dragging){const dx=e.clientX-lastX;const step=-dx/Math.max(330,rect.width*.215);target+=step;velocity=velocity*.62+step*.38;dragDistance+=Math.abs(dx);lastX=e.clientX;return}
+      if(dragging){const dx=e.clientX-lastX;const step=-dx/Math.max(300,rect.width*.19);target+=step;velocity=velocity*.58+step*.42;lastX=e.clientX;return}
       if(e.pointerType==='touch')return;
-      const x=(e.clientX-rect.left)/rect.width;edge=x<.12?-1:x>.88?1:0;if(!edge)snap(560);else clearTimeout(snapTimer);
+      const x=(e.clientX-rect.left)/rect.width;edge=x<.12?-1:x>.88?1:0;if(!edge)snap(520);else clearTimeout(snapTimer);
     });
-    const end=e=>{if(!dragging)return;dragging=false;viewport.classList.remove('is-dragging');viewport.releasePointerCapture?.(e.pointerId);target+=velocity*4.6;snap(680)};
-    viewport.addEventListener('pointerup',end);viewport.addEventListener('pointercancel',end);viewport.addEventListener('pointerleave',()=>{if(!dragging){edge=0;snap(500)}});
-    viewport.addEventListener('click',e=>{if(dragDistance>8){e.preventDefault();e.stopPropagation()}dragDistance=0},true);
+
+    const openCard=(card)=>{
+      const sourceIndex=card.dataset.sourceIndex;
+      const source=sourceIndex==null?card:originals[Number(sourceIndex)];
+      if(typeof source?.onclick==='function') source.onclick.call(source,new MouseEvent('click',{bubbles:true,cancelable:true}));
+      else source?.click();
+    };
+
+    const end=e=>{
+      if(!dragging)return;
+      const travel=Math.abs(e.clientX-startX);
+      dragging=false;viewport.classList.remove('is-dragging');viewport.releasePointerCapture?.(e.pointerId);
+      if(travel<9){const card=e.target.closest('.gallery-card');if(card)openCard(card)}
+      else{target+=velocity*4.2;snap(620)}
+    };
+    viewport.addEventListener('pointerup',end);
+    viewport.addEventListener('pointercancel',end);
+    viewport.addEventListener('pointerleave',()=>{if(!dragging){edge=0;snap(460)}});
+    viewport.addEventListener('click',e=>e.preventDefault(),true);
 
     const render=()=>{
-      const rect=viewport.getBoundingClientRect();const width=rect.width||innerWidth;const mobile=width<900;const unit=mobile?Math.max(110,width*.22):Math.max(175,width*.098);
+      const rect=viewport.getBoundingClientRect();const width=rect.width||innerWidth;const mobile=width<900;const unit=mobile?Math.max(118,width*.23):Math.max(175,width*.105);
       cards.forEach((card,i)=>{
-        const d=delta(i,position,TOTAL),a=Math.abs(d),side=d<0?-1:1,lane=lanes[i%lanes.length];
-        const x=side*unit*(.62+a*1.1+a*a*.08);
-        const y=lane*(mobile?52:92)+lane*Math.min(a,4)*(mobile?3:6);
-        const z=(mobile?-540:-700)+Math.min(a,5.1)*(mobile?92:120);
-        const ry=side*(82-Math.min(a,5)*12.4),rx=lane*-5.4,rz=lane*2.15-side*1.15,scale=Math.min(1.08,(mobile?.68:.70)+a*.076);
-        let opacity=1;if(a>4.7)opacity=Math.max(0,1-(a-4.7)/.65);if(a>5.35)opacity=0;
-        card.style.setProperty('--fan-x',`${x}px`);card.style.setProperty('--fan-y',`${y}px`);card.style.setProperty('--fan-z',`${z}px`);card.style.setProperty('--fan-ry',`${ry}deg`);card.style.setProperty('--fan-rx',`${rx}deg`);card.style.setProperty('--fan-rz',`${rz}deg`);card.style.setProperty('--fan-scale',scale);card.style.setProperty('--fan-opacity',opacity);card.style.setProperty('--fan-visibility',opacity<.02?'hidden':'visible');card.style.zIndex=String(1000+Math.round(z));card.dataset.fanNear=a>3.2&&a<5.1?'true':'false';
+        const d=wrapped(i,position,TOTAL),a=Math.abs(d),side=d<0?-1:1,lane=lanes[i%lanes.length];
+        const x=side*unit*(.78+a*1.02+a*a*.035);
+        const y=lane*(mobile?52:78)+lane*Math.min(a,4)*(mobile?2:4);
+        const z=(mobile?-310:-290)+Math.min(a,4.8)*(mobile?54:66);
+        const ry=side*(56-Math.min(a,4.8)*7.2),rx=lane*-3.2,rz=lane*1.5-side*.7,scale=Math.min(1.08,(mobile?.78:.80)+a*.052);
+        let opacity=1;if(a>4.6)opacity=Math.max(0,1-(a-4.6)/.75);if(a>5.35)opacity=0;
+        card.style.setProperty('--fan-x',`${x}px`);card.style.setProperty('--fan-y',`${y}px`);card.style.setProperty('--fan-z',`${z}px`);card.style.setProperty('--fan-ry',`${ry}deg`);card.style.setProperty('--fan-rx',`${rx}deg`);card.style.setProperty('--fan-rz',`${rz}deg`);card.style.setProperty('--fan-scale',scale);card.style.setProperty('--fan-opacity',opacity);card.style.setProperty('--fan-visibility',opacity<.02?'hidden':'visible');card.style.zIndex=String(1000+Math.round(z));card.dataset.fanNear=a>2.8&&a<5?'true':'false';
       });
       current.textContent=String(mod(Math.round(position+.5),TOTAL)+1).padStart(2,'0');
     };
-    const animate=()=>{if(edge&&!dragging)target+=edge*.0065;if(!dragging&&Math.abs(velocity)>.000045){target+=velocity;velocity*=.94}position+=(target-position)*.067;if(Math.abs(position)>1200||Math.abs(target)>1200){const s=Math.trunc(position/TOTAL)*TOTAL;position-=s;target-=s}render();requestAnimationFrame(animate)};animate();
+    const animate=()=>{if(edge&&!dragging)target+=edge*.006;if(!dragging&&Math.abs(velocity)>.00004){target+=velocity;velocity*=.94}position+=(target-position)*.072;if(Math.abs(position)>1200||Math.abs(target)>1200){const s=Math.trunc(position/TOTAL)*TOTAL;position-=s;target-=s}render();requestAnimationFrame(animate)};animate();
   };
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
