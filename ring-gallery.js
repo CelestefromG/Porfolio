@@ -9,6 +9,7 @@
     ['个人视觉实验档案', 'Personal Visual Archive', 'VIS-12', '2023–26', '#dedbd6', 'radial-gradient(circle at 52% 48%, transparent 0 18%, #15171b 18.5% 20%, transparent 20.5%), linear-gradient(135deg, transparent 0 48%, #a8b7c5 48% 52%, transparent 52%)']
   ];
 
+  const LANES = [-1.25, .38, 1.12, -.48, .82, -1.02, .16, -.72, 1.30, -.12, .64, -1.34];
   const modulo = (value, length) => ((value % length) + length) % length;
   const wrappedDelta = (index, position, length) => {
     let delta = modulo(index - position, length);
@@ -27,8 +28,8 @@
     if (!viewport || !track || !previous || !next || !counter || !total) return;
 
     let cards = [];
-    let position = 0;
-    let target = 0;
+    let position = -0.5;
+    let target = -0.5;
     let dragging = false;
     let lastX = 0;
     let dragDistance = 0;
@@ -75,7 +76,7 @@
 
       if (existing.length === TOTAL) {
         cards = existing;
-        cards.forEach((card, index) => { card.dataset.ringIndex = String(index); });
+        cards.forEach((card, index) => { card.dataset.fanIndex = String(index); });
         total.textContent = String(TOTAL).padStart(2, '0');
         refreshExtraLanguage();
         return;
@@ -94,7 +95,7 @@
 
       cards = [...track.querySelectorAll('.gallery-card')];
       cards.forEach((card, index) => {
-        card.dataset.ringIndex = String(index);
+        card.dataset.fanIndex = String(index);
         card.style.removeProperty('--offset');
         card.style.removeProperty('--abs-offset');
         card.style.removeProperty('--opacity');
@@ -112,17 +113,17 @@
       setTimeout(refreshExtraLanguage, 0);
     });
 
-    const scheduleSnap = (delay = 460) => {
+    const scheduleSnap = (delay = 480) => {
       clearTimeout(snapTimer);
       snapTimer = setTimeout(() => {
-        if (!dragging && !edgeDirection) target = Math.round(target);
+        if (!dragging && !edgeDirection) target = Math.round(target + 0.5) - 0.5;
       }, delay);
     };
 
     const moveBy = amount => {
       target += amount;
       velocity = 0;
-      scheduleSnap(280);
+      scheduleSnap(300);
     };
 
     const interceptButton = (button, amount) => {
@@ -139,9 +140,9 @@
       event.preventDefault();
       event.stopImmediatePropagation();
       const delta = event.deltaY || event.deltaX;
-      target += delta * 0.00135;
-      velocity = delta * 0.00008;
-      scheduleSnap(560);
+      target += delta * 0.00105;
+      velocity = delta * 0.000055;
+      scheduleSnap(620);
     }, { capture: true, passive: false });
 
     viewport.addEventListener('pointerdown', event => {
@@ -161,10 +162,10 @@
       const rect = viewport.getBoundingClientRect();
       if (dragging) {
         const dx = event.clientX - lastX;
-        const spacing = Math.max(290, rect.width * 0.19);
+        const spacing = Math.max(330, rect.width * 0.215);
         const step = -dx / spacing;
         target += step;
-        velocity = velocity * 0.58 + step * 0.42;
+        velocity = velocity * 0.62 + step * 0.38;
         dragDistance += Math.abs(dx);
         lastX = event.clientX;
         return;
@@ -172,9 +173,9 @@
 
       if (event.pointerType === 'touch') return;
       const relativeX = (event.clientX - rect.left) / rect.width;
-      edgeDirection = relativeX < 0.13 ? -1 : relativeX > 0.87 ? 1 : 0;
+      edgeDirection = relativeX < 0.12 ? -1 : relativeX > 0.88 ? 1 : 0;
       if (edgeDirection) clearTimeout(snapTimer);
-      else scheduleSnap(520);
+      else scheduleSnap(560);
     }, true);
 
     const endDrag = event => {
@@ -183,15 +184,15 @@
       dragging = false;
       viewport.classList.remove('is-dragging');
       viewport.releasePointerCapture?.(event.pointerId);
-      target += velocity * 5.2;
-      scheduleSnap(600);
+      target += velocity * 4.6;
+      scheduleSnap(680);
     };
     viewport.addEventListener('pointerup', endDrag, true);
     viewport.addEventListener('pointercancel', endDrag, true);
     viewport.addEventListener('pointerleave', event => {
       if (!dragging) {
         edgeDirection = 0;
-        scheduleSnap(450);
+        scheduleSnap(500);
       }
       event.stopImmediatePropagation();
     }, true);
@@ -206,55 +207,54 @@
 
     const render = () => {
       if (!cards.length) cards = [...track.querySelectorAll('.gallery-card')];
-      const width = viewport.getBoundingClientRect().width || window.innerWidth;
+      const rect = viewport.getBoundingClientRect();
+      const width = rect.width || window.innerWidth;
       const mobile = width < 900;
-
-      /* A wide radius creates the airy inner-ring spacing seen in the reference. */
-      const radiusX = mobile
-        ? Math.max(680, width * 1.35)
-        : Math.min(1650, Math.max(1040, width * 0.84));
-      const angleStep = mobile ? 0.31 : 0.245;
+      const unit = mobile ? Math.max(112, width * 0.22) : Math.max(168, width * 0.094);
 
       cards.forEach((card, index) => {
         const delta = wrappedDelta(index, position, TOTAL);
         const absolute = Math.abs(delta);
-        const angle = delta * angleStep;
-        const curve = 1 - Math.cos(angle);
+        const side = delta < 0 ? -1 : 1;
+        const lane = LANES[index % LANES.length];
 
-        const x = Math.sin(angle) * radiusX;
-        const z = -360 + curve * (mobile ? 760 : 1100);
-        const y = Math.pow(Math.min(absolute, 3.2), 1.45) * (mobile ? 3.5 : 5.5);
-        const scaleX = Math.min(1.09, 0.80 + absolute * 0.095);
-        const scaleY = Math.min(1.06, 0.80 + absolute * 0.085);
-        const rotation = -angle * 0.80 * (180 / Math.PI);
+        const x = side * (unit * (0.72 + absolute * 1.08 + absolute * absolute * 0.075));
+        const y = lane * (mobile ? 54 : 91) + lane * Math.min(absolute, 4) * (mobile ? 3 : 6);
+        const z = (mobile ? -520 : -650) + Math.min(absolute, 5.1) * (mobile ? 88 : 112);
+
+        const rotateY = side * (80 - Math.min(absolute, 5) * 11.7);
+        const rotateX = lane * -5.2;
+        const rotateZ = lane * 2.1 - side * 1.1;
+        const scale = Math.min(1.09, (mobile ? .69 : .72) + absolute * .073);
 
         let opacity = 1;
-        if (absolute > 2.7) opacity = Math.max(0, 1 - (absolute - 2.7) / 0.7);
-        if (absolute > 3.4) opacity = 0;
+        if (absolute > 4.75) opacity = Math.max(0, 1 - (absolute - 4.75) / 0.65);
+        if (absolute > 5.4) opacity = 0;
 
-        card.style.setProperty('--ring-x', `${x.toFixed(2)}px`);
-        card.style.setProperty('--ring-y', `${y.toFixed(2)}px`);
-        card.style.setProperty('--ring-z', `${z.toFixed(2)}px`);
-        card.style.setProperty('--ring-rotate', `${rotation.toFixed(2)}deg`);
-        card.style.setProperty('--ring-scale-x', scaleX.toFixed(4));
-        card.style.setProperty('--ring-scale-y', scaleY.toFixed(4));
-        card.style.setProperty('--ring-opacity', opacity.toFixed(3));
-        card.style.setProperty('--ring-visibility', opacity < 0.02 ? 'hidden' : 'visible');
+        card.style.setProperty('--fan-x', `${x.toFixed(2)}px`);
+        card.style.setProperty('--fan-y', `${y.toFixed(2)}px`);
+        card.style.setProperty('--fan-z', `${z.toFixed(2)}px`);
+        card.style.setProperty('--fan-ry', `${rotateY.toFixed(2)}deg`);
+        card.style.setProperty('--fan-rx', `${rotateX.toFixed(2)}deg`);
+        card.style.setProperty('--fan-rz', `${rotateZ.toFixed(2)}deg`);
+        card.style.setProperty('--fan-scale', scale.toFixed(4));
+        card.style.setProperty('--fan-opacity', opacity.toFixed(3));
+        card.style.setProperty('--fan-visibility', opacity < 0.02 ? 'hidden' : 'visible');
         card.style.zIndex = String(1000 + Math.round(z));
-        card.dataset.ringActive = absolute < 0.5 ? 'true' : 'false';
+        card.dataset.fanNear = absolute > 3.2 && absolute < 5.1 ? 'true' : 'false';
       });
 
-      const active = modulo(Math.round(position), TOTAL);
+      const active = modulo(Math.round(position + 0.5), TOTAL);
       counter.textContent = String(active + 1).padStart(2, '0');
     };
 
     const animate = () => {
-      if (edgeDirection && !dragging) target += edgeDirection * 0.008;
-      if (!dragging && Math.abs(velocity) > 0.00006) {
+      if (edgeDirection && !dragging) target += edgeDirection * 0.0065;
+      if (!dragging && Math.abs(velocity) > 0.000045) {
         target += velocity;
-        velocity *= 0.935;
+        velocity *= 0.94;
       }
-      position += (target - position) * 0.075;
+      position += (target - position) * 0.067;
 
       if (Math.abs(position) > 1200 || Math.abs(target) > 1200) {
         const shift = Math.trunc(position / TOTAL) * TOTAL;
