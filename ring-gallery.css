@@ -1,0 +1,77 @@
+/* Poster gallery: inner cylindrical ring with a narrow centre and wider sides. */
+.poster-scene .gallery-viewport {
+  top: 24vh;
+  height: 66vh;
+  perspective: 1450px;
+  perspective-origin: 50% 48%;
+  overflow: hidden;
+  cursor: grab;
+  touch-action: none;
+}
+
+.poster-scene .gallery-viewport.is-dragging { cursor: grabbing; }
+
+.poster-scene .gallery-track {
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  transform: translate3d(-50%, -50%, 0);
+  transform-style: preserve-3d;
+}
+
+.poster-scene .gallery-card {
+  width: clamp(220px, 17vw, 330px) !important;
+  aspect-ratio: 16 / 10 !important;
+  opacity: var(--ring-opacity, 1) !important;
+  visibility: var(--ring-visibility, visible);
+  transform:
+    translate3d(calc(-50% + var(--ring-x, 0px)), calc(-50% + var(--ring-y, 0px)), var(--ring-z, -240px))
+    rotateY(var(--ring-rotate, 0deg))
+    scale(var(--ring-scale-x, .74), var(--ring-scale-y, .78)) !important;
+  transform-origin: 50% 50%;
+  transition: none !important;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+.poster-scene .gallery-art {
+  border: 1px solid rgba(15, 16, 19, .68);
+  box-shadow: 0 28px 55px rgba(21, 22, 27, .16);
+  transform: translateZ(0);
+}
+
+.poster-scene .gallery-card[data-ring-active="true"] .gallery-art {
+  box-shadow: 0 34px 75px rgba(21, 22, 27, .22);
+}
+
+.poster-scene .gallery-card:hover .gallery-art {
+  filter: brightness(1.035) contrast(1.02);
+}
+
+.poster-scene .gallery-viewport::before,
+.poster-scene .gallery-viewport::after {
+  width: 10vw;
+  opacity: .18;
+}
+
+.poster-scene .gallery-controls {
+  bottom: 28px;
+}
+
+.poster-scene .gallery-controls span {
+  min-width: 72px;
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .poster-scene .gallery-viewport {
+    top: 28vh;
+    height: 58vh;
+    perspective: 1000px;
+  }
+
+  .poster-scene .gallery-card {
+    width: clamp(190px, 56vw, 290px) !important;
+  }
+}
