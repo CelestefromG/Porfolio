@@ -1,0 +1,13 @@
+/* V2 poster wall: light-background radial fan around a central vanishing point. */
+.poster-scene{background:#f5f3ef}
+.poster-scene .gallery-viewport{top:20vh;height:72vh;perspective:1350px;perspective-origin:50% 50%;overflow:hidden;cursor:grab;touch-action:none}
+.poster-scene .gallery-viewport.is-dragging{cursor:grabbing}
+.poster-scene .gallery-track{left:50%;top:52%;width:0;height:0;transform:translate3d(-50%,-50%,0);transform-style:preserve-3d}
+.poster-scene .gallery-card{width:clamp(230px,17vw,340px)!important;aspect-ratio:16/10!important;opacity:var(--fan-opacity,0)!important;visibility:var(--fan-visibility,hidden);transform:translate3d(calc(-50% + var(--fan-x,0px)),calc(-50% + var(--fan-y,0px)),var(--fan-z,-700px)) rotateX(var(--fan-rx,0deg)) rotateY(var(--fan-ry,0deg)) rotateZ(var(--fan-rz,0deg)) scale(var(--fan-scale,.7))!important;transform-origin:50% 50%;transition:none!important;will-change:transform,opacity;backface-visibility:hidden}
+.poster-scene .gallery-art{border:1px solid rgba(15,16,19,.72);box-shadow:0 24px 58px rgba(25,27,33,.17);transform:translateZ(0);background-color:var(--card-bg)}
+.poster-scene .gallery-card[data-fan-near="true"] .gallery-art{box-shadow:0 35px 82px rgba(25,27,33,.24)}
+.poster-scene .gallery-card:hover .gallery-art{filter:brightness(1.045) contrast(1.025)}
+.poster-scene .gallery-viewport::before{content:"";position:absolute;left:50%;top:52%;width:min(44vw,760px);height:min(34vw,500px);transform:translate(-50%,-50%);background:radial-gradient(ellipse,rgba(45,49,58,.13),rgba(45,49,58,.035) 44%,transparent 72%);filter:blur(24px);pointer-events:none;opacity:.74}
+.poster-scene .gallery-viewport::after{content:"";position:absolute;left:50%;top:52%;width:1px;height:38%;transform:translate(-50%,-50%);background:linear-gradient(transparent,rgba(14,16,20,.22),transparent);pointer-events:none;opacity:.38}
+.poster-scene .gallery-controls{bottom:27px}.poster-scene .gallery-controls span{min-width:78px;text-align:center}
+@media(max-width:900px){.poster-scene .gallery-viewport{top:26vh;height:62vh;perspective:1000px}.poster-scene .gallery-card{width:clamp(200px,52vw,285px)!important}.poster-scene .gallery-track{top:52%}}
