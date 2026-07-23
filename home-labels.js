@@ -1,12 +1,20 @@
 (() => {
-  const POSTER_IMAGE = './assets/gufeng-poster-2024.jpg?v=20260724-1';
+  const VERSION = '20260724-2';
+  const visualWorks = [
+    { src: `./assets/poster1?v=${VERSION}`, custom: true },
+    { src: `./assets/poster2?v=${VERSION}` },
+    { src: `./assets/poster3?v=${VERSION}` },
+    { src: `./assets/visual4?v=${VERSION}` },
+    { src: `./assets/visual5?v=${VERSION}` },
+    { src: `./assets/visual6?v=${VERSION}` }
+  ];
 
   const isEnglish = () => document.querySelector('.lang-en')?.classList.contains('is-active');
 
-  const posterCopy = () => isEnglish()
+  const firstPosterCopy = () => isEnglish()
     ? {
         title: 'Chinese-style Poster',
-        description: 'A Chinese-style poster completed in December 2024, combining classical painting, seal-script details and calligraphic typography into a traditional visual composition.',
+        description: 'A Chinese-style poster completed in December 2024, combining classical painting, seal details and calligraphic typography into a traditional visual composition.',
         role: 'Visual design / poster layout',
         tools: 'Photoshop',
         year: '2024.12',
@@ -38,89 +46,103 @@
     }
   };
 
-  const getFirstPosterCard = () => document.querySelector('.poster-scene .gallery-track .gallery-card:first-child');
+  const applyVisualCards = () => {
+    const cards = [...document.querySelectorAll('.poster-scene .gallery-track .gallery-card')];
+    if (!cards.length) return;
 
-  const applyRealPoster = () => {
-    const card = getFirstPosterCard();
-    if (!card) return;
+    cards.slice(0, visualWorks.length).forEach((card, index) => {
+      const work = visualWorks[index];
+      const art = card.querySelector('.gallery-art');
+      if (!art) return;
 
-    const copy = posterCopy();
-    const art = card.querySelector('.gallery-art');
-    const title = card.querySelector('.card-copy b');
-    const year = card.querySelector('.card-copy span');
-
-    card.dataset.realPoster = 'gufeng-2024';
-    card.setAttribute('aria-label', copy.title);
-
-    if (art) {
-      art.dataset.code = 'VIS-01';
-      art.style.setProperty('--card-pattern', 'none');
-      art.style.backgroundImage = `url("${POSTER_IMAGE}")`;
+      card.dataset.visualIndex = String(index);
+      art.classList.add('has-real-image');
+      art.style.backgroundImage = `url("${work.src}")`;
       art.style.backgroundSize = 'cover';
-      art.style.backgroundPosition = 'center top';
+      art.style.backgroundPosition = 'center';
       art.style.backgroundRepeat = 'no-repeat';
-    }
-    if (title) title.textContent = copy.title;
-    if (year) year.textContent = copy.year;
+
+      if (index === 0) {
+        const copy = firstPosterCopy();
+        const title = card.querySelector('.card-copy b');
+        const year = card.querySelector('.card-copy span');
+        art.dataset.code = 'VIS-01';
+        card.setAttribute('aria-label', copy.title);
+        if (title) title.textContent = copy.title;
+        if (year) year.textContent = copy.year;
+      }
+    });
   };
 
-  const fillPosterDialog = () => {
+  const resetDialogVisual = () => {
+    const visual = document.querySelector('.dialog-visual');
+    if (!visual) return;
+    visual.classList.remove('has-real-image');
+    visual.style.removeProperty('background-image');
+    visual.style.removeProperty('background-size');
+    visual.style.removeProperty('background-position');
+    visual.style.removeProperty('background-repeat');
+    visual.style.removeProperty('background-color');
+  };
+
+  const applyDialogImage = index => {
     const dialog = document.querySelector('.project-dialog');
-    if (!dialog) return;
+    const visual = dialog?.querySelector('.dialog-visual');
+    const work = visualWorks[index];
+    if (!dialog || !visual || !work) return;
 
-    const copy = posterCopy();
-    const visual = dialog.querySelector('.dialog-visual');
-    const kicker = dialog.querySelector('.dialog-kicker');
-    const title = dialog.querySelector('h3');
-    const description = dialog.querySelector('.dialog-description');
-    const role = dialog.querySelector('.dialog-role');
-    const tools = dialog.querySelector('.dialog-tools');
-    const year = dialog.querySelector('.dialog-year');
-    const tags = dialog.querySelector('.dialog-tags');
+    visual.classList.add('has-real-image');
+    visual.style.backgroundImage = `url("${work.src}")`;
+    visual.style.backgroundSize = 'contain';
+    visual.style.backgroundPosition = 'center';
+    visual.style.backgroundRepeat = 'no-repeat';
+    visual.style.backgroundColor = '#e9e5dc';
 
-    dialog.dataset.customPoster = 'gufeng-2024';
-    if (visual) {
-      visual.style.backgroundImage = `url("${POSTER_IMAGE}")`;
-      visual.style.backgroundSize = 'contain';
-      visual.style.backgroundPosition = 'center';
-      visual.style.backgroundRepeat = 'no-repeat';
-      visual.style.backgroundColor = '#efe4ca';
+    if (index === 0) {
+      const copy = firstPosterCopy();
+      const kicker = dialog.querySelector('.dialog-kicker');
+      const title = dialog.querySelector('h3');
+      const description = dialog.querySelector('.dialog-description');
+      const role = dialog.querySelector('.dialog-role');
+      const tools = dialog.querySelector('.dialog-tools');
+      const year = dialog.querySelector('.dialog-year');
+      const tags = dialog.querySelector('.dialog-tags');
+
+      if (kicker) kicker.textContent = 'VIS-01 / VISUAL DESIGN';
+      if (title) title.textContent = copy.title;
+      if (description) description.textContent = copy.description;
+      if (role) role.textContent = copy.role;
+      if (tools) tools.textContent = copy.tools;
+      if (year) year.textContent = copy.year;
+      if (tags) tags.innerHTML = copy.tags.map(tag => `<span>${tag}</span>`).join('');
     }
-    if (kicker) kicker.textContent = 'VIS-01 / VISUAL DESIGN';
-    if (title) title.textContent = copy.title;
-    if (description) description.textContent = copy.description;
-    if (role) role.textContent = copy.role;
-    if (tools) tools.textContent = copy.tools;
-    if (year) year.textContent = copy.year;
-    if (tags) tags.innerHTML = copy.tags.map(tag => `<span>${tag}</span>`).join('');
-
-    if (!dialog.open) dialog.showModal();
   };
 
   const init = () => {
     applyLabels();
-    applyRealPoster();
+    applyVisualCards();
 
     const track = document.querySelector('.poster-scene .gallery-track');
     if (track) {
-      new MutationObserver(() => window.requestAnimationFrame(applyRealPoster))
+      new MutationObserver(() => requestAnimationFrame(applyVisualCards))
         .observe(track, { childList: true, subtree: true });
     }
 
     document.addEventListener('click', event => {
-      const card = event.target.closest('.poster-scene .gallery-card[data-real-poster="gufeng-2024"]');
+      if (event.target.closest('[data-project], .video-scene .gallery-card')) {
+        resetDialogVisual();
+      }
+
+      const card = event.target.closest('.poster-scene .gallery-card[data-visual-index]');
       if (!card) return;
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      fillPosterDialog();
-    }, true);
+      const index = Number(card.dataset.visualIndex);
+      window.setTimeout(() => applyDialogImage(index), 0);
+    });
 
     document.querySelector('.lang-toggle')?.addEventListener('click', () => {
       window.setTimeout(() => {
         applyLabels();
-        applyRealPoster();
-        const dialog = document.querySelector('.project-dialog');
-        if (dialog?.dataset.customPoster === 'gufeng-2024' && dialog.open) fillPosterDialog();
+        applyVisualCards();
       }, 0);
     });
   };
