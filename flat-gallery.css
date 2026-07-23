@@ -1,0 +1,48 @@
+/* Flat poster gallery override: one horizontal row, no arc, no 3D tilt. */
+.poster-scene .gallery-viewport {
+  top: 27vh;
+  height: 61vh;
+  perspective: none !important;
+}
+
+.poster-scene .gallery-track {
+  top: 50%;
+}
+
+.poster-scene .gallery-card {
+  width: min(20vw, 290px) !important;
+  aspect-ratio: 16 / 11 !important;
+  transform:
+    translate(-50%, -50%)
+    translateX(calc(var(--offset) * min(22vw, 330px))) !important;
+  opacity: clamp(.18, calc(1 - var(--abs-offset) * .16), 1) !important;
+  will-change: transform, opacity;
+}
+
+.poster-scene .gallery-art {
+  transform: none !important;
+  box-shadow: 0 22px 46px rgba(20, 22, 28, .15);
+}
+
+@media (max-width: 900px) {
+  .poster-scene .gallery-viewport {
+    top: 29vh;
+    height: 57vh;
+  }
+
+  .poster-scene .gallery-card {
+    width: min(38vw, 255px) !important;
+    transform:
+      translate(-50%, -50%)
+      translateX(calc(var(--offset) * min(41vw, 285px))) !important;
+  }
+}
+
+@media (max-width: 620px) {
+  .poster-scene .gallery-card {
+    width: 54vw !important;
+    transform:
+      translate(-50%, -50%)
+      translateX(calc(var(--offset) * 60vw)) !important;
+  }
+}
