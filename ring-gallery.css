@@ -1,8 +1,8 @@
-/* Poster gallery: inner cylindrical ring with a narrow centre and wider sides. */
+/* Poster gallery: an airy inner-cylinder layout inspired by the supplied reference. */
 .poster-scene .gallery-viewport {
   top: 24vh;
   height: 66vh;
-  perspective: 1450px;
+  perspective: 1550px;
   perspective-origin: 50% 48%;
   overflow: hidden;
   cursor: grab;
@@ -21,14 +21,18 @@
 }
 
 .poster-scene .gallery-card {
-  width: clamp(220px, 17vw, 330px) !important;
+  width: clamp(250px, 18vw, 350px) !important;
   aspect-ratio: 16 / 10 !important;
-  opacity: var(--ring-opacity, 1) !important;
-  visibility: var(--ring-visibility, visible);
+  opacity: var(--ring-opacity, 0) !important;
+  visibility: var(--ring-visibility, hidden);
   transform:
-    translate3d(calc(-50% + var(--ring-x, 0px)), calc(-50% + var(--ring-y, 0px)), var(--ring-z, -240px))
+    translate3d(
+      calc(-50% + var(--ring-x, 0px)),
+      calc(-50% + var(--ring-y, 0px)),
+      var(--ring-z, -360px)
+    )
     rotateY(var(--ring-rotate, 0deg))
-    scale(var(--ring-scale-x, .74), var(--ring-scale-y, .78)) !important;
+    scale(var(--ring-scale-x, .8), var(--ring-scale-y, .8)) !important;
   transform-origin: 50% 50%;
   transition: none !important;
   will-change: transform, opacity;
@@ -37,12 +41,12 @@
 
 .poster-scene .gallery-art {
   border: 1px solid rgba(15, 16, 19, .68);
-  box-shadow: 0 28px 55px rgba(21, 22, 27, .16);
+  box-shadow: 0 24px 52px rgba(21, 22, 27, .15);
   transform: translateZ(0);
 }
 
 .poster-scene .gallery-card[data-ring-active="true"] .gallery-art {
-  box-shadow: 0 34px 75px rgba(21, 22, 27, .22);
+  box-shadow: 0 28px 68px rgba(21, 22, 27, .2);
 }
 
 .poster-scene .gallery-card:hover .gallery-art {
@@ -51,14 +55,11 @@
 
 .poster-scene .gallery-viewport::before,
 .poster-scene .gallery-viewport::after {
-  width: 10vw;
-  opacity: .18;
+  width: 8vw;
+  opacity: .08;
 }
 
-.poster-scene .gallery-controls {
-  bottom: 28px;
-}
-
+.poster-scene .gallery-controls { bottom: 28px; }
 .poster-scene .gallery-controls span {
   min-width: 72px;
   text-align: center;
@@ -67,11 +68,11 @@
 @media (max-width: 900px) {
   .poster-scene .gallery-viewport {
     top: 28vh;
-    height: 58vh;
-    perspective: 1000px;
+    height: 60vh;
+    perspective: 1150px;
   }
 
   .poster-scene .gallery-card {
-    width: clamp(190px, 56vw, 290px) !important;
+    width: clamp(210px, 54vw, 300px) !important;
   }
 }
