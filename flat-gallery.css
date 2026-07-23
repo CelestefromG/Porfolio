@@ -27,6 +27,34 @@
   box-shadow: 0 22px 46px rgba(20, 22, 28, .15);
 }
 
+.poster-scene .gallery-art.has-real-image {
+  background-color: #e8e4dc !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+}
+
+.poster-scene .gallery-art.has-real-image::before,
+.dialog-visual.has-real-image::before {
+  display: none !important;
+}
+
+.poster-scene .gallery-art.has-real-image .card-copy {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 34px 14px 13px;
+  color: #fff;
+  background: linear-gradient(to top, rgba(0, 0, 0, .72), transparent);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, .55);
+}
+
+.dialog-visual.has-real-image {
+  background-size: contain !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+}
+
 @media (max-width: 900px) {
   .poster-scene .gallery-viewport {
     top: 27vh;
