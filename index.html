@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600&family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./styles.css" />
+  <link rel="stylesheet" href="./refinements.css" />
 </head>
 <body>
   <div class="noise" aria-hidden="true"></div>
@@ -26,12 +27,24 @@
         <button class="nav-link contact-trigger" aria-expanded="false" data-i18n="contact">联系方式</button>
         <article class="id-card" aria-label="Contact card">
           <div class="lanyard"></div>
-          <div class="id-card-top"><span>PORTFOLIO ACCESS</span><span>NO. 0504</span></div>
+          <div class="id-card-top">
+            <span>PORTFOLIO ACCESS</span>
+            <span>NO. 0504</span>
+          </div>
           <div class="id-card-main">
             <img src="https://avatars.githubusercontent.com/u/205961239?v=4" alt="Celeste Chen profile" />
-            <div><p class="id-label">NAME</p><strong>陈思睿<br/>Celeste Chen</strong><p class="id-label">ROLE</p><span>Data · UX · Visual</span></div>
+            <div>
+              <p class="id-label">NAME</p>
+              <strong>陈思睿<br/>Celeste Chen</strong>
+              <p class="id-label">ROLE</p>
+              <span>Data · UX · Visual</span>
+            </div>
           </div>
-          <div class="id-card-meta"><a href="tel:+8617307690635">+86 173 0769 0635</a><a href="mailto:CelesteC2003@outlook.com">CelesteC2003@outlook.com</a></div>
+          <div class="id-card-meta">
+            <a href="tel:+8617307690635">+86 173 0769 0635</a>
+            <a href="tel:+447344361482">+44 7344361482</a>
+            <a href="mailto:CelesteC2003@outlook.com">CelesteC2003@outlook.com</a>
+          </div>
           <div class="barcode" aria-hidden="true"></div>
         </article>
       </div>
@@ -43,13 +56,40 @@
     <section class="scene scene-home is-visible" data-scene="home" aria-label="Portfolio home">
       <div id="star-stage" class="star-stage" aria-hidden="true"></div>
       <div class="star-glow" aria-hidden="true"></div>
-      <div class="hero-copy"><p class="eyebrow" data-i18n="eyebrow">DATA · UX RESEARCH · VISUAL STORYTELLING</p><h1 data-i18n="heroTitle">把数据、研究与视觉<br/>编织成可感知的叙事。</h1><p class="hero-sub" data-i18n="heroSub">A portfolio orbiting research, moving image and visual systems.</p></div>
-      <div class="chapter-network" aria-label="Portfolio chapters">
-        <button class="chapter chapter-data" data-chapter="data"><span class="node"></span><span class="chapter-index">01</span><strong>DATA & UX</strong><small data-i18n="dataDesc">研究、分析与交互可视化</small></button>
-        <button class="chapter chapter-poster" data-chapter="poster"><span class="node"></span><span class="chapter-index">02</span><strong data-i18n="poster">海报 / 长图</strong><small data-i18n="posterDesc">视觉系统与信息设计</small></button>
-        <button class="chapter chapter-video" data-chapter="video"><span class="node"></span><span class="chapter-index">03</span><strong data-i18n="video">视频 / 动态</strong><small data-i18n="videoDesc">剪辑、渲染与动态图像</small></button>
-        <button class="chapter chapter-about" data-chapter="about"><span class="node"></span><span class="chapter-index">04</span><strong data-i18n="about">关于我</strong><small data-i18n="aboutDesc">经历、技能与方法</small></button>
+
+      <div class="hero-copy">
+        <p class="eyebrow" data-i18n="eyebrow">DATA · UX RESEARCH · VISUAL STORYTELLING</p>
+        <h1 data-i18n="heroTitle">把数据、研究与视觉<br/>编织成可感知的叙事。</h1>
+        <p class="hero-sub" data-i18n="heroSub">A portfolio orbiting research, moving image and visual systems.</p>
       </div>
+
+      <div class="chapter-network" aria-label="Portfolio chapters">
+        <button class="chapter chapter-data" data-chapter="data">
+          <span class="node"></span>
+          <span class="chapter-index">01</span>
+          <strong>DATA & UX</strong>
+          <small data-i18n="dataDesc">研究、分析与交互可视化</small>
+        </button>
+        <button class="chapter chapter-poster" data-chapter="poster">
+          <span class="node"></span>
+          <span class="chapter-index">02</span>
+          <strong data-i18n="poster">海报 / 长图</strong>
+          <small data-i18n="posterDesc">视觉系统与信息设计</small>
+        </button>
+        <button class="chapter chapter-video" data-chapter="video">
+          <span class="node"></span>
+          <span class="chapter-index">03</span>
+          <strong data-i18n="video">视频 / 动态</strong>
+          <small data-i18n="videoDesc">剪辑、渲染与动态图像</small>
+        </button>
+        <button class="chapter chapter-about" data-chapter="about">
+          <span class="node"></span>
+          <span class="chapter-index">04</span>
+          <strong data-i18n="about">关于我</strong>
+          <small data-i18n="aboutDesc">经历、技能与方法</small>
+        </button>
+      </div>
+
       <aside class="project-branches" aria-live="polite">
         <p class="branch-label" data-i18n="selectedProjects">SELECTED DATA & UX PROJECTS</p>
         <button data-project="dialect"><span>01</span><b data-i18n="dialect">中国方言声学地图</b></button>
@@ -57,19 +97,92 @@
         <button data-project="data-news"><span>03</span><b data-i18n="dataNews">预制菜数据新闻</b></button>
         <button class="branch-back" data-action="home"><span>←</span><b data-i18n="backOrbit">返回主轨道</b></button>
       </aside>
-      <div class="corner-meta left-meta"><span data-i18n="status">AVAILABLE FOR DATA / UX OPPORTUNITIES</span><span class="pulse"></span></div>
-      <div class="corner-meta right-meta"><span>SHANGHAI · HANGZHOU · XIAMEN</span><span>2026</span></div>
+
+      <div class="corner-meta left-meta">
+        <span data-i18n="status">AVAILABLE FOR DATA / UX OPPORTUNITIES</span>
+        <span class="pulse"></span>
+      </div>
+      <div class="corner-meta right-meta">
+        <span>SHANGHAI · HANGZHOU · XIAMEN</span>
+        <span>2026</span>
+      </div>
       <p class="scroll-hint"><span></span><em data-i18n="explore">CLICK A CHAPTER TO EXPLORE</em></p>
     </section>
 
-    <section class="scene gallery-scene poster-scene" data-scene="poster"><div class="gallery-head"><div><p class="eyebrow">02 / VISUAL ARCHIVE</p><h2 data-i18n="posterTitle">海报与长图</h2></div><p data-i18n="posterIntro">统一裁切的视觉档案。拖动、滚轮或按钮均可浏览，点击作品展开完整信息。</p></div><div class="gallery-viewport" data-gallery="poster"><div class="gallery-track"></div></div><div class="gallery-controls"><button data-gallery-prev="poster">←</button><span><b class="gallery-current">01</b> / <em class="gallery-total">06</em></span><button data-gallery-next="poster">→</button></div><button class="scene-back" data-action="home">← <span data-i18n="backHome">返回首页</span></button></section>
+    <section class="scene gallery-scene poster-scene" data-scene="poster" aria-label="Poster archive">
+      <div class="gallery-head">
+        <div>
+          <p class="eyebrow">02 / VISUAL ARCHIVE</p>
+          <h2 data-i18n="posterTitle">海报与长图</h2>
+        </div>
+        <p data-i18n="posterIntro">统一裁切的视觉档案。拖动、滚轮或按钮均可浏览，点击作品展开完整信息。</p>
+      </div>
+      <div class="gallery-viewport" data-gallery="poster">
+        <div class="gallery-track"></div>
+      </div>
+      <div class="gallery-controls">
+        <button data-gallery-prev="poster" aria-label="Previous">←</button>
+        <span><b class="gallery-current">01</b> / <em class="gallery-total">06</em></span>
+        <button data-gallery-next="poster" aria-label="Next">→</button>
+      </div>
+      <button class="scene-back" data-action="home">← <span data-i18n="backHome">返回首页</span></button>
+    </section>
 
-    <section class="scene gallery-scene video-scene" data-scene="video"><div class="video-ambient" aria-hidden="true"></div><div class="gallery-head"><div><p class="eyebrow">03 / MOVING IMAGE</p><h2 data-i18n="videoTitle">视频与动态视觉</h2></div><p data-i18n="videoIntro">新闻影像、MMD渲染与短视频实验。点击卡片进入沉浸式播放界面。</p></div><div class="gallery-viewport" data-gallery="video"><div class="gallery-track"></div></div><div class="gallery-controls"><button data-gallery-prev="video">←</button><span><b class="gallery-current">01</b> / <em class="gallery-total">05</em></span><button data-gallery-next="video">→</button></div><button class="scene-back" data-action="home">← <span data-i18n="backHome">返回首页</span></button></section>
+    <section class="scene gallery-scene video-scene" data-scene="video" aria-label="Video archive">
+      <div class="video-ambient" aria-hidden="true"></div>
+      <div class="gallery-head">
+        <div>
+          <p class="eyebrow">03 / MOVING IMAGE</p>
+          <h2 data-i18n="videoTitle">视频与动态视觉</h2>
+        </div>
+        <p data-i18n="videoIntro">新闻影像、MMD渲染与短视频实验。点击卡片进入沉浸式播放界面。</p>
+      </div>
+      <div class="gallery-viewport" data-gallery="video">
+        <div class="gallery-track"></div>
+      </div>
+      <div class="gallery-controls">
+        <button data-gallery-prev="video" aria-label="Previous">←</button>
+        <span><b class="gallery-current">01</b> / <em class="gallery-total">05</em></span>
+        <button data-gallery-next="video" aria-label="Next">→</button>
+      </div>
+      <button class="scene-back" data-action="home">← <span data-i18n="backHome">返回首页</span></button>
+    </section>
 
-    <section class="scene about-scene" data-scene="about"><div class="about-grid"><div class="about-title"><p class="eyebrow">04 / ABOUT</p><h2 data-i18n="aboutTitle">研究复杂问题，<br/>并让答案清晰可见。</h2></div><div class="about-copy"><p data-i18n="aboutP1">伦敦国王学院数字人文硕士，关注数据分析、用户研究、计算方法与视觉传播之间的交叉地带。</p><p data-i18n="aboutP2">我的工作从采访和定性编码开始，也可能从一组音频、一个内容账号或一张空白画布开始。最终目标始终相同：发现结构，解释证据，构建可理解的体验。</p><div class="skill-grid"><span>Python / Pandas</span><span>UX Research</span><span>Data Visualization</span><span>HTML / CSS / JS</span><span>Adobe PS / PR</span><span>Video Editing</span></div></div></div><button class="scene-back" data-action="home">← <span data-i18n="backHome">返回首页</span></button></section>
+    <section class="scene about-scene" data-scene="about" aria-label="About Celeste">
+      <div class="about-grid">
+        <div class="about-title">
+          <p class="eyebrow">04 / ABOUT</p>
+          <h2 data-i18n="aboutTitle">研究复杂问题，<br/>并让答案清晰可见。</h2>
+        </div>
+        <div class="about-copy">
+          <p data-i18n="aboutP1">伦敦国王学院数字人文硕士，关注数据分析、用户研究、计算方法与视觉传播之间的交叉地带。</p>
+          <p data-i18n="aboutP2">我的工作从采访和定性编码开始，也可能从一组音频、一个内容账号或一张空白画布开始。最终目标始终相同：发现结构，解释证据，构建可理解的体验。</p>
+          <div class="skill-grid">
+            <span>Python / Pandas</span><span>UX Research</span><span>Data Visualization</span><span>HTML / CSS / JS</span><span>Adobe PS / PR</span><span>Video Editing</span>
+          </div>
+        </div>
+      </div>
+      <button class="scene-back" data-action="home">← <span data-i18n="backHome">返回首页</span></button>
+    </section>
   </main>
 
-  <dialog class="project-dialog"><button class="dialog-close">×</button><div class="dialog-visual"></div><div class="dialog-content"><p class="dialog-kicker"></p><h3></h3><p class="dialog-description"></p><dl><div><dt data-i18n="role">ROLE</dt><dd class="dialog-role"></dd></div><div><dt data-i18n="tools">TOOLS</dt><dd class="dialog-tools"></dd></div><div><dt data-i18n="year">YEAR</dt><dd class="dialog-year"></dd></div></dl><div class="dialog-tags"></div></div></dialog>
+  <dialog class="project-dialog">
+    <button class="dialog-close" aria-label="Close">×</button>
+    <div class="dialog-visual"></div>
+    <div class="dialog-content">
+      <p class="dialog-kicker"></p>
+      <h3></h3>
+      <p class="dialog-description"></p>
+      <dl>
+        <div><dt data-i18n="role">ROLE</dt><dd class="dialog-role"></dd></div>
+        <div><dt data-i18n="tools">TOOLS</dt><dd class="dialog-tools"></dd></div>
+        <div><dt data-i18n="year">YEAR</dt><dd class="dialog-year"></dd></div>
+      </dl>
+      <div class="dialog-tags"></div>
+    </div>
+  </dialog>
+
   <script type="module" src="./app.js"></script>
+  <script src="./refinements.js" defer></script>
 </body>
 </html>
