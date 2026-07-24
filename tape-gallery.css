@@ -1,0 +1,356 @@
+/* Draggable long-form tape archive for the Visual Design scene. */
+.poster-scene.is-tape-archive {
+  padding: 92px 0 0;
+  background:
+    linear-gradient(rgba(255,255,255,.7), rgba(255,255,255,.7)),
+    radial-gradient(circle at 18% 14%, rgba(255,255,255,.95), transparent 32%),
+    #d8d8d5;
+}
+
+.poster-scene.is-tape-archive .gallery-head {
+  z-index: 12;
+  align-items: flex-start;
+  pointer-events: none;
+}
+
+.poster-scene.is-tape-archive .gallery-head h2 {
+  font-size: clamp(42px, 5.4vw, 82px);
+}
+
+.poster-scene.is-tape-archive .gallery-head > p {
+  max-width: 390px;
+  opacity: .62;
+}
+
+.poster-scene.is-tape-archive .gallery-viewport,
+.poster-scene.is-tape-archive .gallery-controls {
+  display: none !important;
+}
+
+.tape-archive {
+  position: absolute;
+  inset: 74px 0 0;
+  z-index: 5;
+  overflow: hidden;
+  user-select: none;
+  --tape-angle: -35deg;
+  --travel: 0px;
+}
+
+.tape-stage {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  cursor: grab;
+  touch-action: none;
+}
+
+.tape-stage.is-dragging {
+  cursor: grabbing;
+}
+
+.tape-stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: .28;
+  background-image:
+    linear-gradient(90deg, rgba(0,0,0,.018) 1px, transparent 1px),
+    linear-gradient(rgba(0,0,0,.018) 1px, transparent 1px);
+  background-size: 72px 72px;
+}
+
+.tape-instruction {
+  position: absolute;
+  right: 4.3vw;
+  top: 19vh;
+  z-index: 15;
+  display: grid;
+  gap: 8px;
+  width: min(29vw, 340px);
+  font-family: "IBM Plex Mono", monospace;
+  pointer-events: none;
+}
+
+.tape-instruction b {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: .04em;
+}
+
+.tape-instruction span {
+  font-size: 9px;
+  line-height: 1.6;
+  opacity: .52;
+  text-transform: uppercase;
+}
+
+.tape-axis {
+  position: absolute;
+  left: 47%;
+  top: 49%;
+  width: clamp(230px, 20vw, 340px);
+  height: 2500px;
+  transform: translate(-50%, -50%) rotate(var(--tape-angle));
+  transform-origin: center;
+  pointer-events: none;
+  filter: drop-shadow(0 34px 34px rgba(18, 20, 24, .18));
+}
+
+.tape-strip {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  transform: translate3d(0, var(--travel), 0);
+  will-change: transform;
+}
+
+.tape-strip::before,
+.tape-strip::after {
+  content: "";
+  position: absolute;
+  top: -42px;
+  bottom: -42px;
+  width: 18px;
+  z-index: 3;
+  opacity: .62;
+  background:
+    repeating-linear-gradient(0deg, rgba(255,255,255,.78) 0 7px, rgba(116,120,126,.22) 7px 8px),
+    linear-gradient(90deg, rgba(255,255,255,.8), rgba(130,134,140,.2));
+  border: 1px solid rgba(40,42,46,.24);
+}
+
+.tape-strip::before { left: -17px; }
+.tape-strip::after { right: -17px; transform: scaleX(-1); }
+
+.tape-surface {
+  position: relative;
+  width: 100%;
+  padding: 14px;
+  overflow: hidden;
+  border-left: 1px solid rgba(15,16,18,.2);
+  border-right: 1px solid rgba(15,16,18,.2);
+  background:
+    linear-gradient(90deg, rgba(255,255,255,.55), transparent 13% 87%, rgba(255,255,255,.42)),
+    linear-gradient(#ebeae6, #d9d8d3);
+}
+
+.tape-surface::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: .17;
+  mix-blend-mode: multiply;
+  background-image:
+    repeating-linear-gradient(91deg, transparent 0 8px, rgba(20,22,24,.09) 8px 9px),
+    radial-gradient(circle at 30% 20%, rgba(255,255,255,.9), transparent 26%);
+}
+
+.tape-longform-image {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 520px;
+  object-fit: contain;
+  background: #f3f2ef;
+  transition: opacity .28s ease, filter .28s ease;
+}
+
+.tape-longform-image.is-switching {
+  opacity: .12;
+  filter: blur(5px);
+}
+
+.tape-placeholder {
+  display: none;
+  position: relative;
+  z-index: 1;
+  min-height: 1450px;
+  padding: 140px 36px;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.82), rgba(220,221,218,.75)),
+    repeating-linear-gradient(0deg, transparent 0 44px, rgba(0,0,0,.08) 44px 45px);
+  color: #111;
+  text-align: center;
+  font-family: "IBM Plex Mono", monospace;
+}
+
+.tape-placeholder.is-visible { display: grid; place-items: center; }
+.tape-placeholder strong { font-size: 18px; font-weight: 500; }
+.tape-placeholder small { display: block; margin-top: 16px; opacity: .48; line-height: 1.7; }
+
+.tape-reel {
+  position: absolute;
+  right: -4.8vw;
+  bottom: -12vh;
+  width: clamp(260px, 31vw, 510px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  z-index: 9;
+  transform: rotateX(68deg) rotateZ(-18deg);
+  transform-style: preserve-3d;
+  pointer-events: none;
+  box-shadow: 0 60px 70px rgba(14,15,18,.23);
+  background:
+    radial-gradient(circle at 50% 50%, transparent 0 20%, rgba(248,248,246,.84) 20.5% 22%, transparent 22.5% 37%, rgba(42,44,48,.22) 37.5% 38.5%, transparent 39% 48%, rgba(255,255,255,.88) 48.5% 49.5%, transparent 50% 100%),
+    repeating-radial-gradient(circle at 50% 50%, #c9cac7 0 2px, #8f9293 2.5px 4px, #e3e3df 4.5px 6px);
+}
+
+.tape-reel::before {
+  content: "";
+  position: absolute;
+  inset: 8%;
+  border-radius: 50%;
+  background:
+    conic-gradient(from 20deg, rgba(255,255,255,.1), rgba(0,0,0,.22), rgba(255,255,255,.55), rgba(0,0,0,.12), rgba(255,255,255,.1));
+  mix-blend-mode: multiply;
+  opacity: .7;
+}
+
+.tape-reel::after {
+  content: "";
+  position: absolute;
+  inset: 37%;
+  border-radius: 50%;
+  border: 14px solid rgba(57,59,62,.48);
+  background: rgba(245,245,242,.76);
+  box-shadow: inset 0 0 22px rgba(0,0,0,.23);
+}
+
+.tape-feed-shadow {
+  position: absolute;
+  right: 19vw;
+  bottom: 3vh;
+  width: 39vw;
+  height: 17vh;
+  z-index: 4;
+  opacity: .22;
+  filter: blur(12px);
+  transform: rotate(-16deg);
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(10,12,14,.62), transparent);
+}
+
+.tape-progress {
+  position: absolute;
+  left: 4.2vw;
+  bottom: 94px;
+  z-index: 14;
+  width: min(240px, 22vw);
+  display: grid;
+  gap: 8px;
+  font: 500 8px/1 "IBM Plex Mono", monospace;
+}
+
+.tape-progress-track {
+  height: 1px;
+  background: rgba(12,13,15,.25);
+  overflow: hidden;
+}
+
+.tape-progress-fill {
+  display: block;
+  width: 0%;
+  height: 100%;
+  background: #111;
+  transition: width .12s linear;
+}
+
+.tape-progress-meta {
+  display: flex;
+  justify-content: space-between;
+  opacity: .58;
+}
+
+.tape-menu {
+  position: absolute;
+  left: 50%;
+  bottom: 20px;
+  z-index: 18;
+  width: min(760px, 70vw);
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 7px;
+  transform: translateX(-50%);
+}
+
+.tape-tab {
+  min-width: 0;
+  height: 52px;
+  padding: 8px 9px;
+  display: grid;
+  grid-template-columns: 25px 1fr;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid rgba(12,13,15,.36) !important;
+  background: rgba(236,236,232,.86) !important;
+  backdrop-filter: blur(9px);
+  text-align: left;
+  transition: background .24s, color .24s, transform .24s;
+}
+
+.tape-tab:hover { transform: translateY(-4px); }
+.tape-tab.is-active { background: #111 !important; color: #f2f2ef; }
+
+.tape-tab-reel {
+  width: 23px;
+  height: 23px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  position: relative;
+  opacity: .7;
+}
+
+.tape-tab-reel::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+}
+
+.tape-tab-copy { min-width: 0; display: grid; gap: 4px; }
+.tape-tab-copy b {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font: 500 9px/1 "IBM Plex Mono", monospace;
+}
+.tape-tab-copy small { font: 400 7px/1 "IBM Plex Mono", monospace; opacity: .48; }
+
+.poster-scene.is-tape-archive .scene-back {
+  z-index: 22;
+  bottom: 24px;
+}
+
+@media (max-width: 900px) {
+  .tape-archive { --tape-angle: -25deg; }
+  .tape-axis { left: 42%; width: clamp(210px, 31vw, 290px); }
+  .tape-reel { right: -12vw; bottom: -5vh; width: 43vw; }
+  .tape-instruction { top: 22vh; width: 34vw; }
+  .tape-menu { width: 68vw; grid-template-columns: repeat(3, 1fr); bottom: 18px; }
+  .tape-tab { height: 42px; }
+  .tape-progress { bottom: 118px; }
+}
+
+@media (max-width: 620px) {
+  .poster-scene.is-tape-archive .gallery-head > p { display: none; }
+  .poster-scene.is-tape-archive .gallery-head h2 { font-size: 44px; }
+  .tape-archive { --tape-angle: -13deg; }
+  .tape-axis { left: 47%; top: 54%; width: 54vw; }
+  .tape-instruction { right: 18px; top: 21vh; width: 150px; }
+  .tape-reel { right: -29vw; bottom: 3vh; width: 74vw; opacity: .72; }
+  .tape-feed-shadow { display: none; }
+  .tape-progress { left: 18px; bottom: 154px; width: 150px; }
+  .tape-menu { width: calc(100vw - 36px); bottom: 66px; grid-template-columns: repeat(3, 1fr); }
+  .tape-tab { grid-template-columns: 19px 1fr; height: 39px; padding: 6px; }
+  .tape-tab-reel { width: 18px; height: 18px; }
+  .tape-tab-reel::before { inset: 5px; }
+  .poster-scene.is-tape-archive .scene-back { bottom: 20px; }
+}
