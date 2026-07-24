@@ -2,13 +2,13 @@
 .poster-scene.is-tape-archive {
   padding: 92px 0 0;
   background:
-    linear-gradient(rgba(255,255,255,.7), rgba(255,255,255,.7)),
-    radial-gradient(circle at 18% 14%, rgba(255,255,255,.95), transparent 32%),
+    linear-gradient(rgba(255,255,255,.76), rgba(255,255,255,.76)),
+    radial-gradient(circle at 18% 14%, rgba(255,255,255,.98), transparent 34%),
     #d8d8d5;
 }
 
 .poster-scene.is-tape-archive .gallery-head {
-  z-index: 12;
+  z-index: 20;
   align-items: flex-start;
   pointer-events: none;
 }
@@ -19,7 +19,7 @@
 
 .poster-scene.is-tape-archive .gallery-head > p {
   max-width: 390px;
-  opacity: .62;
+  opacity: .58;
 }
 
 .poster-scene.is-tape-archive .gallery-viewport,
@@ -33,28 +33,26 @@
   z-index: 5;
   overflow: hidden;
   user-select: none;
-  --tape-angle: -35deg;
+  --tape-angle: -32deg;
   --travel: 0px;
 }
 
 .tape-stage {
   position: absolute;
-  inset: 0;
+  inset: 0 0 92px;
   overflow: hidden;
   cursor: grab;
   touch-action: none;
 }
 
-.tape-stage.is-dragging {
-  cursor: grabbing;
-}
+.tape-stage.is-dragging { cursor: grabbing; }
 
 .tape-stage::before {
   content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: .28;
+  opacity: .24;
   background-image:
     linear-gradient(90deg, rgba(0,0,0,.018) 1px, transparent 1px),
     linear-gradient(rgba(0,0,0,.018) 1px, transparent 1px);
@@ -64,8 +62,8 @@
 .tape-instruction {
   position: absolute;
   right: 4.3vw;
-  top: 19vh;
-  z-index: 15;
+  top: 18vh;
+  z-index: 22;
   display: grid;
   gap: 8px;
   width: min(29vw, 340px);
@@ -86,22 +84,21 @@
   text-transform: uppercase;
 }
 
+/* The strip now starts inside the viewport instead of at the top of a 2500px axis. */
 .tape-axis {
   position: absolute;
-  left: 47%;
-  top: 49%;
-  width: clamp(230px, 20vw, 340px);
-  height: 2500px;
-  transform: translate(-50%, -50%) rotate(var(--tape-angle));
-  transform-origin: center;
+  left: 23vw;
+  top: 15vh;
+  width: clamp(220px, 18vw, 310px);
+  height: auto;
+  transform: rotate(var(--tape-angle));
+  transform-origin: 50% 0;
   pointer-events: none;
-  filter: drop-shadow(0 34px 34px rgba(18, 20, 24, .18));
+  filter: drop-shadow(0 30px 30px rgba(18,20,24,.18));
 }
 
 .tape-strip {
-  position: absolute;
-  left: 0;
-  top: 0;
+  position: relative;
   width: 100%;
   transform: translate3d(0, var(--travel), 0);
   will-change: transform;
@@ -111,29 +108,28 @@
 .tape-strip::after {
   content: "";
   position: absolute;
-  top: -42px;
-  bottom: -42px;
-  width: 18px;
+  top: -28px;
+  bottom: -28px;
+  width: 16px;
   z-index: 3;
-  opacity: .62;
+  opacity: .64;
   background:
-    repeating-linear-gradient(0deg, rgba(255,255,255,.78) 0 7px, rgba(116,120,126,.22) 7px 8px),
-    linear-gradient(90deg, rgba(255,255,255,.8), rgba(130,134,140,.2));
+    repeating-linear-gradient(0deg, rgba(255,255,255,.8) 0 7px, rgba(116,120,126,.22) 7px 8px),
+    linear-gradient(90deg, rgba(255,255,255,.82), rgba(130,134,140,.22));
   border: 1px solid rgba(40,42,46,.24);
 }
 
-.tape-strip::before { left: -17px; }
-.tape-strip::after { right: -17px; transform: scaleX(-1); }
+.tape-strip::before { left: -15px; }
+.tape-strip::after { right: -15px; transform: scaleX(-1); }
 
 .tape-surface {
   position: relative;
   width: 100%;
-  padding: 14px;
+  padding: 12px;
   overflow: hidden;
-  border-left: 1px solid rgba(15,16,18,.2);
-  border-right: 1px solid rgba(15,16,18,.2);
+  border: 1px solid rgba(15,16,18,.22);
   background:
-    linear-gradient(90deg, rgba(255,255,255,.55), transparent 13% 87%, rgba(255,255,255,.42)),
+    linear-gradient(90deg, rgba(255,255,255,.58), transparent 13% 87%, rgba(255,255,255,.45)),
     linear-gradient(#ebeae6, #d9d8d3);
 }
 
@@ -143,10 +139,10 @@
   inset: 0;
   z-index: 2;
   pointer-events: none;
-  opacity: .17;
+  opacity: .14;
   mix-blend-mode: multiply;
   background-image:
-    repeating-linear-gradient(91deg, transparent 0 8px, rgba(20,22,24,.09) 8px 9px),
+    repeating-linear-gradient(91deg, transparent 0 8px, rgba(20,22,24,.08) 8px 9px),
     radial-gradient(circle at 30% 20%, rgba(255,255,255,.9), transparent 26%);
 }
 
@@ -156,7 +152,6 @@
   display: block;
   width: 100%;
   height: auto;
-  min-height: 520px;
   object-fit: contain;
   background: #f3f2ef;
   transition: opacity .28s ease, filter .28s ease;
@@ -171,32 +166,31 @@
   display: none;
   position: relative;
   z-index: 1;
-  min-height: 1450px;
-  padding: 140px 36px;
+  min-height: 920px;
+  padding: 110px 26px;
   background:
-    linear-gradient(135deg, rgba(255,255,255,.82), rgba(220,221,218,.75)),
+    linear-gradient(135deg, rgba(255,255,255,.88), rgba(220,221,218,.78)),
     repeating-linear-gradient(0deg, transparent 0 44px, rgba(0,0,0,.08) 44px 45px);
   color: #111;
   text-align: center;
   font-family: "IBM Plex Mono", monospace;
 }
 
-.tape-placeholder.is-visible { display: grid; place-items: center; }
-.tape-placeholder strong { font-size: 18px; font-weight: 500; }
-.tape-placeholder small { display: block; margin-top: 16px; opacity: .48; line-height: 1.7; }
+.tape-placeholder.is-visible { display: grid; place-items: start center; }
+.tape-placeholder strong { font-size: 17px; font-weight: 500; }
+.tape-placeholder small { display: block; margin-top: 16px; opacity: .52; line-height: 1.7; }
 
 .tape-reel {
   position: absolute;
-  right: -4.8vw;
-  bottom: -12vh;
-  width: clamp(260px, 31vw, 510px);
+  right: -3vw;
+  bottom: 30px;
+  width: clamp(250px, 28vw, 470px);
   aspect-ratio: 1;
   border-radius: 50%;
   z-index: 9;
   transform: rotateX(68deg) rotateZ(-18deg);
-  transform-style: preserve-3d;
   pointer-events: none;
-  box-shadow: 0 60px 70px rgba(14,15,18,.23);
+  box-shadow: 0 55px 65px rgba(14,15,18,.22);
   background:
     radial-gradient(circle at 50% 50%, transparent 0 20%, rgba(248,248,246,.84) 20.5% 22%, transparent 22.5% 37%, rgba(42,44,48,.22) 37.5% 38.5%, transparent 39% 48%, rgba(255,255,255,.88) 48.5% 49.5%, transparent 50% 100%),
     repeating-radial-gradient(circle at 50% 50%, #c9cac7 0 2px, #8f9293 2.5px 4px, #e3e3df 4.5px 6px);
@@ -207,8 +201,7 @@
   position: absolute;
   inset: 8%;
   border-radius: 50%;
-  background:
-    conic-gradient(from 20deg, rgba(255,255,255,.1), rgba(0,0,0,.22), rgba(255,255,255,.55), rgba(0,0,0,.12), rgba(255,255,255,.1));
+  background: conic-gradient(from 20deg, rgba(255,255,255,.1), rgba(0,0,0,.22), rgba(255,255,255,.55), rgba(0,0,0,.12), rgba(255,255,255,.1));
   mix-blend-mode: multiply;
   opacity: .7;
 }
@@ -225,12 +218,12 @@
 
 .tape-feed-shadow {
   position: absolute;
-  right: 19vw;
-  bottom: 3vh;
-  width: 39vw;
-  height: 17vh;
+  right: 18vw;
+  bottom: 105px;
+  width: 38vw;
+  height: 13vh;
   z-index: 4;
-  opacity: .22;
+  opacity: .18;
   filter: blur(12px);
   transform: rotate(-16deg);
   pointer-events: none;
@@ -240,40 +233,24 @@
 .tape-progress {
   position: absolute;
   left: 4.2vw;
-  bottom: 94px;
-  z-index: 14;
+  bottom: 92px;
+  z-index: 24;
   width: min(240px, 22vw);
   display: grid;
   gap: 8px;
   font: 500 8px/1 "IBM Plex Mono", monospace;
 }
 
-.tape-progress-track {
-  height: 1px;
-  background: rgba(12,13,15,.25);
-  overflow: hidden;
-}
-
-.tape-progress-fill {
-  display: block;
-  width: 0%;
-  height: 100%;
-  background: #111;
-  transition: width .12s linear;
-}
-
-.tape-progress-meta {
-  display: flex;
-  justify-content: space-between;
-  opacity: .58;
-}
+.tape-progress-track { height: 1px; background: rgba(12,13,15,.25); overflow: hidden; }
+.tape-progress-fill { display: block; width: 0%; height: 100%; background: #111; transition: width .12s linear; }
+.tape-progress-meta { display: flex; justify-content: space-between; opacity: .58; }
 
 .tape-menu {
   position: absolute;
   left: 50%;
-  bottom: 20px;
-  z-index: 18;
-  width: min(760px, 70vw);
+  bottom: 24px;
+  z-index: 28;
+  width: min(820px, 72vw);
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 7px;
@@ -282,14 +259,14 @@
 
 .tape-tab {
   min-width: 0;
-  height: 52px;
+  height: 56px;
   padding: 8px 9px;
   display: grid;
   grid-template-columns: 25px 1fr;
   align-items: center;
   gap: 7px;
   border: 1px solid rgba(12,13,15,.36) !important;
-  background: rgba(236,236,232,.86) !important;
+  background: rgba(236,236,232,.92) !important;
   backdrop-filter: blur(9px);
   text-align: left;
   transition: background .24s, color .24s, transform .24s;
@@ -297,60 +274,35 @@
 
 .tape-tab:hover { transform: translateY(-4px); }
 .tape-tab.is-active { background: #111 !important; color: #f2f2ef; }
-
-.tape-tab-reel {
-  width: 23px;
-  height: 23px;
-  border: 1px solid currentColor;
-  border-radius: 50%;
-  position: relative;
-  opacity: .7;
-}
-
-.tape-tab-reel::before {
-  content: "";
-  position: absolute;
-  inset: 6px;
-  border: 1px solid currentColor;
-  border-radius: 50%;
-}
-
+.tape-tab-reel { width: 23px; height: 23px; border: 1px solid currentColor; border-radius: 50%; position: relative; opacity: .7; }
+.tape-tab-reel::before { content: ""; position: absolute; inset: 6px; border: 1px solid currentColor; border-radius: 50%; }
 .tape-tab-copy { min-width: 0; display: grid; gap: 4px; }
-.tape-tab-copy b {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font: 500 9px/1 "IBM Plex Mono", monospace;
-}
+.tape-tab-copy b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 500 9px/1 "IBM Plex Mono", monospace; }
 .tape-tab-copy small { font: 400 7px/1 "IBM Plex Mono", monospace; opacity: .48; }
 
-.poster-scene.is-tape-archive .scene-back {
-  z-index: 22;
-  bottom: 24px;
-}
+.poster-scene.is-tape-archive .scene-back { z-index: 30; bottom: 28px; }
 
 @media (max-width: 900px) {
-  .tape-archive { --tape-angle: -25deg; }
-  .tape-axis { left: 42%; width: clamp(210px, 31vw, 290px); }
-  .tape-reel { right: -12vw; bottom: -5vh; width: 43vw; }
-  .tape-instruction { top: 22vh; width: 34vw; }
+  .tape-archive { --tape-angle: -24deg; }
+  .tape-axis { left: 18vw; top: 20vh; width: clamp(205px, 30vw, 280px); }
+  .tape-reel { right: -11vw; bottom: 55px; width: 42vw; }
+  .tape-instruction { top: 23vh; width: 34vw; }
   .tape-menu { width: 68vw; grid-template-columns: repeat(3, 1fr); bottom: 18px; }
-  .tape-tab { height: 42px; }
+  .tape-tab { height: 44px; }
   .tape-progress { bottom: 118px; }
+  .tape-stage { bottom: 112px; }
 }
 
 @media (max-width: 620px) {
   .poster-scene.is-tape-archive .gallery-head > p { display: none; }
   .poster-scene.is-tape-archive .gallery-head h2 { font-size: 44px; }
-  .tape-archive { --tape-angle: -13deg; }
-  .tape-axis { left: 47%; top: 54%; width: 54vw; }
-  .tape-instruction { right: 18px; top: 21vh; width: 150px; }
-  .tape-reel { right: -29vw; bottom: 3vh; width: 74vw; opacity: .72; }
+  .tape-archive { --tape-angle: -12deg; }
+  .tape-axis { left: 15vw; top: 24vh; width: 54vw; }
+  .tape-instruction { right: 18px; top: 19vh; width: 145px; }
+  .tape-reel { right: -30vw; bottom: 9vh; width: 76vw; opacity: .68; }
   .tape-feed-shadow { display: none; }
   .tape-progress { left: 18px; bottom: 154px; width: 150px; }
-  .tape-menu { width: calc(100vw - 36px); bottom: 66px; grid-template-columns: repeat(3, 1fr); }
-  .tape-tab { grid-template-columns: 19px 1fr; height: 39px; padding: 6px; }
-  .tape-tab-reel { width: 18px; height: 18px; }
-  .tape-tab-reel::before { inset: 5px; }
-  .poster-scene.is-tape-archive .scene-back { bottom: 20px; }
+  .tape-menu { left: 18px; right: 18px; bottom: 18px; width: auto; transform: none; grid-template-columns: repeat(2, 1fr); }
+  .poster-scene.is-tape-archive .scene-back { display: none; }
+  .tape-stage { bottom: 144px; }
 }
