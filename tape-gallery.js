@@ -21,8 +21,8 @@
   let activeIndex = 0;
   let currentOffset = 0;
   let targetOffset = 0;
-  let minOffset = -1400;
-  let maxOffset = 240;
+  let minOffset = -1200;
+  let maxOffset = 0;
   let velocity = 0;
   let dragging = false;
   let startX = 0;
@@ -71,7 +71,6 @@
   scene.insertBefore(archive, scene.querySelector('.scene-back'));
 
   const stage = archive.querySelector('.tape-stage');
-  const strip = archive.querySelector('.tape-strip');
   const image = archive.querySelector('.tape-longform-image');
   const placeholder = archive.querySelector('.tape-placeholder');
   const placeholderTitle = placeholder.querySelector('strong');
@@ -115,10 +114,10 @@
     placeholder.classList.add('is-visible');
     placeholderTitle.textContent = isEnglish() ? work.en : work.zh;
     placeholderText.textContent = isEnglish()
-      ? `Upload this work to ${work.src.replace('./', '')}`
-      : `将对应图片上传至 ${work.src.replace('./', '')}`;
+      ? `Upload the actual image to ${work.src.replace('./', '')}`
+      : `当前文件没有图片内容，请将实际图片上传至 ${work.src.replace('./', '')}`;
     imageFailed = true;
-    recalculateBounds();
+    recalculateBounds(true);
   };
 
   const loadSource = (work, allowFallback = true) => {
@@ -128,11 +127,15 @@
     image.classList.add('is-switching');
     image.alt = isEnglish() ? work.en : work.zh;
 
-    const source = withBust(work.src);
     const onLoad = () => {
+      if (image.naturalWidth < 2 || image.naturalHeight < 2) {
+        onError();
+        return;
+      }
       image.classList.remove('is-switching');
-      recalculateBounds(true);
+      requestAnimationFrame(() => recalculateBounds(true));
     };
+
     const onError = () => {
       if (allowFallback && work.fallback) {
         image.onload = onLoad;
@@ -142,9 +145,10 @@
         showPlaceholder(work);
       }
     };
+
     image.onload = onLoad;
     image.onerror = onError;
-    image.src = source;
+    image.src = withBust(work.src);
   };
 
   const selectWork = index => {
@@ -155,12 +159,14 @@
 
   function recalculateBounds(reset = false) {
     const stageHeight = Math.max(stage.clientHeight, 1);
-    const imageHeight = imageFailed ? 1450 : Math.max(image.getBoundingClientRect().height, 700);
-    maxOffset = stageHeight * 0.36;
-    minOffset = -Math.max(stageHeight * 0.7, imageHeight - stageHeight * 0.52);
+    const imageHeight = imageFailed ? 920 : Math.max(image.offsetHeight || 0, 420);
+    const visibleLength = Math.max(stageHeight * 0.74, 520);
+    maxOffset = 0;
+    minOffset = Math.min(0, visibleLength - imageHeight);
+
     if (reset) {
-      currentOffset = maxOffset - 70;
-      targetOffset = currentOffset;
+      currentOffset = 0;
+      targetOffset = 0;
       velocity = 0;
     } else {
       targetOffset = Math.max(minOffset, Math.min(maxOffset, targetOffset));
@@ -172,7 +178,7 @@
   const clampOffset = value => Math.max(minOffset, Math.min(maxOffset, value));
 
   const projectedPointer = (x, y) => {
-    const angle = -35 * Math.PI / 180;
+    const angle = -32 * Math.PI / 180;
     return x * (-Math.sin(angle)) + y * Math.cos(angle);
   };
 
@@ -224,7 +230,7 @@
     event.preventDefault();
     const delta = Math.abs(event.deltaY) >= Math.abs(event.deltaX) ? event.deltaY : event.deltaX;
     targetOffset = clampOffset(targetOffset - delta * 0.58);
-    velocity = -delta * 0.055;
+    velocity = -delta * 0.05;
   }, { passive: false });
 
   const animate = () => {
