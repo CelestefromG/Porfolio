@@ -2,8 +2,8 @@ import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
 
 (() => {
   const posterScene = document.querySelector('.poster-scene');
-  if (!posterScene || posterScene.dataset.longformReady === 'v2') return;
-  posterScene.dataset.longformReady = 'v2';
+  if (!posterScene || posterScene.dataset.longformReady === 'v3') return;
+  posterScene.dataset.longformReady = 'v3';
   posterScene.classList.add('has-longform-archive');
 
   const head = posterScene.querySelector('.gallery-head');
@@ -30,7 +30,7 @@ import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
         <p class="eyebrow">02B / LONGFORM TAPE</p>
         <h3 data-longform-title>长图胶带</h3>
       </div>
-      <p data-longform-intro>移动鼠标让胶带卷沿轨迹滚动，走过的位置会连续留下长图胶印。按住拖动也可以更精确地控制路线。</p>
+      <p data-longform-intro>移动鼠标，胶带卷会沿方向滚动，并把长图连续印在经过的轨迹上。点击“回卷”可收回胶带重新绘制。</p>
     </div>
     <div class="longform-draw-stage" aria-label="Cursor controlled longform tape">
       <div class="longform-canvas-host"></div>
@@ -67,6 +67,7 @@ import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
   const progressValue = tapePanel.querySelector('.longform-progress-meta b');
   const pointValue = tapePanel.querySelector('.longform-counter b');
   const fpsValue = tapePanel.querySelector('.longform-fps b');
+  const pointerNote = tapePanel.querySelector('.longform-pointer-note');
   const previous = posterScene.querySelector('[data-gallery-prev="poster"]');
   const next = posterScene.querySelector('[data-gallery-next="poster"]');
 
@@ -75,8 +76,8 @@ import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
     const english = isEnglish();
     tapePanel.querySelector('[data-longform-title]').textContent = english ? 'LONGFORM TAPE' : '长图胶带';
     tapePanel.querySelector('[data-longform-intro]').textContent = english
-      ? 'Move the pointer and the roll follows its direction, rotating as it lays a continuous long-form print along the path. Drag for more precise control.'
-      : '移动鼠标让胶带卷沿轨迹滚动，走过的位置会连续留下长图胶印。按住拖动也可以更精确地控制路线。';
+      ? 'Move the pointer: the roll follows its direction and continuously stamps the long-form artwork along the path. Use Rewind to collect the tape and draw again.'
+      : '移动鼠标，胶带卷会沿方向滚动，并把长图连续印在经过的轨迹上。点击“回卷”可收回胶带重新绘制。';
     tapePanel.querySelector('[data-longform-sample]').textContent = english ? 'SAMPLE LONGFORM' : '示例长图';
     tapePanel.querySelectorAll('[data-longform-slot]').forEach(node => {
       node.textContent = english ? 'LONGFORM SLOT' : '长图预留位';
@@ -87,13 +88,12 @@ import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
     scrollCue.textContent = english ? 'SCROLL THROUGH 06 WORKS · THEN LONGFORM' : '滚过 06 张作品 · 进入长图胶带';
   };
 
-  // --- Three.js scene ------------------------------------------------------
   const worldScene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
-  camera.position.set(0, -0.5, 16);
+  const camera = new THREE.OrthographicCamera(-8, 8, 5, -5, 0.1, 50);
+  camera.position.set(0, 0, 18);
   camera.lookAt(0, 0, 0);
 
-  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.8));
   renderer.setClearColor(0x000000, 0);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -102,19 +102,19 @@ import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
   renderer.domElement.className = 'longform-webgl';
   canvasHost.appendChild(renderer.domElement);
 
-  worldScene.add(new THREE.HemisphereLight(0xffffff, 0x777b80, 2.2));
-  const key = new THREE.DirectionalLight(0xffffff, 4.8);
+  worldScene.add(new THREE.HemisphereLight(0xffffff, 0x767a80, 2.35));
+  const key = new THREE.DirectionalLight(0xffffff, 4.2);
   key.position.set(-5, 7, 12);
   key.castShadow = true;
   key.shadow.mapSize.set(1024, 1024);
   worldScene.add(key);
-  const rim = new THREE.DirectionalLight(0xa8cfff, 2.5);
-  rim.position.set(8, -4, 7);
+  const rim = new THREE.DirectionalLight(0xb7d7ff, 2.1);
+  rim.position.set(8, -3, 9);
   worldScene.add(rim);
 
   const shadowPlane = new THREE.Mesh(
-    new THREE.PlaneGeometry(40, 26),
-    new THREE.ShadowMaterial({ color: 0x000000, opacity: 0.17 })
+    new THREE.PlaneGeometry(36, 22),
+    new THREE.ShadowMaterial({ color: 0x000000, opacity: 0.13 })
   );
   shadowPlane.position.z = -0.08;
   shadowPlane.receiveShadow = true;
@@ -123,50 +123,30 @@ import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
   const fallbackCanvas = document.createElement('canvas');
   fallbackCanvas.width = 512;
   fallbackCanvas.height = 2048;
-  const ctx = fallbackCanvas.getContext('2d');
-  ctx.fillStyle = '#f3f0e8';
-  ctx.fillRect(0, 0, fallbackCanvas.width, fallbackCanvas.height);
-  ctx.fillStyle = '#111318';
-  ctx.font = '700 42px sans-serif';
-  ctx.fillText('SAMPLE LONGFORM', 46, 92);
+  const fallbackCtx = fallbackCanvas.getContext('2d');
+  fallbackCtx.fillStyle = '#f3f0e8';
+  fallbackCtx.fillRect(0, 0, fallbackCanvas.width, fallbackCanvas.height);
+  fallbackCtx.fillStyle = '#101217';
+  fallbackCtx.font = '700 40px sans-serif';
+  fallbackCtx.fillText('SAMPLE LONGFORM', 42, 80);
   for (let i = 0; i < 10; i += 1) {
-    const y = 150 + i * 180;
-    ctx.fillStyle = i % 2 ? '#d9ecff' : '#f0e7cc';
-    ctx.fillRect(42, y, 428, 140);
-    ctx.fillStyle = '#111318';
-    ctx.font = '700 24px sans-serif';
-    ctx.fillText(String(i + 1).padStart(2, '0'), 64, y + 48);
-    ctx.font = '500 18px sans-serif';
-    ctx.fillText('VISUAL STORY / CONTENT MODULE', 64, y + 88);
+    const y = 132 + i * 184;
+    fallbackCtx.fillStyle = i % 2 ? '#dceeff' : '#efe4c8';
+    fallbackCtx.fillRect(38, y, 436, 148);
+    fallbackCtx.fillStyle = '#101217';
+    fallbackCtx.font = '700 24px sans-serif';
+    fallbackCtx.fillText(String(i + 1).padStart(2, '0'), 60, y + 48);
+    fallbackCtx.font = '500 18px sans-serif';
+    fallbackCtx.fillText('VISUAL STORY / CONTENT MODULE', 60, y + 92);
   }
   const fallbackTexture = new THREE.CanvasTexture(fallbackCanvas);
   fallbackTexture.colorSpace = THREE.SRGBColorSpace;
 
-  let longformTexture = fallbackTexture;
-  const loader = new THREE.TextureLoader();
-  loader.load(
-    './assets/sample-longform.svg?v=20260725-2',
-    texture => {
-      texture.colorSpace = THREE.SRGBColorSpace;
-      texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
-      longformTexture = texture;
-      ribbonMaterial.map = texture;
-      ribbonMaterial.needsUpdate = true;
-      sideMaterial.map = texture.clone();
-      sideMaterial.map.wrapS = THREE.RepeatWrapping;
-      sideMaterial.map.wrapT = THREE.ClampToEdgeWrapping;
-      sideMaterial.map.needsUpdate = true;
-      sideMaterial.needsUpdate = true;
-    },
-    undefined,
-    () => {}
-  );
-
   const ribbonMaterial = new THREE.MeshStandardMaterial({
-    map: longformTexture,
+    map: fallbackTexture,
     color: 0xffffff,
-    roughness: 0.82,
-    metalness: 0.02,
+    roughness: 0.84,
+    metalness: 0.01,
     side: THREE.DoubleSide
   });
   const ribbonMesh = new THREE.Mesh(new THREE.BufferGeometry(), ribbonMaterial);
@@ -176,60 +156,122 @@ import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
 
   const ribbonShadow = new THREE.Mesh(
     new THREE.BufferGeometry(),
-    new THREE.MeshBasicMaterial({ color: 0x15171a, transparent: true, opacity: 0.11, side: THREE.DoubleSide, depthWrite: false })
+    new THREE.MeshBasicMaterial({
+      color: 0x16181c,
+      transparent: true,
+      opacity: 0.12,
+      side: THREE.DoubleSide,
+      depthWrite: false
+    })
   );
-  ribbonShadow.position.z = -0.035;
+  ribbonShadow.position.set(0.13, -0.16, -0.055);
   worldScene.add(ribbonShadow);
 
-  const edgeMaterial = new THREE.LineBasicMaterial({ color: 0xb9b8b2, transparent: true, opacity: 0.85 });
+  const edgeMaterial = new THREE.LineBasicMaterial({ color: 0xb8b7b1, transparent: true, opacity: 0.9 });
   const leftEdge = new THREE.Line(new THREE.BufferGeometry(), edgeMaterial);
   const rightEdge = new THREE.Line(new THREE.BufferGeometry(), edgeMaterial);
   worldScene.add(leftEdge, rightEdge);
 
-  const radius = 1.36;
-  const rollWidth = 1.72;
-  const sideMaterial = new THREE.MeshStandardMaterial({
-    map: longformTexture,
-    color: 0xffffff,
-    roughness: 0.76,
-    metalness: 0.03
-  });
-  const capMaterial = new THREE.MeshStandardMaterial({ color: 0xc7c8c5, roughness: 0.92, metalness: 0.02 });
-  const innerMaterial = new THREE.MeshStandardMaterial({ color: 0x8e9194, roughness: 0.95 });
+  const radius = 1.04;
+  const rollWidth = 1.56;
+  const tapeWidth = 1.46;
+  const maxTapeLength = 100;
+  const sampleGap = 0.065;
+
+  const rollTexture = fallbackTexture.clone();
+  rollTexture.wrapS = THREE.RepeatWrapping;
+  rollTexture.wrapT = THREE.RepeatWrapping;
+  rollTexture.repeat.set(2.3, 0.23);
+  rollTexture.needsUpdate = true;
 
   const roller = new THREE.Group();
-  const cylinderGeometry = new THREE.CylinderGeometry(radius, radius, rollWidth, 72, 1, false);
+  const orientGroup = new THREE.Group();
+  const tiltGroup = new THREE.Group();
+  roller.add(orientGroup);
+  orientGroup.add(tiltGroup);
+  tiltGroup.rotation.x = 0.57;
+  tiltGroup.rotation.y = -0.12;
+
+  const outerMaterial = new THREE.MeshStandardMaterial({
+    map: rollTexture,
+    color: 0xf7f7f4,
+    roughness: 0.8,
+    metalness: 0.01,
+    side: THREE.DoubleSide
+  });
+  const cylinderGeometry = new THREE.CylinderGeometry(radius, radius, rollWidth, 96, 1, true);
   cylinderGeometry.rotateZ(Math.PI / 2);
-  const rollBody = new THREE.Mesh(cylinderGeometry, [sideMaterial, capMaterial, capMaterial]);
+  const rollBody = new THREE.Mesh(cylinderGeometry, outerMaterial);
   rollBody.castShadow = true;
   rollBody.receiveShadow = true;
-  roller.add(rollBody);
+  tiltGroup.add(rollBody);
 
-  const ringGeometry = new THREE.TorusGeometry(radius * 0.73, 0.08, 18, 72);
-  ringGeometry.rotateY(Math.PI / 2);
-  const ringA = new THREE.Mesh(ringGeometry, innerMaterial);
-  const ringB = ringA.clone();
-  ringA.position.x = rollWidth * 0.505;
-  ringB.position.x = -rollWidth * 0.505;
-  roller.add(ringA, ringB);
+  const innerRadius = radius * 0.5;
+  const innerGeometry = new THREE.CylinderGeometry(innerRadius, innerRadius, rollWidth * 1.04, 72, 1, true);
+  innerGeometry.rotateZ(Math.PI / 2);
+  const innerTube = new THREE.Mesh(
+    innerGeometry,
+    new THREE.MeshStandardMaterial({ color: 0x8d9092, roughness: 0.96, side: THREE.BackSide })
+  );
+  tiltGroup.add(innerTube);
 
-  const hubGeometry = new THREE.CylinderGeometry(radius * 0.38, radius * 0.38, rollWidth * 1.04, 48);
-  hubGeometry.rotateZ(Math.PI / 2);
-  const hub = new THREE.Mesh(hubGeometry, new THREE.MeshStandardMaterial({ color: 0xdfe0dc, roughness: 0.82 }));
-  roller.add(hub);
-  roller.position.set(-3.4, 0.3, radius * 0.88);
-  roller.rotation.y = -0.22;
+  const rimGeometry = new THREE.TorusGeometry(radius, 0.065, 18, 96);
+  rimGeometry.rotateY(Math.PI / 2);
+  const rimMaterial = new THREE.MeshStandardMaterial({ color: 0xd5d6d3, roughness: 0.9 });
+  const frontRim = new THREE.Mesh(rimGeometry, rimMaterial);
+  const backRim = frontRim.clone();
+  frontRim.position.x = rollWidth * 0.505;
+  backRim.position.x = -rollWidth * 0.505;
+  tiltGroup.add(frontRim, backRim);
+
+  const coreGeometry = new THREE.TorusGeometry(innerRadius, 0.08, 18, 72);
+  coreGeometry.rotateY(Math.PI / 2);
+  const coreMaterial = new THREE.MeshStandardMaterial({ color: 0x6e7174, roughness: 0.96 });
+  const coreFront = new THREE.Mesh(coreGeometry, coreMaterial);
+  const coreBack = coreFront.clone();
+  coreFront.position.x = rollWidth * 0.515;
+  coreBack.position.x = -rollWidth * 0.515;
+  tiltGroup.add(coreFront, coreBack);
+
+  const rollerShadow = new THREE.Mesh(
+    new THREE.CircleGeometry(radius * 1.12, 64),
+    new THREE.MeshBasicMaterial({ color: 0x111318, transparent: true, opacity: 0.18, depthWrite: false })
+  );
+  rollerShadow.scale.set(1.5, 0.48, 1);
+  rollerShadow.position.z = -0.045;
+  worldScene.add(rollerShadow);
+
   worldScene.add(roller);
 
-  const target = new THREE.Vector3(-3.4, 0.3, 0);
+  const loader = new THREE.TextureLoader();
+  loader.load(
+    './assets/sample-longform.svg?v=20260725-3',
+    texture => {
+      texture.colorSpace = THREE.SRGBColorSpace;
+      texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+      ribbonMaterial.map = texture;
+      ribbonMaterial.needsUpdate = true;
+
+      const wrapped = texture.clone();
+      wrapped.wrapS = THREE.RepeatWrapping;
+      wrapped.wrapT = THREE.RepeatWrapping;
+      wrapped.repeat.set(2.3, 0.23);
+      wrapped.needsUpdate = true;
+      outerMaterial.map = wrapped;
+      outerMaterial.needsUpdate = true;
+    },
+    undefined,
+    () => {}
+  );
+
+  const target = new THREE.Vector3(3.25, -0.35, 0);
   const current = target.clone();
-  const previousPosition = current.clone();
-  const raycaster = new THREE.Raycaster();
-  const pointer = new THREE.Vector2();
-  const drawPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
-  const points = [current.clone()];
-  const maxTapeLength = 52;
-  const tapeWidth = 1.64;
+  const velocity = new THREE.Vector3();
+  const contact = new THREE.Vector3();
+  const previousHead = current.clone();
+  const direction = new THREE.Vector3(1, 0, 0);
+  const points = [];
+
   let drawnLength = 0;
   let rollSpin = 0;
   let heading = 0;
@@ -237,9 +279,34 @@ import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
   let touchDrawing = false;
   let rewinding = false;
   let panelVisible = false;
-  let lastGeometryPointCount = 0;
+  let hasMoved = false;
   let frameCounter = 0;
   let lastFpsTime = performance.now();
+
+  const initialisePath = () => {
+    points.length = 0;
+    current.set(3.25, -0.35, 0);
+    target.copy(current);
+    previousHead.copy(current);
+    velocity.set(0, 0, 0);
+    direction.set(1, 0, 0);
+    heading = 0;
+    contact.copy(current).addScaledVector(direction, -radius * 0.92);
+    points.push(
+      new THREE.Vector3(contact.x - 2.6, contact.y + 0.25, 0),
+      new THREE.Vector3(contact.x - 1.25, contact.y + 0.08, 0),
+      contact.clone()
+    );
+    drawnLength = points[0].distanceTo(points[1]) + points[1].distanceTo(points[2]);
+    rollSpin = -drawnLength / radius;
+    hasMoved = false;
+    rebuildRibbon(contact);
+    updateProgress();
+  };
+
+  const raycaster = new THREE.Raycaster();
+  const pointer = new THREE.Vector2();
+  const drawPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
 
   const setTargetFromEvent = event => {
     const rect = renderer.domElement.getBoundingClientRect();
@@ -248,17 +315,21 @@ import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
     pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
     raycaster.setFromCamera(pointer, camera);
     raycaster.ray.intersectPlane(drawPlane, target);
-    target.x = THREE.MathUtils.clamp(target.x, -9.2, 9.2);
-    target.y = THREE.MathUtils.clamp(target.y, -5.1, 5.1);
+    const marginX = 1.35;
+    const marginY = 1.4;
+    target.x = THREE.MathUtils.clamp(target.x, camera.left + marginX, camera.right - marginX);
+    target.y = THREE.MathUtils.clamp(target.y, camera.bottom + marginY, camera.top - marginY);
   };
 
   stage.addEventListener('pointerenter', event => {
     pointerInside = true;
+    document.body.classList.add('is-laying-tape');
     setTargetFromEvent(event);
   });
   stage.addEventListener('pointerleave', () => {
     pointerInside = false;
     touchDrawing = false;
+    document.body.classList.remove('is-laying-tape');
   });
   stage.addEventListener('pointerdown', event => {
     touchDrawing = true;
@@ -274,36 +345,62 @@ import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
     if (event.pointerType === 'mouse' || touchDrawing) setTargetFromEvent(event);
   });
 
-  const rebuildRibbon = () => {
-    if (points.length < 2) return;
-    const controlPoints = points.map(point => point.clone());
-    const curve = new THREE.CatmullRomCurve3(controlPoints, false, 'centripetal', 0.5);
-    const sampleCount = Math.min(360, Math.max(12, points.length * 3));
+  const smoothPoints = source => {
+    if (source.length < 4) return source.map(point => point.clone());
+    let result = source.map(point => point.clone());
+    for (let pass = 0; pass < 2; pass += 1) {
+      const nextResult = [result[0].clone()];
+      for (let i = 1; i < result.length - 1; i += 1) {
+        nextResult.push(
+          result[i - 1].clone().multiplyScalar(0.18)
+            .add(result[i].clone().multiplyScalar(0.64))
+            .add(result[i + 1].clone().multiplyScalar(0.18))
+        );
+      }
+      nextResult.push(result[result.length - 1].clone());
+      result = nextResult;
+    }
+    return result;
+  };
+
+  function rebuildRibbon(dynamicContact = contact) {
+    const source = points.slice();
+    if (!source.length || source[source.length - 1].distanceTo(dynamicContact) > 0.001) {
+      source.push(dynamicContact.clone());
+    }
+    if (source.length < 2) return;
+
+    const path = smoothPoints(source);
     const vertices = [];
     const uvs = [];
     const indices = [];
     const leftPositions = [];
     const rightPositions = [];
     let cumulative = 0;
-    let previousSample = curve.getPoint(0);
 
-    for (let i = 0; i < sampleCount; i += 1) {
-      const t = i / (sampleCount - 1);
-      const point = curve.getPoint(t);
-      const tangent = curve.getTangent(t).normalize();
+    for (let i = 0; i < path.length; i += 1) {
+      const point = path[i];
+      const prev = path[Math.max(0, i - 1)];
+      const nextPoint = path[Math.min(path.length - 1, i + 1)];
+      const tangent = nextPoint.clone().sub(prev).normalize();
+      if (tangent.lengthSq() < 0.0001) tangent.set(1, 0, 0);
       const normal = new THREE.Vector3(-tangent.y, tangent.x, 0).normalize();
-      if (i > 0) cumulative += point.distanceTo(previousSample);
-      previousSample = point;
+      if (i > 0) cumulative += point.distanceTo(path[i - 1]);
+
+      const tailRatio = i / Math.max(path.length - 1, 1);
+      const lift = Math.pow(tailRatio, 12) * 0.09;
+      const z = 0.026 + lift + i * 0.000025;
       const left = point.clone().addScaledVector(normal, tapeWidth / 2);
       const right = point.clone().addScaledVector(normal, -tapeWidth / 2);
-      left.z = 0.025;
-      right.z = 0.025;
+      left.z = z;
+      right.z = z;
       vertices.push(left.x, left.y, left.z, right.x, right.y, right.z);
       leftPositions.push(left.x, left.y, left.z + 0.012);
       rightPositions.push(right.x, right.y, right.z + 0.012);
+
       const v = 1 - THREE.MathUtils.clamp(cumulative / maxTapeLength, 0, 1);
       uvs.push(0, v, 1, v);
-      if (i < sampleCount - 1) {
+      if (i < path.length - 1) {
         const base = i * 2;
         indices.push(base, base + 1, base + 2, base + 1, base + 3, base + 2);
       }
@@ -326,7 +423,28 @@ import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
     rightEdge.geometry = new THREE.BufferGeometry();
     leftEdge.geometry.setAttribute('position', new THREE.Float32BufferAttribute(leftPositions, 3));
     rightEdge.geometry.setAttribute('position', new THREE.Float32BufferAttribute(rightPositions, 3));
-    lastGeometryPointCount = points.length;
+  }
+
+  const appendToPath = dynamicContact => {
+    if (!points.length) points.push(dynamicContact.clone());
+    let tail = points[points.length - 1];
+    let remaining = tail.distanceTo(dynamicContact);
+    if (remaining < sampleGap) return;
+
+    const dir = dynamicContact.clone().sub(tail).normalize();
+    while (remaining >= sampleGap && drawnLength < maxTapeLength) {
+      tail = tail.clone().addScaledVector(dir, sampleGap);
+      points.push(tail);
+      drawnLength += sampleGap;
+      remaining -= sampleGap;
+    }
+
+    if (points.length > 1500) {
+      const reduced = [points[0]];
+      for (let i = 2; i < points.length - 1; i += 2) reduced.push(points[i]);
+      reduced.push(points[points.length - 1]);
+      points.splice(0, points.length, ...reduced);
+    }
   };
 
   const recomputeLength = () => {
@@ -334,31 +452,17 @@ import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
     for (let i = 1; i < points.length; i += 1) drawnLength += points[i].distanceTo(points[i - 1]);
   };
 
-  const updateProgress = () => {
+  function updateProgress() {
     const progress = THREE.MathUtils.clamp(drawnLength / maxTapeLength, 0, 1);
     const percent = Math.round(progress * 100);
     progressFill.style.width = `${percent}%`;
     progressValue.textContent = `${String(percent).padStart(2, '0')}%`;
     pointValue.textContent = String(Math.max(0, points.length - 1)).padStart(3, '0');
-  };
-
-  const resetPath = () => {
-    points.splice(0, points.length, current.clone());
-    drawnLength = 0;
-    lastGeometryPointCount = 0;
-    ribbonMesh.geometry.dispose();
-    ribbonShadow.geometry.dispose();
-    ribbonMesh.geometry = new THREE.BufferGeometry();
-    ribbonShadow.geometry = new THREE.BufferGeometry();
-    leftEdge.geometry.dispose();
-    rightEdge.geometry.dispose();
-    leftEdge.geometry = new THREE.BufferGeometry();
-    rightEdge.geometry = new THREE.BufferGeometry();
-    updateProgress();
-  };
+  }
 
   tapePanel.querySelector('.longform-rewind').addEventListener('click', () => {
     rewinding = true;
+    pointerNote.classList.remove('is-hidden');
   });
   tapePanel.querySelector('.longform-back-to-posters').addEventListener('click', () => {
     posterScene.scrollTo({ top: 0, behavior: 'smooth' });
@@ -369,7 +473,12 @@ import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
     const width = Math.max(1, rect.width);
     const height = Math.max(1, rect.height);
     renderer.setSize(width, height, false);
-    camera.aspect = width / height;
+    const viewHeight = 10.8;
+    const viewWidth = viewHeight * (width / height);
+    camera.left = -viewWidth / 2;
+    camera.right = viewWidth / 2;
+    camera.top = viewHeight / 2;
+    camera.bottom = -viewHeight / 2;
     camera.updateProjectionMatrix();
   };
   new ResizeObserver(resize).observe(stage);
@@ -379,17 +488,16 @@ import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
     panelVisible = entries[0]?.isIntersecting ?? false;
   }, { threshold: 0.12 }).observe(tapePanel);
 
-  // The sixth card becomes the gateway to the second screen instead of wrapping to 01.
   let wheelLockedUntil = 0;
   viewport.addEventListener('wheel', event => {
     event.preventDefault();
     event.stopImmediatePropagation();
     const now = performance.now();
     if (now < wheelLockedUntil) return;
-    const direction = Math.sign(event.deltaY || event.deltaX);
+    const directionSign = Math.sign(event.deltaY || event.deltaX);
     const cardCurrent = Number(posterScene.querySelector('.gallery-current')?.textContent || 1);
     const total = Number(posterScene.querySelector('.gallery-total')?.textContent || 6);
-    if (direction > 0) {
+    if (directionSign > 0) {
       if (cardCurrent < total) {
         next?.click();
         wheelLockedUntil = now + 230;
@@ -397,7 +505,7 @@ import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
         posterScene.scrollTo({ top: tapePanel.offsetTop, behavior: 'smooth' });
         wheelLockedUntil = now + 700;
       }
-    } else if (direction < 0 && cardCurrent > 1) {
+    } else if (directionSign < 0 && cardCurrent > 1) {
       previous?.click();
       wheelLockedUntil = now + 230;
     }
@@ -408,56 +516,72 @@ import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
 
   const clock = new THREE.Clock();
   const animate = () => {
-    const deltaTime = Math.min(clock.getDelta(), 0.05);
+    const deltaTime = Math.min(clock.getDelta(), 0.04);
 
     if (panelVisible) {
       if (rewinding) {
-        if (points.length > 1) {
-          const removeCount = Math.min(4, points.length - 1);
+        const removeCount = Math.min(points.length - 1, Math.max(1, Math.ceil(220 * deltaTime)));
+        if (removeCount > 0) {
           points.splice(points.length - removeCount, removeCount);
           recomputeLength();
           const tail = points[points.length - 1];
-          target.lerp(tail, 0.45);
-          current.lerp(tail, 0.32);
-          rebuildRibbon();
+          const prev = points[Math.max(0, points.length - 2)];
+          const backDir = tail.clone().sub(prev).normalize();
+          if (backDir.lengthSq() < 0.001) backDir.set(1, 0, 0);
+          direction.lerp(backDir, 0.35).normalize();
+          heading = Math.atan2(direction.y, direction.x);
+          current.copy(tail).addScaledVector(direction, radius * 0.92);
+          target.copy(current);
+          velocity.set(0, 0, 0);
+          rollSpin = -drawnLength / radius;
+          contact.copy(tail);
+          rebuildRibbon(contact);
         } else {
           rewinding = false;
-          resetPath();
+          initialisePath();
         }
       } else if (pointerInside || touchDrawing) {
-        current.lerp(target, 1 - Math.pow(0.0008, deltaTime));
-        const step = current.distanceTo(previousPosition);
-        if (step > 0.0005) {
-          const dx = current.x - previousPosition.x;
-          const dy = current.y - previousPosition.y;
-          const desiredHeading = Math.atan2(dy, dx) + Math.PI / 2;
-          heading += Math.atan2(Math.sin(desiredHeading - heading), Math.cos(desiredHeading - heading)) * 0.18;
-          rollSpin -= step / radius;
-          previousPosition.copy(current);
+        const spring = 31;
+        const damping = 9.5;
+        const acceleration = target.clone().sub(current).multiplyScalar(spring);
+        velocity.addScaledVector(acceleration, deltaTime);
+        velocity.multiplyScalar(Math.exp(-damping * deltaTime));
+        if (velocity.length() > 8.5) velocity.setLength(8.5);
+
+        current.addScaledVector(velocity, deltaTime);
+        const movement = current.distanceTo(previousHead);
+        if (movement > 0.00025) {
+          const velocityDirection = velocity.clone().normalize();
+          if (velocityDirection.lengthSq() > 0.001) {
+            direction.lerp(velocityDirection, 1 - Math.pow(0.003, deltaTime)).normalize();
+            const desiredHeading = Math.atan2(direction.y, direction.x);
+            heading += Math.atan2(Math.sin(desiredHeading - heading), Math.cos(desiredHeading - heading)) * 0.24;
+          }
+          rollSpin -= movement / radius;
+          previousHead.copy(current);
+          hasMoved = true;
+          pointerNote.classList.add('is-hidden');
         }
 
-        const tail = points[points.length - 1];
-        const segment = current.distanceTo(tail);
-        if (segment > 0.18 && drawnLength < maxTapeLength) {
-          const allowed = Math.min(segment, maxTapeLength - drawnLength);
-          const direction = current.clone().sub(tail).normalize();
-          const nextPoint = tail.clone().addScaledVector(direction, allowed);
-          points.push(nextPoint);
-          drawnLength += allowed;
-          rebuildRibbon();
-        }
+        contact.copy(current).addScaledVector(direction, -radius * 0.92);
+        if (hasMoved && drawnLength < maxTapeLength) appendToPath(contact);
+        rebuildRibbon(contact);
       }
 
-      roller.position.x += (current.x - roller.position.x) * 0.22;
-      roller.position.y += (current.y - roller.position.y) * 0.22;
-      roller.position.z = radius * 0.88 + Math.sin(performance.now() * 0.002) * 0.025;
-      roller.rotation.z += Math.atan2(Math.sin(heading - roller.rotation.z), Math.cos(heading - roller.rotation.z)) * 0.2;
-      rollBody.rotation.x += (rollSpin - rollBody.rotation.x) * 0.3;
-      ringA.rotation.x = rollBody.rotation.x;
-      ringB.rotation.x = rollBody.rotation.x;
-      hub.rotation.x = rollBody.rotation.x;
+      roller.position.set(current.x, current.y, radius + 0.035);
+      orientGroup.rotation.z += Math.atan2(
+        Math.sin(heading + Math.PI / 2 - orientGroup.rotation.z),
+        Math.cos(heading + Math.PI / 2 - orientGroup.rotation.z)
+      ) * 0.24;
+      rollBody.rotation.x += (rollSpin - rollBody.rotation.x) * 0.35;
+      innerTube.rotation.x = rollBody.rotation.x;
+      frontRim.rotation.x = rollBody.rotation.x;
+      backRim.rotation.x = rollBody.rotation.x;
+      coreFront.rotation.x = rollBody.rotation.x;
+      coreBack.rotation.x = rollBody.rotation.x;
 
-      if (points.length !== lastGeometryPointCount && points.length > 1) rebuildRibbon();
+      rollerShadow.position.set(current.x + 0.14, current.y - 0.28, -0.045);
+      rollerShadow.rotation.z = orientGroup.rotation.z;
       updateProgress();
     }
 
@@ -472,5 +596,7 @@ import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
     }
     requestAnimationFrame(animate);
   };
+
+  initialisePath();
   animate();
 })();
