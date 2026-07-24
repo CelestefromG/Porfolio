@@ -1,4 +1,4 @@
-/* Two-screen Visual Design scene: six posters, then a cursor-driven 3D tape. */
+/* Visual Design scene: six posters first, then a connected cursor-driven tape roll. */
 .poster-scene.has-longform-archive {
   padding: 0 !important;
   overflow-y: auto !important;
@@ -53,9 +53,9 @@
   color: #111318;
   border-top: 1px solid rgba(12,13,15,.18);
   background:
-    linear-gradient(rgba(255,255,255,.58), rgba(255,255,255,.58)),
-    radial-gradient(circle at 18% 15%, rgba(255,255,255,.98), transparent 34%),
-    #cfd0cd;
+    linear-gradient(rgba(255,255,255,.48), rgba(255,255,255,.48)),
+    radial-gradient(circle at 16% 12%, rgba(255,255,255,.98), transparent 34%),
+    #cdcecb;
 }
 .longform-tape-panel::before {
   content: "";
@@ -63,11 +63,21 @@
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  opacity: .25;
+  opacity: .24;
   background-image:
     linear-gradient(90deg, rgba(0,0,0,.026) 1px, transparent 1px),
     linear-gradient(rgba(0,0,0,.026) 1px, transparent 1px);
   background-size: 72px 72px;
+}
+.longform-tape-panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(to bottom, rgba(255,255,255,.54), transparent 20%),
+    radial-gradient(circle at 50% 48%, transparent 44%, rgba(18,20,24,.055) 100%);
 }
 
 .longform-tape-head {
@@ -75,7 +85,7 @@
   left: 4.2vw;
   right: 4.2vw;
   top: 34px;
-  z-index: 16;
+  z-index: 18;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -85,14 +95,14 @@
 .longform-tape-head .eyebrow { margin: 0 0 12px; }
 .longform-tape-head h3 {
   margin: 0;
-  font-size: clamp(48px, 6vw, 94px);
+  font-size: clamp(46px, 5.2vw, 82px);
   line-height: .88;
   letter-spacing: -.065em;
   font-weight: 500;
 }
 .longform-tape-head > p {
-  width: min(410px, 34vw);
-  margin: 10px 0 0;
+  width: min(430px, 35vw);
+  margin: 8px 0 0;
   font: 400 10px/1.65 "IBM Plex Mono", monospace;
   text-transform: uppercase;
   opacity: .58;
@@ -104,7 +114,7 @@
   z-index: 2;
   overflow: hidden;
   touch-action: none;
-  cursor: crosshair;
+  cursor: none;
 }
 .longform-canvas-host,
 .longform-webgl {
@@ -115,12 +125,13 @@
   display: block;
 }
 .longform-webgl { outline: none; }
+body.is-laying-tape .cursor-dot { opacity: 0 !important; }
 
 .longform-pointer-note {
   position: absolute;
   left: 50%;
-  top: 18%;
-  z-index: 18;
+  top: 22%;
+  z-index: 20;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
@@ -129,7 +140,9 @@
   letter-spacing: .08em;
   pointer-events: none;
   opacity: .58;
+  transition: opacity .45s ease, transform .45s ease;
 }
+.longform-pointer-note.is-hidden { opacity: 0; transform: translate(-50%, -8px); }
 .longform-pointer-note span {
   width: 8px;
   height: 8px;
@@ -144,14 +157,14 @@
 .longform-fps {
   position: absolute;
   top: 22px;
-  z-index: 18;
+  z-index: 20;
   display: grid;
   gap: 5px;
   font: 500 8px/1 "IBM Plex Mono", monospace;
   pointer-events: none;
 }
 .longform-counter { right: 34px; }
-.longform-fps { right: 100px; }
+.longform-fps { right: 104px; }
 .longform-counter span,
 .longform-fps span { opacity: .5; }
 .longform-counter b,
@@ -161,7 +174,7 @@
   position: absolute;
   left: 4.2vw;
   bottom: 94px;
-  z-index: 20;
+  z-index: 24;
   width: min(270px, 23vw);
   display: grid;
   gap: 8px;
@@ -176,7 +189,7 @@
   position: absolute;
   left: 50%;
   bottom: 24px;
-  z-index: 22;
+  z-index: 26;
   width: min(720px, 66vw);
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -228,34 +241,34 @@
 .longform-back-to-posters {
   position: absolute;
   bottom: 95px;
-  z-index: 24;
+  z-index: 28;
   padding: 10px 13px !important;
   border: 1px solid #111 !important;
   background: rgba(243,242,239,.82) !important;
   font: 500 8px/1 "IBM Plex Mono", monospace !important;
   backdrop-filter: blur(8px);
 }
-.longform-rewind { right: 132px; display: flex; align-items: center; gap: 8px; }
+.longform-rewind { right: 136px; display: flex; align-items: center; gap: 8px; }
 .longform-rewind span { font-size: 14px; }
 .longform-back-to-posters { right: 4.2vw; }
 .longform-rewind:hover,
 .longform-back-to-posters:hover { background: #111 !important; color: #f3f2ef; }
 
 @media (max-width: 900px) {
-  .longform-tape-head > p { width: 38vw; }
+  .longform-tape-head > p { width: 39vw; }
   .longform-tape-menu { width: 66vw; }
-  .longform-rewind { right: 118px; }
+  .longform-rewind { right: 122px; }
 }
 
 @media (max-width: 620px) {
   .poster-showcase-panel .gallery-head { top: 100px; }
   .poster-scroll-cue { display: none; }
   .longform-tape-head { top: 84px; left: 20px; right: 20px; }
-  .longform-tape-head h3 { font-size: 44px; }
-  .longform-tape-head > p { width: 49vw; font-size: 8px; }
-  .longform-pointer-note { top: 24%; }
+  .longform-tape-head h3 { font-size: 42px; }
+  .longform-tape-head > p { width: 52vw; font-size: 8px; }
+  .longform-pointer-note { top: 27%; }
   .longform-counter { right: 18px; top: 82px; }
-  .longform-fps { right: 76px; top: 82px; }
+  .longform-fps { right: 78px; top: 82px; }
   .longform-progress { left: 18px; bottom: 142px; width: 42vw; }
   .longform-tape-menu {
     width: calc(100vw - 36px);
@@ -266,6 +279,6 @@
   .longform-tape-tab.is-active { display: grid; }
   .longform-rewind,
   .longform-back-to-posters { bottom: 88px; }
-  .longform-rewind { right: 126px; }
+  .longform-rewind { right: 128px; }
   .longform-back-to-posters { right: 18px; }
 }
