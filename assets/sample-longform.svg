@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="2800" viewBox="0 0 720 2800">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f7f3e9"/><stop offset="1" stop-color="#e9eef2"/></linearGradient>
+    <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#0a7cff"/><stop offset="1" stop-color="#64d8ff"/></linearGradient>
+    <linearGradient id="lime" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#b7ef24"/><stop offset="1" stop-color="#61cf42"/></linearGradient>
+    <filter id="shadow"><feDropShadow dx="0" dy="12" stdDeviation="16" flood-opacity=".16"/></filter>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" fill="none" stroke="#1b2430" stroke-opacity=".055"/></pattern>
+  </defs>
+  <rect width="720" height="2800" fill="url(#bg)"/>
+  <rect width="720" height="2800" fill="url(#grid)"/>
+
+  <g font-family="Arial, Helvetica, sans-serif" fill="#101318">
+    <text x="54" y="78" font-size="22" font-weight="700" letter-spacing="4">SAMPLE LONGFORM / 01</text>
+    <text x="54" y="190" font-size="92" font-weight="800">MOVE</text>
+    <text x="54" y="282" font-size="92" font-weight="800">REST</text>
+    <text x="54" y="374" font-size="92" font-weight="800">RESET</text>
+    <text x="54" y="432" font-size="25">A modular visual story about daily rhythm and recovery.</text>
+  </g>
+
+  <g transform="translate(430 82)" filter="url(#shadow)">
+    <circle cx="92" cy="92" r="92" fill="#11151b"/>
+    <circle cx="92" cy="92" r="62" fill="none" stroke="#b7ef24" stroke-width="24" stroke-dasharray="245 145" transform="rotate(-52 92 92)"/>
+    <circle cx="92" cy="92" r="25" fill="#f5f1e7"/>
+    <path d="M92 92L151 50" stroke="#f5f1e7" stroke-width="7" stroke-linecap="round"/>
+  </g>
+
+  <g transform="translate(54 520)">
+    <rect width="612" height="322" rx="26" fill="#11151b" filter="url(#shadow)"/>
+    <text x="36" y="58" font-family="Arial" font-size="18" fill="#b7ef24" font-weight="700">01 / UNDERSTAND YOUR DAY</text>
+    <text x="36" y="116" font-family="Arial" font-size="38" fill="#fff" font-weight="700">ENERGY IS A CURVE</text>
+    <path d="M42 244 C130 115 214 270 302 170 S482 98 568 210" fill="none" stroke="#64d8ff" stroke-width="14" stroke-linecap="round"/>
+    <circle cx="42" cy="244" r="12" fill="#b7ef24"/><circle cx="302" cy="170" r="12" fill="#b7ef24"/><circle cx="568" cy="210" r="12" fill="#b7ef24"/>
+    <g font-family="Arial" font-size="15" fill="#fff" opacity=".72"><text x="36" y="292">08:00</text><text x="280" y="292">14:00</text><text x="530" y="292">22:00</text></g>
+  </g>
+
+  <g transform="translate(54 908)">
+    <text x="0" y="0" font-family="Arial" font-size="18" font-weight="700" letter-spacing="3">02 / SMALL ACTIONS</text>
+    <text x="0" y="68" font-family="Arial" font-size="56" font-weight="800">THREE CHECKPOINTS</text>
+    <g transform="translate(0 116)" font-family="Arial">
+      <rect width="188" height="270" rx="22" fill="url(#blue)"/>
+      <text x="24" y="48" font-size="16" font-weight="700">MORNING</text><text x="24" y="112" font-size="62" font-weight="800">10</text><text x="24" y="146" font-size="22">MINUTES</text>
+      <path d="M28 220h128" stroke="#fff" stroke-width="8" stroke-linecap="round"/><circle cx="76" cy="220" r="16" fill="#fff"/>
+      <rect x="212" width="188" height="270" rx="22" fill="url(#lime)"/>
+      <text x="236" y="48" font-size="16" font-weight="700">MIDDAY</text><text x="236" y="112" font-size="62" font-weight="800">20</text><text x="236" y="146" font-size="22">STEPS × 5</text>
+      <path d="M242 216c28-40 52 36 80-4s50 24 66-10" fill="none" stroke="#11151b" stroke-width="8" stroke-linecap="round"/>
+      <rect x="424" width="188" height="270" rx="22" fill="#ff735c"/>
+      <text x="448" y="48" font-size="16" font-weight="700">EVENING</text><text x="448" y="112" font-size="62" font-weight="800">30</text><text x="448" y="146" font-size="22">MINUTES OFF</text>
+      <circle cx="518" cy="218" r="45" fill="none" stroke="#11151b" stroke-width="8"/><path d="M518 184v38l28 18" fill="none" stroke="#11151b" stroke-width="8" stroke-linecap="round"/>
+    </g>
+  </g>
+
+  <g transform="translate(54 1410)" font-family="Arial">
+    <rect width="612" height="500" rx="28" fill="#fff" stroke="#11151b" stroke-width="3" filter="url(#shadow)"/>
+    <text x="36" y="58" font-size="18" font-weight="700" letter-spacing="3">03 / ROUTE MAP</text>
+    <text x="36" y="120" font-size="48" font-weight="800">A GENTLER LOOP</text>
+    <path d="M56 390 C120 206 196 428 280 246 S446 178 548 334" fill="none" stroke="#11151b" stroke-width="22" stroke-linecap="round"/>
+    <path d="M56 390 C120 206 196 428 280 246 S446 178 548 334" fill="none" stroke="#b7ef24" stroke-width="10" stroke-linecap="round" stroke-dasharray="26 18"/>
+    <g fill="#0a7cff" stroke="#fff" stroke-width="8"><circle cx="56" cy="390" r="24"/><circle cx="280" cy="246" r="24"/><circle cx="548" cy="334" r="24"/></g>
+    <g font-size="16" font-weight="700"><text x="34" y="446">START</text><text x="247" y="206">PAUSE</text><text x="520" y="390">RESET</text></g>
+  </g>
+
+  <g transform="translate(54 1982)" font-family="Arial">
+    <text x="0" y="0" font-size="18" font-weight="700" letter-spacing="3">04 / VISUAL NOTES</text>
+    <text x="0" y="70" font-size="55" font-weight="800">COLLECT THE SIGNALS</text>
+    <g transform="translate(0 116)">
+      <rect width="292" height="292" rx="24" fill="#11151b"/>
+      <circle cx="146" cy="146" r="92" fill="none" stroke="#64d8ff" stroke-width="34" stroke-dasharray="320 260" transform="rotate(-90 146 146)"/>
+      <text x="110" y="158" font-size="42" fill="#fff" font-weight="800">64%</text>
+      <rect x="320" width="292" height="292" rx="24" fill="#efe7d8"/>
+      <g transform="translate(36 52)" fill="#11151b"><rect width="28" height="174" rx="14"/><rect x="54" y="42" width="28" height="132" rx="14"/><rect x="108" y="82" width="28" height="92" rx="14"/><rect x="162" y="18" width="28" height="156" rx="14"/><rect x="216" y="108" width="28" height="66" rx="14"/></g>
+      <text x="354" y="260" font-size="17" font-weight="700">RHYTHM / 7 DAYS</text>
+    </g>
+  </g>
+
+  <g transform="translate(54 2470)" font-family="Arial">
+    <rect width="612" height="250" rx="26" fill="url(#blue)"/>
+    <text x="34" y="62" font-size="17" font-weight="700" letter-spacing="3">FINAL NOTE</text>
+    <text x="34" y="128" font-size="45" font-weight="800">DO LESS, NOTICE MORE.</text>
+    <text x="34" y="182" font-size="20">A sample editorial longform created for the tape interaction.</text>
+    <path d="M470 198h96" stroke="#11151b" stroke-width="10" stroke-linecap="round"/><path d="M538 168l32 30-32 30" fill="none" stroke="#11151b" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="54" y="2764" font-family="Arial" font-size="15" fill="#101318" opacity=".56">CELESTE PORTFOLIO / INTERACTION SAMPLE / 2026</text>
+</svg>
