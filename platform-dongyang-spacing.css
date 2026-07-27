@@ -1,0 +1,81 @@
+/* Dongyang section spacing and title refinement */
+.dongyang-section {
+  min-height: 132vh;
+}
+
+.dongyang-heading {
+  top: 7.5vh;
+  width: min(32vw, 430px);
+}
+
+.dongyang-heading h2 {
+  font-size: clamp(34px, 4.5vw, 64px);
+  line-height: .94;
+  letter-spacing: -.05em;
+}
+
+.dongyang-heading > p:last-child {
+  width: min(390px, 100%);
+  margin-top: 22px;
+}
+
+.dongyang-meta {
+  top: 8.5vh;
+}
+
+.dongyang-stack {
+  top: 57%;
+  width: min(72vw, 940px);
+  height: min(60vh, 560px);
+  transform: translate(-50%, -34%) scale(.9);
+  transform-origin: center top;
+}
+
+.dongyang-instruction {
+  bottom: 2.2vh;
+}
+
+@media (max-width: 920px) {
+  .dongyang-heading {
+    top: 7.5vh;
+    width: 38vw;
+  }
+
+  .dongyang-stack {
+    top: 58%;
+    width: 86vw;
+    transform: translate(-50%, -33%) scale(.86);
+  }
+}
+
+@media (max-width: 640px) {
+  .dongyang-section {
+    min-height: 124vh;
+  }
+
+  .dongyang-heading {
+    top: 8vh;
+    width: calc(100vw - 36px);
+  }
+
+  .dongyang-heading h2 {
+    max-width: 290px;
+    font-size: 40px;
+    line-height: .96;
+  }
+
+  .dongyang-heading > p:last-child {
+    width: 285px;
+    margin-top: 16px;
+  }
+
+  .dongyang-stack {
+    top: 59%;
+    width: calc(100vw - 20px);
+    transform: translate(-50%, -28%) scale(.82);
+  }
+
+  .dongyang-instruction {
+    bottom: 1.6vh;
+  }
+}
