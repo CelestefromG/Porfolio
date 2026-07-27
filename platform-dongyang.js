@@ -4,7 +4,7 @@
   if (!scene || !biliSection || scene.dataset.dongyangReady === 'true') return;
   scene.dataset.dongyangReady = 'true';
 
-  const cacheVersion = '20260727-4';
+  const cacheVersion = '20260728-1';
   const folders = [
     {
       code: 'CM-01',
@@ -57,20 +57,20 @@
   section.innerHTML = `
     <div class="dongyang-sticky">
       <header class="dongyang-heading">
-        <p class="eyebrow">03C / CITY MEDIA CENTER</p>
-        <h2 data-dy-title>市媒体中心运营</h2>
-        <p data-dy-intro>市媒体中心平台运营与地方文化影像内容。悬浮文件夹，打开对应案例。</p>
+        <p class="eyebrow">03C / CONVERGED MEDIA OPERATIONS</p>
+        <h2 data-dy-title>融媒体内容运营</h2>
+        <p data-dy-intro>短视频 · 长视频 · 公众号编辑</p>
       </header>
 
       <div class="dongyang-meta">
-        <b>CITY MEDIA CENTER / CONTENT OPERATIONS</b>
-        <span data-dy-meta>地方文化 · 内容策划 · 拍摄 · 剪辑</span>
+        <b>LONG-FORM VIDEO / LOCAL CULTURE</b>
+        <span data-dy-meta>地方文化影像 · 内容策划 · 拍摄 · 剪辑</span>
       </div>
 
-      <div class="dongyang-stack" aria-label="City media center case folders"></div>
+      <div class="dongyang-stack" aria-label="Long-form local culture video case folders"></div>
 
       <div class="dongyang-instruction">
-        <span></span><b data-dy-hint>悬浮文件夹以打开</b><em>04 CASES</em>
+        <span></span><b data-dy-hint>悬浮文件夹以打开长视频案例</b><em>04 CASES</em>
       </div>
     </div>
   `;
@@ -99,7 +99,7 @@
             </a>
           </div>
           <a class="dongyang-player" href="${folder.href}" target="_blank" rel="noopener noreferrer" aria-label="Open published case ${index + 1}">
-            <img src="${folder.poster}" alt="City media center case preview ${index + 1}">
+            <img src="${folder.poster}" alt="Long-form video case preview ${index + 1}">
             <div class="dongyang-player-ui"><span>CASE PREVIEW</span><b>OPEN ↗</b></div>
           </a>
         </div>
@@ -107,7 +107,7 @@
       <div class="dongyang-folder-front">
         <span>${folder.code}</span>
         <b></b>
-        <em>CITY MEDIA CENTER</em>
+        <em>LONG-FORM VIDEO</em>
       </div>
     `;
     stack.appendChild(item);
@@ -132,17 +132,17 @@
   const isEnglish = () => document.querySelector('.lang-en')?.classList.contains('is-active');
   const text = {
     zh: {
-      title: '市媒体中心运营',
-      intro: '市媒体中心平台运营与地方文化影像内容。悬浮文件夹，打开对应案例。',
-      meta: '地方文化 · 内容策划 · 拍摄 · 剪辑',
-      hint: '悬浮文件夹以打开',
+      title: '融媒体内容运营',
+      intro: '短视频 · 长视频 · 公众号编辑',
+      meta: '地方文化影像 · 内容策划 · 拍摄 · 剪辑',
+      hint: '悬浮文件夹以打开长视频案例',
       explore: '探索更多'
     },
     en: {
-      title: 'CITY MEDIA CENTER<br>OPERATIONS',
-      intro: 'Platform operations and local-culture moving-image content for a city media center. Hover over a folder to open each published case.',
+      title: 'CONVERGED MEDIA<br>CONTENT OPERATIONS',
+      intro: 'SHORT VIDEO · LONG-FORM VIDEO · WECHAT EDITORIAL',
       meta: 'LOCAL CULTURE · CONTENT · FILMING · EDITING',
-      hint: 'HOVER A FOLDER TO OPEN',
+      hint: 'HOVER A FOLDER TO OPEN A LONG-FORM CASE',
       explore: 'EXPLORE MORE'
     }
   };
