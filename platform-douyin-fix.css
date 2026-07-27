@@ -1,0 +1,7 @@
+.douyin-book {
+  --left-scale: .35;
+}
+
+.douyin-board-left {
+  transform: scaleX(var(--left-scale));
+}
