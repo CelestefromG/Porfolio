@@ -75,8 +75,9 @@
   `;
   dongyangSection.insertAdjacentElement('afterend', section);
 
+  const book = section.querySelector('.douyin-book');
   const cover = section.querySelector('.douyin-cover');
-  const sheets = [...section.querySelectorAll('.douyin-sheet')];
+  const sheets = [1, 2, 3].map(index => section.querySelector(`[data-sheet="${index}"]`));
   const currentNode = section.querySelector('[data-douyin-current]');
   const progressLabel = section.querySelector('[data-douyin-progress-label]');
   const progressLine = section.querySelector('.douyin-progress > span');
@@ -102,6 +103,9 @@
     const page2 = phase(progress, .46, .63);
     const page3 = phase(progress, .69, .86);
 
+    book.style.setProperty('--book-shift', `${-25 * (1 - coverProgress)}%`);
+    book.style.setProperty('--left-reveal', coverProgress.toFixed(4));
+    book.style.setProperty('--left-scale', (0.35 + coverProgress * 0.65).toFixed(4));
     cover.style.setProperty('--cover-angle', `${-166 * coverProgress}deg`);
     sheets[0].style.setProperty('--sheet-angle', `${-174 * page1}deg`);
     sheets[1].style.setProperty('--sheet-angle', `${-174 * page2}deg`);
