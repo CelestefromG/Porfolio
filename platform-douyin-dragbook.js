@@ -4,13 +4,31 @@
   if (!scene || !dongyangSection || scene.dataset.douyinDragbookReady === 'true') return;
   scene.dataset.douyinDragbookReady = 'true';
 
-  const cacheVersion = '20260728-1';
+  const cacheVersion = '20260728-2';
   const assets = {
-    left: `./assets/sanqin-left.jpg?v=${cacheVersion}`,
-    front: `./assets/sanqin-front.jpg?v=${cacheVersion}`,
-    back: `./assets/sanqin-back.jpg?v=${cacheVersion}`,
-    right: `./assets/sanqin-right.jpg?v=${cacheVersion}`
+    leftMain: `./assets/sanqin-left-main.jpg?v=${cacheVersion}`,
+    leftSmall: `./assets/sanqin-left-small.jpg?v=${cacheVersion}`,
+    frontMain: `./assets/sanqin-front-main.jpg?v=${cacheVersion}`,
+    frontSmall: `./assets/sanqin-front-small.jpg?v=${cacheVersion}`,
+    backMain: `./assets/sanqin-back-main.jpg?v=${cacheVersion}`,
+    backSmall: `./assets/sanqin-back-small.jpg?v=${cacheVersion}`,
+    rightMain: `./assets/sanqin-right-main.jpg?v=${cacheVersion}`,
+    rightSmall: `./assets/sanqin-right-small.jpg?v=${cacheVersion}`
   };
+
+  const framedPage = ({ main, small, mainName, smallName, page, alt }) => `
+    <div class="douyin-page-layout">
+      <figure class="douyin-photo-frame douyin-photo-main">
+        <div class="douyin-photo-placeholder"><b>MAIN IMAGE</b><span>${mainName}</span></div>
+        <img src="${main}" alt="${alt} main image">
+      </figure>
+      <figure class="douyin-photo-frame douyin-photo-small">
+        <div class="douyin-photo-placeholder"><b>DETAIL</b><span>${smallName}</span></div>
+        <img src="${small}" alt="${alt} detail image">
+      </figure>
+      <div class="douyin-page-index"><span>DOUYIN / SANQIN YOUTH</span><b>${page}</b></div>
+    </div>
+  `;
 
   const section = document.createElement('section');
   section.className = 'douyin-dragbook-section';
@@ -19,8 +37,8 @@
     <div class="douyin-dragbook-inner">
       <header class="douyin-dragbook-heading">
         <p class="eyebrow">03D / DOUYIN</p>
-        <h2 data-douyin-title>三秦青年</h2>
-        <p data-douyin-intro>社会正面新闻与青年故事的短视频内容运营。长按右页并向左拖动，翻阅一次案例页。</p>
+        <h2 data-douyin-title>省融媒体平台运营</h2>
+        <p data-douyin-intro>省级融媒体平台短视频内容运营。长按右页并向左拖动，翻阅一次案例页。</p>
       </header>
 
       <div class="douyin-role-note">
@@ -32,23 +50,47 @@
         <div class="douyin-book-shell"></div>
         <div class="douyin-book-pages">
           <div class="douyin-page douyin-page-left">
-            <div class="douyin-page-placeholder"><b>LEFT PAGE</b><span>sanqin-left.jpg</span></div>
-            <img class="douyin-page-image" src="${assets.left}" alt="Sanqin Youth left page">
+            ${framedPage({
+              main: assets.leftMain,
+              small: assets.leftSmall,
+              mainName: 'sanqin-left-main.jpg',
+              smallName: 'sanqin-left-small.jpg',
+              page: '01',
+              alt: 'Sanqin Youth left page'
+            })}
           </div>
 
           <div class="douyin-page douyin-page-right">
-            <div class="douyin-page-placeholder"><b>NEXT RIGHT PAGE</b><span>sanqin-right.jpg</span></div>
-            <img class="douyin-page-image" src="${assets.right}" alt="Sanqin Youth next right page">
+            ${framedPage({
+              main: assets.rightMain,
+              small: assets.rightSmall,
+              mainName: 'sanqin-right-main.jpg',
+              smallName: 'sanqin-right-small.jpg',
+              page: '04',
+              alt: 'Sanqin Youth next right page'
+            })}
           </div>
 
           <div class="douyin-flip-sheet" role="button" tabindex="0" aria-label="Drag to turn the page">
             <div class="douyin-flip-face douyin-flip-front">
-              <div class="douyin-page-placeholder"><b>FRONT</b><span>sanqin-front.jpg</span></div>
-              <img class="douyin-flip-image" src="${assets.front}" alt="Sanqin Youth page front">
+              ${framedPage({
+                main: assets.frontMain,
+                small: assets.frontSmall,
+                mainName: 'sanqin-front-main.jpg',
+                smallName: 'sanqin-front-small.jpg',
+                page: '02',
+                alt: 'Sanqin Youth page front'
+              })}
             </div>
             <div class="douyin-flip-face douyin-flip-back">
-              <div class="douyin-page-placeholder"><b>BACK</b><span>sanqin-back.jpg</span></div>
-              <img class="douyin-flip-image" src="${assets.back}" alt="Sanqin Youth page back">
+              ${framedPage({
+                main: assets.backMain,
+                small: assets.backSmall,
+                mainName: 'sanqin-back-main.jpg',
+                smallName: 'sanqin-back-small.jpg',
+                page: '03',
+                alt: 'Sanqin Youth page back'
+              })}
             </div>
           </div>
         </div>
@@ -66,7 +108,7 @@
   dongyangSection.insertAdjacentElement('afterend', section);
 
   const sheet = section.querySelector('.douyin-flip-sheet');
-  const images = [...section.querySelectorAll('img')];
+  const images = [...section.querySelectorAll('.douyin-photo-frame img')];
   let progress = 0;
   let target = 0;
   let dragging = false;
@@ -76,11 +118,12 @@
   let raf = 0;
 
   images.forEach(image => {
-    image.addEventListener('load', () => {
-      image.previousElementSibling?.setAttribute('hidden', '');
-    });
+    const frame = image.closest('.douyin-photo-frame');
+    const placeholder = frame?.querySelector('.douyin-photo-placeholder');
+    image.addEventListener('load', () => placeholder?.setAttribute('hidden', ''));
     image.addEventListener('error', () => {
       image.hidden = true;
+      placeholder?.removeAttribute('hidden');
     });
   });
 
@@ -148,13 +191,13 @@
 
   const copy = {
     zh: {
-      title: '三秦青年',
-      intro: '社会正面新闻与青年故事的短视频内容运营。长按右页并向左拖动，翻阅一次案例页。',
+      title: '省融媒体平台运营',
+      intro: '省级融媒体平台短视频内容运营。长按右页并向左拖动，翻阅一次案例页。',
       role: '职责：选题 · 剪辑'
     },
     en: {
-      title: 'SANQIN YOUTH',
-      intro: 'Short-form operations covering positive social news and youth stories. Press and drag the right page left to turn it once.',
+      title: 'PROVINCIAL MEDIA PLATFORM OPERATIONS',
+      intro: 'Short-form content operations for a provincial converged media platform. Press and drag the right page left to turn it once.',
       role: 'ROLE: TOPIC SELECTION · EDITING'
     }
   };
