@@ -1,0 +1,300 @@
+/* Platform operations — single-page draggable Douyin book */
+.douyin-dragbook-section {
+  position: relative;
+  min-height: 118vh;
+  color: #f3efe7;
+  background:
+    radial-gradient(circle at 50% 54%, rgba(255,255,255,.07), transparent 34%),
+    linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px),
+    #050506;
+  background-size: auto, 38px 38px, 38px 38px, auto;
+  scroll-snap-align: start;
+  overflow: hidden;
+}
+
+.douyin-dragbook-section::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 26vh;
+  pointer-events: none;
+  background: linear-gradient(to bottom, #f2efe7 0%, #77736d 28%, #242325 67%, transparent 100%);
+  opacity: .92;
+}
+
+.douyin-dragbook-inner {
+  position: relative;
+  min-height: 100vh;
+  padding: 13vh 4.2vw 8vh;
+  box-sizing: border-box;
+}
+
+.douyin-dragbook-heading {
+  position: relative;
+  z-index: 8;
+  width: min(31vw, 430px);
+}
+
+.douyin-dragbook-heading .eyebrow {
+  margin: 0 0 13px;
+  color: rgba(243,239,231,.6);
+}
+
+.douyin-dragbook-heading h2 {
+  margin: 0;
+  font-size: clamp(44px, 5.4vw, 80px);
+  line-height: .92;
+  letter-spacing: -.065em;
+  font-weight: 500;
+}
+
+.douyin-dragbook-heading p:last-child {
+  margin: 20px 0 0;
+  color: rgba(243,239,231,.58);
+  font: 400 10px/1.75 "IBM Plex Mono", monospace;
+}
+
+.douyin-role-note {
+  position: absolute;
+  right: 4.2vw;
+  top: 14vh;
+  z-index: 8;
+  display: grid;
+  justify-items: end;
+  gap: 8px;
+  color: rgba(243,239,231,.56);
+  font: 500 9px/1.3 "IBM Plex Mono", monospace;
+}
+
+.douyin-role-note b {
+  color: rgba(243,239,231,.88);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.douyin-book-wrap {
+  position: absolute;
+  left: 50%;
+  top: 58%;
+  width: min(74vw, 1120px);
+  aspect-ratio: 1.88 / 1;
+  transform: translate(-50%, -44%);
+  perspective: 2200px;
+  user-select: none;
+  touch-action: none;
+}
+
+.douyin-book-shell {
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  background:
+    linear-gradient(150deg, rgba(255,255,255,.08), transparent 22%),
+    linear-gradient(120deg, #272729, #0d0d0e 72%);
+  border: 1px solid rgba(255,255,255,.1);
+  box-shadow: 0 48px 72px rgba(0,0,0,.58), inset 0 0 0 3px rgba(255,255,255,.025);
+}
+
+.douyin-book-shell::after {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border: 2px dashed rgba(230,225,215,.28);
+  border-radius: 16px;
+  pointer-events: none;
+}
+
+.douyin-book-pages {
+  position: absolute;
+  inset: 4.8% 8%;
+  transform-style: preserve-3d;
+}
+
+.douyin-page {
+  position: absolute;
+  top: 0;
+  width: 49.4%;
+  height: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  border: 1px solid rgba(45,40,34,.14);
+  background:
+    linear-gradient(rgba(55,48,38,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(55,48,38,.025) 1px, transparent 1px),
+    #eee8dc;
+  background-size: 100% 29px, 29px 100%, auto;
+  box-shadow: 0 9px 24px rgba(0,0,0,.28);
+}
+
+.douyin-page-left {
+  left: 0;
+  border-radius: 12px 2px 2px 12px;
+}
+
+.douyin-page-right {
+  right: 0;
+  border-radius: 2px 12px 12px 2px;
+}
+
+.douyin-page-image,
+.douyin-flip-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.douyin-page-placeholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: 8px;
+  text-align: center;
+  color: rgba(35,32,29,.42);
+  font: 500 10px/1.4 "IBM Plex Mono", monospace;
+}
+
+.douyin-page-placeholder b {
+  color: rgba(35,32,29,.72);
+  font-size: 15px;
+}
+
+.douyin-flip-sheet {
+  --turn-progress: 0;
+  position: absolute;
+  right: .6%;
+  top: 0;
+  width: 49.4%;
+  height: 100%;
+  z-index: 12;
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  transform: rotateY(calc(var(--turn-progress) * -180deg));
+  cursor: grab;
+  will-change: transform;
+}
+
+.douyin-flip-sheet.is-dragging {
+  cursor: grabbing;
+}
+
+.douyin-flip-face {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  backface-visibility: hidden;
+  box-sizing: border-box;
+  border: 1px solid rgba(45,40,34,.14);
+  background: #eee8dc;
+  box-shadow: 6px 5px 14px rgba(0,0,0,.25);
+}
+
+.douyin-flip-front {
+  border-radius: 2px 12px 12px 2px;
+}
+
+.douyin-flip-back {
+  border-radius: 12px 2px 2px 12px;
+  transform: rotateY(180deg);
+}
+
+.douyin-flip-sheet::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(0,0,0,.22), transparent 18%, transparent 78%, rgba(255,255,255,.14));
+  opacity: calc(.2 + sin(var(--turn-progress) * 3.14159) * .8);
+  mix-blend-mode: multiply;
+}
+
+.douyin-book-spine {
+  position: absolute;
+  left: 50%;
+  top: 3.7%;
+  bottom: 3.7%;
+  z-index: 30;
+  width: 18px;
+  transform: translateX(-50%);
+  border-radius: 10px;
+  background: linear-gradient(90deg, #7e7b76, #e4e0d9 31%, #8a8781 54%, #d8d4cc 73%, #696762);
+  box-shadow: 0 0 18px rgba(0,0,0,.4);
+  pointer-events: none;
+}
+
+.douyin-ring {
+  position: absolute;
+  left: 50%;
+  z-index: 31;
+  width: 48px;
+  height: 15px;
+  transform: translateX(-50%);
+  border: 4px solid #b9b6b0;
+  border-left-color: #686661;
+  border-right-color: #e5e2dc;
+  border-radius: 50%;
+  box-shadow: 0 3px 4px rgba(0,0,0,.42);
+  pointer-events: none;
+}
+
+.douyin-ring:nth-child(1) { top: 12%; }
+.douyin-ring:nth-child(2) { top: 27%; }
+.douyin-ring:nth-child(3) { top: 43%; }
+.douyin-ring:nth-child(4) { top: 61%; }
+.douyin-ring:nth-child(5) { top: 77%; }
+.douyin-ring:nth-child(6) { top: 90%; }
+
+.douyin-drag-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 3.6vh;
+  z-index: 8;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: rgba(243,239,231,.58);
+  font: 500 9px/1 "IBM Plex Mono", monospace;
+}
+
+.douyin-drag-hint span {
+  width: 54px;
+  height: 1px;
+  background: currentColor;
+}
+
+.douyin-dragbook-section[data-turned="true"] .douyin-drag-hint b::after {
+  content: "向右拖动可翻回";
+}
+
+.douyin-dragbook-section:not([data-turned="true"]) .douyin-drag-hint b::after {
+  content: "长按右页向左拖动";
+}
+
+@media (max-width: 900px) {
+  .douyin-book-wrap {
+    width: 88vw;
+    top: 61%;
+  }
+  .douyin-dragbook-heading { width: 42vw; }
+}
+
+@media (max-width: 640px) {
+  .douyin-dragbook-section { min-height: 112vh; }
+  .douyin-dragbook-inner { padding-top: 12vh; }
+  .douyin-dragbook-heading { width: calc(100vw - 36px); }
+  .douyin-dragbook-heading h2 { font-size: 42px; }
+  .douyin-role-note { display: none; }
+  .douyin-book-wrap {
+    top: 61%;
+    width: 96vw;
+    transform: translate(-50%, -42%);
+  }
+  .douyin-book-pages { inset: 5.5% 5.5%; }
+  .douyin-book-spine { width: 12px; }
+  .douyin-ring { width: 34px; height: 11px; border-width: 3px; }
+}
