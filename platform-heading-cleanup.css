@@ -1,0 +1,50 @@
+/* Platform section heading cleanup */
+
+/* Xiaohongshu: keep a compact single-line title and remove the descriptive line. */
+.xhs-heading h2 {
+  font-size: clamp(32px, 4vw, 58px) !important;
+  line-height: .95 !important;
+  letter-spacing: -.055em !important;
+}
+
+.xhs-heading > p:last-child {
+  display: none !important;
+}
+
+/* Bilibili: compact title and remove the active-video name below the television. */
+.bili-heading h2 {
+  font-size: clamp(34px, 4.2vw, 60px) !important;
+  line-height: .92 !important;
+  letter-spacing: -.055em !important;
+}
+
+.bili-caption h3 {
+  display: none !important;
+}
+
+.bili-caption .bili-caption-index {
+  margin-bottom: 0 !important;
+}
+
+/* News / new-media book: the book itself is the visual heading. */
+.douyin-dragbook-heading {
+  display: none !important;
+}
+
+.douyin-book-wrap {
+  top: 54% !important;
+}
+
+@media (max-width: 640px) {
+  .xhs-heading h2 {
+    font-size: 36px !important;
+  }
+
+  .bili-heading h2 {
+    font-size: 38px !important;
+  }
+
+  .douyin-book-wrap {
+    top: 57% !important;
+  }
+}
