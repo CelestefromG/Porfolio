@@ -1,0 +1,11 @@
+.dongyang-sticky::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 38vh;
+  z-index: 3;
+  pointer-events: none;
+  background: linear-gradient(to bottom, #050506 0%, #343333 20%, #aaa7a0 56%, rgba(242,239,231,0) 100%);
+}
