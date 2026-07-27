@@ -1,0 +1,381 @@
+/* Platform operations — Gehua Dongyang layered folder archive */
+.dongyang-section {
+  position: relative;
+  min-height: 118vh;
+  background: #f2efe7;
+  color: #111214;
+  scroll-snap-align: start;
+  isolation: isolate;
+}
+
+.dongyang-section::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 38vh;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(to bottom, #050506 0%, #363535 22%, #b9b6af 58%, rgba(242,239,231,0) 100%);
+}
+
+.dongyang-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  min-height: 650px;
+  overflow: hidden;
+  background:
+    linear-gradient(rgba(25,28,33,.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(25,28,33,.055) 1px, transparent 1px),
+    #f2efe7;
+  background-size: 30px 30px;
+}
+
+.dongyang-sticky::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background:
+    radial-gradient(circle at 50% 70%, rgba(77,69,56,.09), transparent 34%),
+    linear-gradient(to bottom, rgba(255,255,255,.3), transparent 32%);
+  mix-blend-mode: multiply;
+}
+
+.dongyang-heading {
+  position: absolute;
+  left: 4.2vw;
+  top: 12vh;
+  z-index: 20;
+  width: min(36vw, 470px);
+}
+
+.dongyang-heading .eyebrow {
+  margin: 0 0 13px;
+  opacity: .62;
+}
+
+.dongyang-heading h2 {
+  margin: 0;
+  font-size: clamp(42px, 5.8vw, 86px);
+  line-height: .88;
+  letter-spacing: -.065em;
+  font-weight: 500;
+}
+
+.dongyang-heading > p:last-child {
+  width: min(360px, 90%);
+  margin: 18px 0 0;
+  font: 400 10px/1.7 "IBM Plex Mono", monospace;
+  text-transform: uppercase;
+  opacity: .62;
+}
+
+.dongyang-meta {
+  position: absolute;
+  right: 4.2vw;
+  top: 13vh;
+  z-index: 20;
+  display: grid;
+  justify-items: end;
+  gap: 7px;
+  font: 500 9px/1.3 "IBM Plex Mono", monospace;
+  letter-spacing: .06em;
+}
+
+.dongyang-meta b { font-size: 12px; font-weight: 500; }
+.dongyang-meta span { opacity: .48; }
+
+.dongyang-stack {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 10;
+  width: min(72vw, 940px);
+  height: min(63vh, 590px);
+  transform: translate(-50%, -37%);
+  perspective: 1500px;
+}
+
+.dongyang-folder {
+  --folder-index: 0;
+  --folder-shift: 0px;
+  position: absolute;
+  left: 50%;
+  top: calc(var(--folder-index) * 66px);
+  width: 100%;
+  height: 390px;
+  color: #111214;
+  transform: translateX(-50%) translateY(var(--folder-shift));
+  transform-style: preserve-3d;
+  transition:
+    transform .72s cubic-bezier(.22,1,.36,1),
+    filter .45s ease,
+    opacity .35s ease;
+  z-index: calc(5 + var(--folder-index));
+  outline: none;
+}
+
+.dongyang-folder.is-open {
+  z-index: 30;
+  transform: translateX(-50%) translateY(-68px) scale(1.015);
+  filter: drop-shadow(0 28px 38px rgba(48,43,35,.18));
+}
+
+.dongyang-stack.has-open-folder .dongyang-folder:not(.is-open) {
+  opacity: .72;
+  filter: grayscale(.15);
+}
+
+.dongyang-folder-back {
+  position: absolute;
+  inset: 0;
+  border: 2px solid #17181b;
+  border-radius: 10px 10px 18px 18px;
+  background: #f7f5ef;
+  box-shadow: 0 5px 0 rgba(17,18,20,.06);
+  overflow: visible;
+}
+
+.dongyang-tab {
+  position: absolute;
+  top: -39px;
+  left: calc(5% + var(--folder-index) * 17%);
+  min-width: 150px;
+  height: 41px;
+  padding: 0 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border: 2px solid #17181b;
+  border-bottom: 0;
+  border-radius: 13px 13px 0 0;
+  background: #f7f5ef;
+  font: 500 10px/1 "IBM Plex Mono", monospace;
+}
+
+.dongyang-tab b { font-weight: 500; }
+.dongyang-tab span { opacity: .52; }
+
+.dongyang-file-content {
+  position: absolute;
+  left: 4.5%;
+  right: 4.5%;
+  top: 4.5%;
+  bottom: 23%;
+  display: grid;
+  grid-template-columns: .72fr 1.28fr;
+  gap: 4vw;
+  align-items: center;
+  opacity: 0;
+  transform: translateY(34px) scale(.98);
+  pointer-events: none;
+  transition: opacity .35s .08s ease, transform .65s .05s cubic-bezier(.22,1,.36,1);
+}
+
+.dongyang-folder.is-open .dongyang-file-content {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.dongyang-file-copy {
+  align-self: center;
+  padding-left: 1vw;
+}
+
+.dongyang-file-copy > span {
+  display: block;
+  margin-bottom: 17px;
+  font: 500 9px/1 "IBM Plex Mono", monospace;
+  opacity: .5;
+}
+
+.dongyang-file-copy h3 {
+  margin: 0;
+  font-size: clamp(28px, 3.7vw, 56px);
+  line-height: .92;
+  letter-spacing: -.055em;
+  font-weight: 700;
+}
+
+.dongyang-file-copy p {
+  margin: 20px 0 0;
+  max-width: 320px;
+  font: 400 10px/1.65 "IBM Plex Mono", monospace;
+  text-transform: uppercase;
+  opacity: .6;
+}
+
+.dongyang-player {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border: 2px solid #17181b;
+  background: #d9d7d1;
+  box-shadow: 10px 12px 0 rgba(17,18,20,.08);
+}
+
+.dongyang-player img,
+.dongyang-player video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dongyang-player img {
+  filter: grayscale(.18) saturate(.75) contrast(1.03);
+  transition: opacity .25s ease;
+}
+
+.dongyang-player video { opacity: 0; }
+.dongyang-folder.is-video-ready .dongyang-player img { opacity: 0; }
+.dongyang-folder.is-video-ready .dongyang-player video { opacity: 1; }
+
+.dongyang-player::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(120deg, rgba(255,255,255,.18), transparent 23%),
+    repeating-linear-gradient(to bottom, rgba(255,255,255,.07) 0 1px, transparent 1px 4px);
+  mix-blend-mode: soft-light;
+}
+
+.dongyang-player-ui {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 9px;
+  z-index: 4;
+  display: flex;
+  justify-content: space-between;
+  color: #fff;
+  font: 500 8px/1 "IBM Plex Mono", monospace;
+  text-shadow: 0 1px 4px rgba(0,0,0,.7);
+}
+
+.dongyang-player-ui span::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: #f45a4b;
+}
+
+.dongyang-folder-front {
+  position: absolute;
+  left: -2px;
+  right: -2px;
+  top: 86px;
+  bottom: -2px;
+  z-index: 8;
+  display: grid;
+  grid-template-columns: 100px 1fr auto;
+  align-items: start;
+  gap: 20px;
+  padding: 27px 30px;
+  border: 2px solid #17181b;
+  border-radius: 8px 8px 18px 18px;
+  background:
+    linear-gradient(rgba(20,22,26,.045) 1px, transparent 1px),
+    #f2efe7;
+  background-size: 100% 26px;
+  transform-origin: center bottom;
+  transform: translateY(0) rotateX(0deg);
+  transition: transform .78s cubic-bezier(.22,1,.36,1), box-shadow .5s ease;
+}
+
+.dongyang-folder.is-open .dongyang-folder-front {
+  transform: translateY(255px) rotateX(-7deg);
+  box-shadow: 0 -8px 25px rgba(17,18,20,.07);
+}
+
+.dongyang-folder-front > span,
+.dongyang-folder-front > em {
+  font: 500 9px/1 "IBM Plex Mono", monospace;
+  opacity: .52;
+}
+
+.dongyang-folder-front > b {
+  font-size: clamp(18px, 2vw, 30px);
+  line-height: 1;
+  font-weight: 500;
+  letter-spacing: -.04em;
+}
+
+.dongyang-folder-front > em {
+  font-style: normal;
+  justify-self: end;
+}
+
+.dongyang-instruction {
+  position: absolute;
+  left: 4.2vw;
+  right: 4.2vw;
+  bottom: 4.5vh;
+  z-index: 20;
+  display: grid;
+  grid-template-columns: 90px auto 1fr;
+  align-items: center;
+  gap: 12px;
+  font: 500 8px/1 "IBM Plex Mono", monospace;
+}
+
+.dongyang-instruction > span { height: 1px; background: currentColor; }
+.dongyang-instruction > b { font-weight: 500; }
+.dongyang-instruction > em { justify-self: end; font-style: normal; opacity: .48; }
+
+body.is-dongyang-section .site-header {
+  color: #111214;
+  border-bottom-color: rgba(17,18,20,.1);
+  transition: color .45s ease, border-color .45s ease;
+}
+
+body.is-dongyang-section .cursor-dot { color: #111214; }
+
+@media (max-width: 920px) {
+  .dongyang-heading { width: 44vw; }
+  .dongyang-meta { display: none; }
+  .dongyang-stack { width: 86vw; transform: translate(-50%, -33%); }
+  .dongyang-file-content { grid-template-columns: .8fr 1.2fr; gap: 26px; }
+  .dongyang-folder-front { grid-template-columns: 74px 1fr auto; }
+}
+
+@media (max-width: 640px) {
+  .dongyang-section { min-height: 112vh; }
+  .dongyang-sticky { min-height: 650px; }
+  .dongyang-heading { left: 18px; top: 9vh; width: calc(100vw - 36px); }
+  .dongyang-heading h2 { font-size: 45px; }
+  .dongyang-heading > p:last-child { width: 280px; }
+  .dongyang-stack { width: calc(100vw - 28px); height: 500px; top: 48%; transform: translate(-50%, -26%); }
+  .dongyang-folder { top: calc(var(--folder-index) * 55px); height: 350px; }
+  .dongyang-folder.is-open { transform: translateX(-50%) translateY(-52px) scale(1); }
+  .dongyang-tab { min-width: 98px; left: calc(2% + var(--folder-index) * 18%); padding: 0 10px; }
+  .dongyang-tab b { display: none; }
+  .dongyang-file-content { left: 6%; right: 6%; top: 6%; bottom: 19%; grid-template-columns: 1fr; gap: 14px; align-content: start; }
+  .dongyang-file-copy { padding: 0; }
+  .dongyang-file-copy h3 { font-size: 31px; }
+  .dongyang-file-copy p { display: none; }
+  .dongyang-file-copy > span { margin-bottom: 8px; }
+  .dongyang-player { width: 100%; }
+  .dongyang-folder-front { top: 75px; padding: 20px 17px; grid-template-columns: 52px 1fr; }
+  .dongyang-folder-front > em { display: none; }
+  .dongyang-folder.is-open .dongyang-folder-front { transform: translateY(238px) rotateX(-5deg); }
+  .dongyang-instruction { left: 18px; right: 18px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dongyang-folder,
+  .dongyang-folder-front,
+  .dongyang-file-content { transition-duration: .01ms !important; }
+}
