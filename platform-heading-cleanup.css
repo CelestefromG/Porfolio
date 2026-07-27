@@ -1,6 +1,15 @@
 /* Platform section heading cleanup */
 
-/* Xiaohongshu: keep a compact single-line title and remove the descriptive line. */
+/* Xiaohongshu: keep a compact single-line title, remove the descriptive line,
+   and leave more breathing room below the fixed navigation. */
+.xhs-heading {
+  top: 8.5vh !important;
+}
+
+.xhs-board-label {
+  top: 9.5vh !important;
+}
+
 .xhs-heading h2 {
   font-size: clamp(32px, 4vw, 58px) !important;
   line-height: .95 !important;
@@ -36,6 +45,14 @@
 }
 
 @media (max-width: 640px) {
+  .xhs-heading {
+    top: 7.5vh !important;
+  }
+
+  .xhs-board-label {
+    top: 8.5vh !important;
+  }
+
   .xhs-heading h2 {
     font-size: 36px !important;
   }
