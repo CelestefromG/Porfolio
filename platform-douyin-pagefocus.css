@@ -3,3 +3,14 @@
 .douyin-flip-front .douyin-photo-frame img {
   object-position: right center;
 }
+
+/* Keep the drag instruction clear of the book edge and binding. */
+.douyin-drag-hint {
+  bottom: .4vh;
+}
+
+@media (max-width: 640px) {
+  .douyin-drag-hint {
+    bottom: 0;
+  }
+}
