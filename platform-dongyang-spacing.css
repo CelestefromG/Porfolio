@@ -1,33 +1,61 @@
 /* Dongyang section spacing and title refinement */
 .dongyang-section {
-  min-height: 132vh;
+  min-height: 140vh;
+}
+
+/* Keep the black-to-cream transition above the actual heading area. */
+.dongyang-sticky::before {
+  height: 17vh;
+  background: linear-gradient(
+    to bottom,
+    #050506 0%,
+    #343333 18%,
+    #aaa7a0 56%,
+    rgba(242, 239, 231, 0) 100%
+  );
+}
+
+body.is-dongyang-section .site-header {
+  color: #111214;
+  background: rgba(242, 239, 231, .93);
+  border-bottom-color: rgba(17, 18, 20, .12);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
 }
 
 .dongyang-heading {
-  top: 7.5vh;
-  width: min(32vw, 430px);
+  top: clamp(122px, 16vh, 158px);
+  width: min(55vw, 720px);
+}
+
+.dongyang-heading .eyebrow {
+  margin-bottom: 22px;
+  opacity: .58;
 }
 
 .dongyang-heading h2 {
-  font-size: clamp(34px, 4.5vw, 64px);
-  line-height: .94;
+  max-width: 720px;
+  font-size: clamp(38px, 4.2vw, 60px);
+  line-height: 1;
   letter-spacing: -.05em;
+  white-space: nowrap;
 }
 
 .dongyang-heading > p:last-child {
-  width: min(390px, 100%);
-  margin-top: 22px;
+  width: min(530px, 100%);
+  margin-top: 30px;
+  line-height: 1.9;
 }
 
 .dongyang-meta {
-  top: 8.5vh;
+  top: clamp(126px, 16.5vh, 164px);
 }
 
 .dongyang-stack {
-  top: 57%;
+  top: 64%;
   width: min(72vw, 940px);
-  height: min(60vh, 560px);
-  transform: translate(-50%, -34%) scale(.9);
+  height: min(58vh, 550px);
+  transform: translate(-50%, -31%) scale(.88);
   transform-origin: center top;
 }
 
@@ -37,42 +65,61 @@
 
 @media (max-width: 920px) {
   .dongyang-heading {
-    top: 7.5vh;
-    width: 38vw;
+    top: clamp(112px, 15vh, 142px);
+    width: 62vw;
+  }
+
+  .dongyang-heading h2 {
+    font-size: clamp(36px, 5vw, 54px);
+  }
+
+  .dongyang-meta {
+    display: none;
   }
 
   .dongyang-stack {
-    top: 58%;
+    top: 65%;
     width: 86vw;
-    transform: translate(-50%, -33%) scale(.86);
+    transform: translate(-50%, -30%) scale(.84);
   }
 }
 
 @media (max-width: 640px) {
   .dongyang-section {
-    min-height: 124vh;
+    min-height: 132vh;
+  }
+
+  .dongyang-sticky::before {
+    height: 14vh;
   }
 
   .dongyang-heading {
-    top: 8vh;
+    left: 18px;
+    top: 104px;
     width: calc(100vw - 36px);
   }
 
+  .dongyang-heading .eyebrow {
+    margin-bottom: 15px;
+  }
+
   .dongyang-heading h2 {
-    max-width: 290px;
-    font-size: 40px;
-    line-height: .96;
+    max-width: calc(100vw - 36px);
+    font-size: clamp(34px, 10.5vw, 44px);
+    line-height: 1.02;
+    white-space: normal;
   }
 
   .dongyang-heading > p:last-child {
-    width: 285px;
-    margin-top: 16px;
+    width: min(330px, 94vw);
+    margin-top: 19px;
+    line-height: 1.7;
   }
 
   .dongyang-stack {
-    top: 59%;
+    top: 66%;
     width: calc(100vw - 20px);
-    transform: translate(-50%, -28%) scale(.82);
+    transform: translate(-50%, -27%) scale(.8);
   }
 
   .dongyang-instruction {
