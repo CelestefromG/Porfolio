@@ -1,0 +1,4 @@
+/* First dragbook page: bias both images toward their right-side content. */
+.douyin-page-left .douyin-photo-frame img {
+  object-position: right center;
+}
