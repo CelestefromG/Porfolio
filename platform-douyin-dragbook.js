@@ -4,16 +4,16 @@
   if (!scene || !dongyangSection || scene.dataset.douyinDragbookReady === 'true') return;
   scene.dataset.douyinDragbookReady = 'true';
 
-  const cacheVersion = '20260728-2';
+  const cacheVersion = '20260728-3';
   const assets = {
-    leftMain: `./assets/sanqin-left-main.jpg?v=${cacheVersion}`,
-    leftSmall: `./assets/sanqin-left-small.jpg?v=${cacheVersion}`,
-    frontMain: `./assets/sanqin-front-main.jpg?v=${cacheVersion}`,
-    frontSmall: `./assets/sanqin-front-small.jpg?v=${cacheVersion}`,
-    backMain: `./assets/sanqin-back-main.jpg?v=${cacheVersion}`,
-    backSmall: `./assets/sanqin-back-small.jpg?v=${cacheVersion}`,
-    rightMain: `./assets/sanqin-right-main.jpg?v=${cacheVersion}`,
-    rightSmall: `./assets/sanqin-right-small.jpg?v=${cacheVersion}`
+    leftMain: `./assets/sanqin-left-main.png?v=${cacheVersion}`,
+    leftSmall: `./assets/sanqin-left-small.png?v=${cacheVersion}`,
+    frontMain: `./assets/sanqin-front-main.png?v=${cacheVersion}`,
+    frontSmall: `./assets/sanqin-front-small.png?v=${cacheVersion}`,
+    backMain: `./assets/sanqin-back-main.png?v=${cacheVersion}`,
+    backSmall: `./assets/sanqin-back-small.png?v=${cacheVersion}`,
+    rightMain: `./assets/sanqin-right-main.png?v=${cacheVersion}`,
+    rightSmall: `./assets/sanqin-right-small.png?v=${cacheVersion}`
   };
 
   const framedPage = ({ main, small, mainName, smallName, page, alt }) => `
@@ -26,7 +26,7 @@
         <div class="douyin-photo-placeholder"><b>DETAIL</b><span>${smallName}</span></div>
         <img src="${small}" alt="${alt} detail image">
       </figure>
-      <div class="douyin-page-index"><span>DOUYIN / SANQIN YOUTH</span><b>${page}</b></div>
+      <div class="douyin-page-index"><span>SHORT VIDEO / WECHAT EDITORIAL</span><b>${page}</b></div>
     </div>
   `;
 
@@ -36,14 +36,14 @@
   section.innerHTML = `
     <div class="douyin-dragbook-inner">
       <header class="douyin-dragbook-heading">
-        <p class="eyebrow">03D / DOUYIN</p>
-        <h2 data-douyin-title>省融媒体平台运营</h2>
-        <p data-douyin-intro>省级融媒体平台短视频内容运营。长按右页并向左拖动，翻阅一次案例页。</p>
+        <p class="eyebrow">03D / NEWS & NEW MEDIA</p>
+        <h2 data-douyin-title>新闻与新媒体内容</h2>
+        <p data-douyin-intro>短视频与公众号内容编辑。长按右页并向左拖动，翻阅一次案例页。</p>
       </header>
 
       <div class="douyin-role-note">
-        <b>CONTENT OPERATIONS / SHORT VIDEO</b>
-        <span data-douyin-role>职责：选题 · 剪辑</span>
+        <b>SHORT VIDEO / WECHAT EDITORIAL</b>
+        <span data-douyin-role>职责：选题 · 剪辑 · 图文排版</span>
       </div>
 
       <div class="douyin-book-wrap">
@@ -53,10 +53,10 @@
             ${framedPage({
               main: assets.leftMain,
               small: assets.leftSmall,
-              mainName: 'sanqin-left-main.jpg',
-              smallName: 'sanqin-left-small.jpg',
+              mainName: 'sanqin-left-main.png',
+              smallName: 'sanqin-left-small.png',
               page: '01',
-              alt: 'Sanqin Youth left page'
+              alt: 'News and new media left page'
             })}
           </div>
 
@@ -64,10 +64,10 @@
             ${framedPage({
               main: assets.rightMain,
               small: assets.rightSmall,
-              mainName: 'sanqin-right-main.jpg',
-              smallName: 'sanqin-right-small.jpg',
+              mainName: 'sanqin-right-main.png',
+              smallName: 'sanqin-right-small.png',
               page: '04',
-              alt: 'Sanqin Youth next right page'
+              alt: 'News and new media next right page'
             })}
           </div>
 
@@ -76,20 +76,20 @@
               ${framedPage({
                 main: assets.frontMain,
                 small: assets.frontSmall,
-                mainName: 'sanqin-front-main.jpg',
-                smallName: 'sanqin-front-small.jpg',
+                mainName: 'sanqin-front-main.png',
+                smallName: 'sanqin-front-small.png',
                 page: '02',
-                alt: 'Sanqin Youth page front'
+                alt: 'News and new media page front'
               })}
             </div>
             <div class="douyin-flip-face douyin-flip-back">
               ${framedPage({
                 main: assets.backMain,
                 small: assets.backSmall,
-                mainName: 'sanqin-back-main.jpg',
-                smallName: 'sanqin-back-small.jpg',
+                mainName: 'sanqin-back-main.png',
+                smallName: 'sanqin-back-small.png',
                 page: '03',
-                alt: 'Sanqin Youth page back'
+                alt: 'News and new media page back'
               })}
             </div>
           </div>
@@ -191,14 +191,14 @@
 
   const copy = {
     zh: {
-      title: '省融媒体平台运营',
-      intro: '省级融媒体平台短视频内容运营。长按右页并向左拖动，翻阅一次案例页。',
-      role: '职责：选题 · 剪辑'
+      title: '新闻与新媒体内容',
+      intro: '短视频与公众号内容编辑。长按右页并向左拖动，翻阅一次案例页。',
+      role: '职责：选题 · 剪辑 · 图文排版'
     },
     en: {
-      title: 'PROVINCIAL MEDIA PLATFORM OPERATIONS',
-      intro: 'Short-form content operations for a provincial converged media platform. Press and drag the right page left to turn it once.',
-      role: 'ROLE: TOPIC SELECTION · EDITING'
+      title: 'NEWS & NEW MEDIA CONTENT',
+      intro: 'Short-video and WeChat editorial work. Press and drag the right page left to turn it once.',
+      role: 'ROLE: TOPIC SELECTION · EDITING · EDITORIAL LAYOUT'
     }
   };
 
