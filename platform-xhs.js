@@ -20,8 +20,8 @@
   root.innerHTML = `
     <header class="xhs-heading">
       <p class="eyebrow" data-xhs-eyebrow>03A / PLATFORM OPERATIONS</p>
-      <h2 data-xhs-title>小红书<br>设计手账</h2>
-      <p data-xhs-intro>个人自媒体账号中的二次元无料设计、视觉排版与内容分享。</p>
+      <h2 data-xhs-title>小红书</h2>
+      <p data-xhs-intro>自媒体账号中的二次元无料设计与视觉排版。</p>
     </header>
     <div class="xhs-board-label">
       <b data-xhs-account>XIAOHONGSHU / PERSONAL ACCOUNT</b>
