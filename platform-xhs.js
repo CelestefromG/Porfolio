@@ -5,7 +5,7 @@
   scene.classList.add('xhs-mode');
   scene.setAttribute('aria-label', 'Platform operations — Xiaohongshu scrapbook');
 
-  const cacheVersion = '20260730-1';
+  const cacheVersion = '20260730-2';
   const works = [
     { image: `./assets/poster1?v=${cacheVersion}`, code: 'RED-01', year: '2024' },
     { image: `./assets/poster2?v=${cacheVersion}`, code: 'RED-02', year: '2024' },
@@ -41,9 +41,9 @@
     card.dataset.workIndex = String(index);
     card.style.setProperty('--delay', `${40 + index * 65}ms`);
     card.innerHTML = `
-      <img src="${work.image}" alt="Xiaohongshu fan-made design ${index + 1}">
+      <img src="${work.image}" alt="Xiaohongshu template design ${index + 1}">
       <span class="xhs-card-copy">
-        <b data-card-title>无料设计记录 ${String(index + 1).padStart(2, '0')}</b>
+        <b data-card-title>模板设计 ${String(index + 1).padStart(2, '0')}</b>
         <span>${work.code}</span>
       </span>
     `;
@@ -65,7 +65,7 @@
       <dl class="xhs-dialog-meta">
         <div><dt data-xhs-meta-account>账号</dt><dd data-xhs-account-value>@arquakkk</dd></div>
         <div><dt data-xhs-meta-year>发布年份</dt><dd data-xhs-year>2024</dd></div>
-        <div data-xhs-engagement-row hidden><dt data-xhs-meta-engagement>点赞收藏</dt><dd data-xhs-engagement></dd></div>
+        <div data-xhs-third-row><dt data-xhs-meta-third>职责</dt><dd data-xhs-third-value>设计排版和内容发布</dd></div>
       </dl>
     </div>
   `;
@@ -77,29 +77,33 @@
   const copy = {
     zh: {
       title: '小红书',
-      intro: '个人自媒体账号中的二次元无料设计、视觉排版与内容分享。',
+      intro: '个人自媒体账号中的模板设计、视觉排版与内容分享。',
       account: 'XIAOHONGSHU / PERSONAL ACCOUNT',
-      label: 'FAN-MADE DESIGN · SOCIAL CONTENT · VISUAL NOTES',
+      label: 'TEMPLATE DESIGN · SOCIAL CONTENT · VISUAL NOTES',
       hint: '点击图片打开详情<br>01 / 小红书',
-      card: index => `无料设计记录 ${String(index + 1).padStart(2, '0')}`,
-      dialogTitle: index => `二次元无料设计 · ${String(index + 1).padStart(2, '0')}`,
-      description: '个人自媒体内容案例，围绕二次元无料设计进行视觉制作、排版整理与平台发布。',
+      card: index => `模板设计 ${String(index + 1).padStart(2, '0')}`,
+      dialogTitle: index => `模板设计 · ${String(index + 1).padStart(2, '0')}`,
+      description: '个人自媒体内容案例，围绕模板设计进行视觉制作、排版整理与平台发布。',
       accountLabel: '账号',
       yearLabel: '发布年份',
-      engagementLabel: '点赞收藏'
+      engagementLabel: '点赞收藏',
+      roleLabel: '职责',
+      roleValue: '设计排版和内容发布'
     },
     en: {
       title: 'XIAOHONGSHU',
-      intro: 'Fan-made anime freebies, visual layouts and content sharing from a personal media account.',
+      intro: 'Template design, visual layouts and content sharing from a personal media account.',
       account: 'XIAOHONGSHU / PERSONAL ACCOUNT',
-      label: 'FAN-MADE DESIGN · SOCIAL CONTENT · VISUAL NOTES',
+      label: 'TEMPLATE DESIGN · SOCIAL CONTENT · VISUAL NOTES',
       hint: 'CLICK A NOTE TO OPEN<br>01 / XIAOHONGSHU',
-      card: index => `FAN-MADE DESIGN ${String(index + 1).padStart(2, '0')}`,
-      dialogTitle: index => `Fan-made Design · ${String(index + 1).padStart(2, '0')}`,
-      description: 'A personal-media content case focused on anime fan-made freebies, including visual production, layout and publishing.',
+      card: index => `TEMPLATE DESIGN ${String(index + 1).padStart(2, '0')}`,
+      dialogTitle: index => `Template Design · ${String(index + 1).padStart(2, '0')}`,
+      description: 'A personal-media content case focused on template design, visual production, layout and publishing.',
       accountLabel: 'ACCOUNT',
       yearLabel: 'PUBLISHED',
-      engagementLabel: 'LIKES + SAVES'
+      engagementLabel: 'LIKES + SAVES',
+      roleLabel: 'ROLE',
+      roleValue: 'DESIGN · LAYOUT · PUBLISHING'
     }
   };
 
@@ -121,18 +125,17 @@
     dialog.querySelector('[data-xhs-dialog-description]').textContent = text.description;
     dialog.querySelector('[data-xhs-meta-account]').textContent = text.accountLabel;
     dialog.querySelector('[data-xhs-meta-year]').textContent = text.yearLabel;
-    dialog.querySelector('[data-xhs-meta-engagement]').textContent = text.engagementLabel;
     dialog.querySelector('[data-xhs-account-value]').textContent = '@arquakkk';
     dialog.querySelector('[data-xhs-year]').textContent = work.year;
 
-    const engagementRow = dialog.querySelector('[data-xhs-engagement-row]');
-    const engagementValue = dialog.querySelector('[data-xhs-engagement]');
+    const thirdLabel = dialog.querySelector('[data-xhs-meta-third]');
+    const thirdValue = dialog.querySelector('[data-xhs-third-value]');
     if (work.engagement) {
-      engagementValue.textContent = work.engagement;
-      engagementRow.hidden = false;
+      thirdLabel.textContent = text.engagementLabel;
+      thirdValue.textContent = work.engagement;
     } else {
-      engagementValue.textContent = '';
-      engagementRow.hidden = true;
+      thirdLabel.textContent = text.roleLabel;
+      thirdValue.textContent = text.roleValue;
     }
   };
 
@@ -142,8 +145,8 @@
     const image = dialog.querySelector('.xhs-dialog-media img');
     image.src = work.image;
     image.alt = isEnglish()
-      ? `Xiaohongshu fan-made design ${index + 1}`
-      : `小红书无料设计作品 ${index + 1}`;
+      ? `Xiaohongshu template design ${index + 1}`
+      : `小红书模板设计作品 ${index + 1}`;
     dialog.querySelector('.xhs-dialog-kicker').textContent = `${work.code} / XIAOHONGSHU`;
     renderLanguage();
     dialog.showModal();
