@@ -4,22 +4,22 @@
   if (!scene || !xhsSection || scene.dataset.bilibiliReady === 'true') return;
   scene.dataset.bilibiliReady = 'true';
 
-  const cacheVersion = '20260727-1';
+  const cacheVersion = '20260730-1';
   const channels = [
     {
-      video: `./assets/bilibili1.mp4?v=${cacheVersion}`,
-      poster: `./assets/poster1?v=${cacheVersion}`,
+      video: `./assets/Bilibili_Video1.mp4?v=${cacheVersion}`,
+      poster: `./assets/poster1.png?v=${cacheVersion}`,
       zh: 'MMD 渲染记录 01',
       en: 'MMD Rendering Study 01'
     },
     {
-      video: `./assets/bilibili2.mp4?v=${cacheVersion}`,
+      video: `./assets/Bilibili_Video2.mp4?v=${cacheVersion}`,
       poster: `./assets/visual5?v=${cacheVersion}`,
       zh: 'MMD 镜头实验 02',
       en: 'MMD Camera Experiment 02'
     },
     {
-      video: `./assets/bilibili3.mp4?v=${cacheVersion}`,
+      video: `./assets/Bilibili_Video3.mp4?v=${cacheVersion}`,
       poster: `./assets/visual6?v=${cacheVersion}`,
       zh: 'MMD 氛围渲染 03',
       en: 'MMD Atmosphere Render 03'
@@ -32,7 +32,7 @@
     <div class="bili-sticky">
       <header class="bili-heading">
         <p class="eyebrow">03B / BILIBILI</p>
-        <h2 data-bili-title>Bilibili<br>MMD放映</h2>
+        <h2 data-bili-title>Bilibili</h2>
         <p data-bili-intro>个人自媒体账号中的MMD渲染、镜头编排与视觉氛围实验。向下滚动，在电视中切换三段内容。</p>
       </header>
 
@@ -44,9 +44,7 @@
       <div class="bili-tv-stage">
         <div class="bili-tv" aria-label="Bilibili video monitor">
           <div class="bili-tv-body">
-            <div class="bili-screen-bezel">
-              <div class="bili-screen"></div>
-            </div>
+            <div class="bili-screen-bezel"><div class="bili-screen"></div></div>
             <div class="bili-tv-lower">
               <span class="bili-power" aria-hidden="true"></span>
               <span class="bili-machine-label">CELESTE / MMD</span>
@@ -63,12 +61,10 @@
       </div>
 
       <nav class="bili-channel-index" aria-label="Bilibili video index"></nav>
-
       <div class="bili-scroll-meter" aria-hidden="true">
         <div class="bili-meter-track"><span></span></div>
         <div class="bili-meter-copy"><span data-bili-scroll>SCROLL TO SWITCH</span><b>01 / 03</b></div>
       </div>
-
       <span class="bili-next-note" data-bili-note>继续下滑 · 切换电视信号</span>
     </div>
   `;
@@ -87,20 +83,17 @@
     signal.className = 'bili-signal';
     signal.dataset.signalIndex = String(index);
     signal.innerHTML = `
-      <img src="${channel.poster}" alt="Bilibili MMD preview ${index + 1}">
-      <video src="${channel.video}" muted loop playsinline preload="metadata" aria-label="Bilibili MMD video ${index + 1}"></video>
+      <img src="${channel.poster}" loading="lazy" decoding="async" alt="Bilibili MMD preview ${index + 1}">
+      <video muted loop playsinline preload="none" data-src="${channel.video}" aria-label="Bilibili MMD video ${index + 1}"></video>
     `;
     screen.appendChild(signal);
 
     const video = signal.querySelector('video');
     video.addEventListener('loadeddata', () => {
       signal.classList.add('is-video-ready');
-      if (signal.classList.contains('is-active')) video.play().catch(() => {});
-    });
-    video.addEventListener('error', () => {
-      signal.classList.remove('is-video-ready');
-      video.removeAttribute('src');
-    });
+      if (signal.classList.contains('is-active') && sectionVisible) video.play().catch(() => {});
+    }, { once: true });
+    video.addEventListener('error', () => signal.classList.remove('is-video-ready'));
 
     const button = document.createElement('button');
     button.type = 'button';
@@ -119,17 +112,16 @@
   let rafPending = false;
 
   const isEnglish = () => document.querySelector('.lang-en')?.classList.contains('is-active');
-
   const text = {
     zh: {
-      title: 'Bilibili<br>MMD放映',
+      title: 'Bilibili',
       intro: '个人自媒体账号中的MMD渲染、镜头编排与视觉氛围实验。向下滚动，在电视中切换三段内容。',
       role: '镜头编排 · 灯光设置 · MMD渲染 · 后期剪辑',
       note: '继续下滑 · 切换电视信号',
       scroll: '滚动切换视频'
     },
     en: {
-      title: 'BILIBILI<br>MMD SCREENINGS',
+      title: 'BILIBILI',
       intro: 'MMD rendering, camera direction and visual-atmosphere studies from a personal media account. Scroll to switch between three films.',
       role: 'CAMERA DIRECTION · LIGHTING · MMD RENDERING · EDITING',
       note: 'KEEP SCROLLING · SWITCH SIGNAL',
@@ -137,10 +129,18 @@
     }
   };
 
+  const ensureVideo = index => {
+    const video = screen.querySelector(`.bili-signal[data-signal-index="${index}"] video`);
+    if (!video || video.src) return video;
+    video.src = video.dataset.src;
+    video.load();
+    return video;
+  };
+
   const renderLanguage = () => {
     const language = isEnglish() ? 'en' : 'zh';
     const copy = text[language];
-    section.querySelector('[data-bili-title]').innerHTML = copy.title;
+    section.querySelector('[data-bili-title]').textContent = copy.title;
     section.querySelector('[data-bili-intro]').textContent = copy.intro;
     section.querySelector('[data-bili-role]').textContent = copy.role;
     section.querySelector('[data-bili-note]').textContent = copy.note;
@@ -151,8 +151,9 @@
   const playActiveSignal = () => {
     screen.querySelectorAll('.bili-signal').forEach((signal, index) => {
       const video = signal.querySelector('video');
-      if (sectionVisible && index === activeIndex && signal.classList.contains('is-video-ready')) {
-        video.play().catch(() => {});
+      if (sectionVisible && index === activeIndex) {
+        const activeVideo = ensureVideo(index);
+        if (activeVideo?.readyState >= 2) activeVideo.play().catch(() => {});
       } else {
         video.pause();
       }
@@ -186,6 +187,7 @@
 
   const updateFromScroll = () => {
     rafPending = false;
+    if (!sectionVisible) return;
     const rect = section.getBoundingClientRect();
     const scrollable = Math.max(1, section.offsetHeight - scene.clientHeight);
     const travelled = Math.max(0, Math.min(scrollable, -rect.top));
@@ -198,26 +200,27 @@
   };
 
   const requestUpdate = () => {
-    if (rafPending) return;
+    if (!sectionVisible || rafPending) return;
     rafPending = true;
     requestAnimationFrame(updateFromScroll);
   };
 
   scene.addEventListener('scroll', requestUpdate, { passive: true });
-  window.addEventListener('resize', requestUpdate);
+  window.addEventListener('resize', requestUpdate, { passive: true });
 
   new IntersectionObserver(entries => {
     sectionVisible = entries[0]?.isIntersecting ?? false;
     document.body.classList.toggle('is-bili-section', sectionVisible);
-    playActiveSignal();
-    if (sectionVisible) requestUpdate();
-  }, { root: scene, threshold: .28 }).observe(sticky);
+    if (sectionVisible) {
+      requestUpdate();
+      playActiveSignal();
+    } else {
+      screen.querySelectorAll('video').forEach(video => video.pause());
+    }
+  }, { root: scene, threshold: .16 }).observe(sticky);
 
-  document.querySelector('.lang-toggle')?.addEventListener('click', () => {
-    setTimeout(renderLanguage, 0);
-  });
+  document.querySelector('.lang-toggle')?.addEventListener('click', () => setTimeout(renderLanguage, 0));
 
   setActiveIndex(0);
   renderLanguage();
-  requestUpdate();
 })();
