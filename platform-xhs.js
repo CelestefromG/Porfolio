@@ -5,11 +5,11 @@
   scene.classList.add('xhs-mode');
   scene.setAttribute('aria-label', 'Platform operations — Xiaohongshu scrapbook');
 
-  const cacheVersion = '20260730-2';
+  const cacheVersion = '20260730-3';
   const works = [
-    { image: `./assets/poster1?v=${cacheVersion}`, code: 'RED-01', year: '2024' },
-    { image: `./assets/poster2?v=${cacheVersion}`, code: 'RED-02', year: '2024' },
-    { image: `./assets/poster3?v=${cacheVersion}`, code: 'RED-03', year: '2024', engagement: '700+' },
+    { image: `./assets/rednote1.png?v=${cacheVersion}`, code: 'RED-01', year: '2024' },
+    { image: `./assets/rednote2.png?v=${cacheVersion}`, code: 'RED-02', year: '2024' },
+    { image: `./assets/rednote3.png?v=${cacheVersion}`, code: 'RED-03', year: '2024', engagement: '700+' },
     { image: `./assets/visual4?v=${cacheVersion}`, code: 'RED-04', year: '2024' },
     { image: `./assets/visual5?v=${cacheVersion}`, code: 'RED-05', year: '2024', engagement: '8000+' },
     { image: `./assets/visual6?v=${cacheVersion}`, code: 'RED-06', year: '2024', engagement: '2000+' }
@@ -21,11 +21,11 @@
     <header class="xhs-heading">
       <p class="eyebrow" data-xhs-eyebrow>03A / PLATFORM OPERATIONS</p>
       <h2 data-xhs-title>小红书</h2>
-      <p data-xhs-intro>自媒体账号中的二次元无料设计与视觉排版。</p>
+      <p data-xhs-intro>自媒体账号中的模板设计与视觉排版。</p>
     </header>
     <div class="xhs-board-label">
       <b data-xhs-account>XIAOHONGSHU / PERSONAL ACCOUNT</b>
-      <span data-xhs-label>FAN-MADE DESIGN · SOCIAL CONTENT · VISUAL NOTES</span>
+      <span data-xhs-label>TEMPLATE DESIGN · SOCIAL CONTENT · VISUAL NOTES</span>
     </div>
     <div class="xhs-board" aria-label="Xiaohongshu works"></div>
     <span class="xhs-doodle xhs-doodle-a">collect<br>small ideas</span>
@@ -41,7 +41,7 @@
     card.dataset.workIndex = String(index);
     card.style.setProperty('--delay', `${40 + index * 65}ms`);
     card.innerHTML = `
-      <img src="${work.image}" alt="Xiaohongshu template design ${index + 1}">
+      <img src="${work.image}" loading="lazy" decoding="async" alt="Xiaohongshu template design ${index + 1}">
       <span class="xhs-card-copy">
         <b data-card-title>模板设计 ${String(index + 1).padStart(2, '0')}</b>
         <span>${work.code}</span>
@@ -163,9 +163,7 @@
     if (event.target === dialog) dialog.close();
   });
 
-  document.querySelector('.lang-toggle')?.addEventListener('click', () => {
-    setTimeout(renderLanguage, 0);
-  });
+  document.querySelector('.lang-toggle')?.addEventListener('click', () => setTimeout(renderLanguage, 0));
 
   renderLanguage();
   requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('is-ready')));
