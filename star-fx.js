@@ -6,8 +6,8 @@ if (host) {
   const camera = new THREE.PerspectiveCamera(34, 1, 0.1, 100);
   camera.position.z = 8.5;
 
-  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'low-power' });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
   renderer.setClearColor(0x000000, 0);
   renderer.domElement.className = 'star-fx-canvas';
   host.appendChild(renderer.domElement);
@@ -25,7 +25,7 @@ if (host) {
   const geometry = new THREE.ExtrudeGeometry(shape, {
     depth: 0.42,
     bevelEnabled: true,
-    bevelSegments: 5,
+    bevelSegments: 3,
     bevelSize: 0.17,
     bevelThickness: 0.15
   });
@@ -52,12 +52,11 @@ if (host) {
   scene.add(mesh);
 
   scene.add(new THREE.AmbientLight(0xffffff, 1.15));
-  const lights = [
+  [
     [0x9fdfff, 3.3, -4, 5, 7],
     [0xf2a5ff, 2.6, 5, -1, 4],
     [0xffd88a, 2.1, 1, 5, 2]
-  ];
-  lights.forEach(([color, intensity, x, y, z]) => {
+  ].forEach(([color, intensity, x, y, z]) => {
     const light = new THREE.DirectionalLight(color, intensity);
     light.position.set(x, y, z);
     scene.add(light);
@@ -65,21 +64,28 @@ if (host) {
 
   let pointerX = 0;
   let pointerY = 0;
-  window.addEventListener('pointermove', event => {
+  let running = false;
+  let frameId = 0;
+
+  const onPointerMove = event => {
+    if (!running) return;
     pointerX = (event.clientX / window.innerWidth - 0.5) * 0.28;
     pointerY = (event.clientY / window.innerHeight - 0.5) * 0.18;
-  });
+  };
+  window.addEventListener('pointermove', onPointerMove, { passive: true });
 
   const resize = () => {
     const rect = host.getBoundingClientRect();
+    if (rect.width < 2 || rect.height < 2) return;
     renderer.setSize(rect.width, rect.height, false);
-    camera.aspect = rect.width / Math.max(rect.height, 1);
+    camera.aspect = rect.width / rect.height;
     camera.updateProjectionMatrix();
   };
   resize();
-  window.addEventListener('resize', resize);
+  window.addEventListener('resize', resize, { passive: true });
 
   const animate = () => {
+    if (!running) return;
     const dataMode = document.querySelector('.scene-home')?.classList.contains('data-mode');
     const targetY = dataMode ? Math.PI + 0.35 : 0.36;
     mesh.rotation.y += (targetY + pointerX - mesh.rotation.y) * 0.04;
@@ -87,7 +93,32 @@ if (host) {
     mesh.rotation.z += dataMode ? -0.0015 : 0.0007;
     material.iridescenceIOR = 1.28 + Math.sin(performance.now() * 0.00055) * 0.08;
     renderer.render(scene, camera);
-    requestAnimationFrame(animate);
+    frameId = requestAnimationFrame(animate);
   };
-  animate();
+
+  const setRunning = next => {
+    if (next === running) return;
+    running = next;
+    if (running) {
+      resize();
+      frameId = requestAnimationFrame(animate);
+    } else if (frameId) {
+      cancelAnimationFrame(frameId);
+      frameId = 0;
+    }
+  };
+
+  const home = document.querySelector('.scene-home');
+  if (home) {
+    new IntersectionObserver(entries => {
+      setRunning(Boolean(entries[0]?.isIntersecting) && !document.hidden);
+    }, { threshold: 0.08 }).observe(home);
+  } else {
+    setRunning(true);
+  }
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) setRunning(false);
+    else if (home?.classList.contains('is-visible')) setRunning(true);
+  });
 }
