@@ -1,309 +1,382 @@
-/* Interactive ranch ABOUT — lightweight SVG/CSS scene */
-.about-scene.ranch-about {
-  position: relative;
-  overflow: hidden;
-  background:
-    radial-gradient(circle at 76% 22%, rgba(255,255,255,.72), transparent 30%),
-    linear-gradient(rgba(90,76,58,.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(90,76,58,.035) 1px, transparent 1px),
-    #f5f0e6;
-  background-size: auto, 40px 40px, 40px 40px, auto;
-  color: #28231d;
-  cursor: none;
-}
-
-.about-scene.ranch-about .about-grid { display: none !important; }
-
-.ranch-about-shell {
+/* ABOUT — four-lamb carousel */
+.about-scene.about-carousel {
   position: absolute;
   inset: 0;
-  min-height: 100%;
+  padding: 0 !important;
   overflow: hidden;
-  isolation: isolate;
-}
-
-.ranch-about-shell::before {
-  content: "";
-  position: absolute;
-  inset: auto 0 0;
-  height: 34%;
   background:
-    radial-gradient(ellipse at 12% 100%, rgba(112,94,69,.07), transparent 36%),
-    radial-gradient(ellipse at 76% 100%, rgba(112,94,69,.06), transparent 34%),
-    linear-gradient(to bottom, rgba(255,255,255,0), rgba(226,214,193,.28));
-  pointer-events: none;
+    radial-gradient(circle at 50% 42%, rgba(255,255,255,.8), transparent 34%),
+    linear-gradient(rgba(83,67,50,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(83,67,50,.035) 1px, transparent 1px),
+    #f6f0e7;
+  background-size: auto, 42px 42px, 42px 42px, auto;
+  color: #29231c;
 }
 
-.ranch-head {
+.about-scene.about-carousel .about-grid { display: none !important; }
+
+.about-carousel-shell {
+  position: absolute;
+  inset: 0;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.about-carousel-head {
   position: absolute;
   left: 4.5vw;
   top: 10.5vh;
-  z-index: 12;
-  width: min(33vw, 460px);
+  z-index: 15;
+  width: min(31vw, 430px);
 }
 
-.ranch-head .eyebrow {
-  margin: 0 0 14px;
-  font: 500 10px/1 "IBM Plex Mono", monospace;
+.about-carousel-head .eyebrow {
+  margin: 0 0 12px;
+  font: 500 9px/1.3 "IBM Plex Mono", monospace;
   letter-spacing: .08em;
-  color: rgba(40,35,29,.58);
+  color: rgba(41,35,28,.55);
 }
 
-.ranch-head h2 {
+.about-carousel-head h2 {
   margin: 0;
-  font-size: clamp(44px, 5.4vw, 78px);
-  line-height: .9;
-  letter-spacing: -.065em;
+  font-size: clamp(46px, 5vw, 72px);
+  line-height: .92;
+  letter-spacing: -.06em;
   font-weight: 500;
 }
 
-.ranch-head p:last-child {
-  margin: 22px 0 0;
-  width: min(370px, 92%);
-  font-size: 13px;
+.about-carousel-head > p:last-child {
+  margin: 18px 0 0;
+  font-size: 12px;
   line-height: 1.85;
-  color: rgba(40,35,29,.62);
+  color: rgba(41,35,28,.58);
 }
 
-.ranch-head strong { color: #28231d; font-weight: 500; }
-
-.ranch-hills {
+.about-carousel-stage {
   position: absolute;
-  left: -2%;
-  right: -2%;
-  bottom: 24%;
-  height: 32%;
-  opacity: .22;
+  left: 58%;
+  top: 52%;
+  width: min(62vw, 860px);
+  aspect-ratio: 1.25 / 1;
+  transform: translate(-50%, -50%);
+}
+
+.about-carousel-core {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 42%;
+  height: 56%;
+  transform: translate(-50%, -50%);
+  z-index: 4;
   pointer-events: none;
 }
 
-.ranch-hills svg { width: 100%; height: 100%; }
-
-.ranch-fence {
+.carousel-apple-top {
   position: absolute;
-  left: -2%;
-  right: -2%;
-  bottom: 18.5%;
+  left: 50%;
+  top: 4%;
+  width: 88%;
+  height: 36%;
+  transform: translateX(-50%);
+  border: 2px solid #3a3026;
+  border-radius: 48% 48% 28% 28% / 72% 72% 26% 26%;
+  background: #b94b3d;
+  box-shadow: 0 18px 34px rgba(94,53,37,.12);
+}
+
+.carousel-apple-top::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 88%;
+  width: 86%;
+  height: 25%;
+  transform: translateX(-50%);
+  background: #efe6d7;
+  border-left: 2px solid #3a3026;
+  border-right: 2px solid #3a3026;
+  border-bottom: 2px solid #3a3026;
+  border-radius: 0 0 50% 50%;
+}
+
+.carousel-apple-top i {
+  position: absolute;
+  left: 50%;
+  top: -27%;
+  width: 18px;
+  height: 58px;
+  transform: translateX(-50%) rotate(5deg);
+  border: 2px solid #3a3026;
+  border-bottom: 0;
+  background: #efe6d7;
+}
+
+.carousel-pole {
+  position: absolute;
+  left: 50%;
+  top: 28%;
+  bottom: 20%;
+  width: 7px;
+  transform: translateX(-50%);
+  border: 1px solid #3a3026;
+  background: linear-gradient(90deg,#a89478,#f7efe3 50%,#9f8a70);
+}
+
+.carousel-apple-base {
+  position: absolute;
+  left: 50%;
+  bottom: 4%;
+  width: 84%;
   height: 24%;
-  z-index: 2;
-  pointer-events: none;
-}
-
-.ranch-fence::before,
-.ranch-fence::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 13px;
-  border: 1px solid rgba(72,60,46,.34);
-  background: linear-gradient(to bottom, #fbf6eb, #e7dac4);
-  box-shadow: inset 0 2px rgba(255,255,255,.72), 0 1px 0 rgba(92,73,51,.1);
-}
-.ranch-fence::before { top: 23%; }
-.ranch-fence::after { top: 66%; }
-
-.ranch-post {
-  position: absolute;
-  top: 8%;
-  bottom: 2%;
-  width: 22px;
-  border: 1px solid rgba(72,60,46,.38);
-  border-radius: 4px 4px 1px 1px;
-  background: linear-gradient(90deg, #e6d8c1, #fff8eb 46%, #dbcab0);
-  box-shadow: inset 0 0 0 2px rgba(255,255,255,.32);
-}
-.ranch-post:nth-child(1) { left: 5%; }
-.ranch-post:nth-child(2) { left: 29%; }
-.ranch-post:nth-child(3) { left: 53%; }
-.ranch-post:nth-child(4) { left: 77%; }
-.ranch-post:nth-child(5) { left: 95%; }
-
-.ranch-entity {
-  position: absolute;
-  z-index: 7;
-  border: 0;
-  padding: 0;
-  background: none;
-  color: inherit;
-  cursor: none;
-  touch-action: none;
-  transform: translate3d(var(--drag-x, 0px), var(--drag-y, 0px), 0) rotate(var(--tilt, 0deg));
-  transform-origin: 50% 85%;
-  transition: filter .24s ease, transform .42s cubic-bezier(.2,.9,.24,1);
-  user-select: none;
-  -webkit-user-select: none;
-}
-
-.ranch-entity.is-dragging {
-  z-index: 30;
-  transition: filter .18s ease;
-  filter: drop-shadow(0 22px 16px rgba(72,56,36,.18));
-}
-
-.ranch-entity:hover:not(.is-dragging) {
-  filter: drop-shadow(0 10px 10px rgba(72,56,36,.12));
-}
-
-.ranch-entity svg { display: block; width: 100%; height: 100%; overflow: visible; }
-.ranch-entity svg * { vector-effect: non-scaling-stroke; }
-
-.ranch-manager { left: 11%; bottom: 11.5%; width: min(13vw, 185px); height: 45%; --tilt: -1deg; }
-.ranch-cow { left: 31%; bottom: 31%; width: min(18vw, 280px); height: 27%; --tilt: -1.5deg; }
-.ranch-horse { left: 60%; bottom: 24%; width: min(20vw, 310px); height: 32%; --tilt: 1deg; }
-.ranch-sheep { left: 82%; bottom: 27%; width: min(12vw, 190px); height: 20%; --tilt: 1.5deg; }
-
-.ranch-label {
-  position: absolute;
-  z-index: 8;
+  transform: translateX(-50%);
   display: grid;
-  justify-items: center;
-  gap: 5px;
-  color: rgba(40,35,29,.68);
-  pointer-events: none;
-  font: 500 9px/1.2 "IBM Plex Mono", monospace;
-  letter-spacing: .04em;
+  place-items: center;
+  border: 2px solid #3a3026;
+  border-radius: 26% 26% 50% 50% / 22% 22% 72% 72%;
+  background: #b94b3d;
+  box-shadow: 0 18px 30px rgba(94,53,37,.12);
 }
 
-.ranch-label b {
-  padding: 7px 13px;
-  border: 1px solid rgba(72,60,46,.28);
+.carousel-apple-base span {
+  color: #f6eee2;
+  font: 500 10px/1 "IBM Plex Mono", monospace;
+  letter-spacing: .22em;
+}
+
+.about-carousel-orbit {
+  position: absolute;
+  left: 50%;
+  top: 51%;
+  width: 76%;
+  aspect-ratio: 1 / 1;
+  transform: translate(-50%, -50%);
+  border: 1px dashed rgba(72,57,42,.14);
+  border-radius: 50%;
+  animation: aboutOrbit 26s linear infinite;
+  z-index: 8;
+}
+
+.about-scene.is-carousel-paused .about-carousel-orbit,
+.about-carousel-stage:hover .about-carousel-orbit {
+  animation-play-state: paused;
+}
+
+@keyframes aboutOrbit {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.about-lamb-slot {
+  --slot-angle: 0deg;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: clamp(106px, 10vw, 154px);
+  height: clamp(106px, 10vw, 154px);
+  padding: 0;
+  border: 0;
+  background: none;
+  transform: translate(-50%, -50%) rotate(var(--slot-angle)) translateY(-260%) rotate(calc(var(--slot-angle) * -1));
+  transform-origin: center;
+  cursor: pointer;
+}
+
+.about-lamb-upright {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  animation: aboutCounterOrbit 26s linear infinite;
+  filter: drop-shadow(0 10px 10px rgba(71,54,36,.08));
+  transition: transform .25s ease, filter .25s ease;
+}
+
+.about-scene.is-carousel-paused .about-lamb-upright,
+.about-carousel-stage:hover .about-lamb-upright {
+  animation-play-state: paused;
+}
+
+@keyframes aboutCounterOrbit {
+  to { transform: rotate(-360deg); }
+}
+
+.about-lamb-slot:hover .about-lamb-upright {
+  transform: scale(1.12);
+  filter: drop-shadow(0 16px 12px rgba(71,54,36,.16));
+}
+
+.about-lamb-upright img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.about-lamb-upright b {
+  position: absolute;
+  left: 50%;
+  bottom: -4px;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  padding: 6px 10px;
+  border: 1px solid rgba(65,52,39,.22);
   border-radius: 999px;
-  background: rgba(247,242,232,.82);
-  color: #30291f;
-  font: 500 11px/1 "Noto Sans SC", sans-serif;
-  box-shadow: 0 4px 14px rgba(55,43,29,.04);
+  background: rgba(249,245,237,.9);
+  font: 500 10px/1 "Noto Sans SC", sans-serif;
+  color: rgba(41,35,28,.74);
 }
 
-.ranch-label::after {
-  content: "";
-  width: 1px;
-  height: 24px;
-  border-left: 1px dashed rgba(72,60,46,.34);
-}
-
-.ranch-label-manager { left: 8.6%; bottom: 54%; }
-.ranch-label-cow { left: 37%; bottom: 62%; }
-.ranch-label-horse { left: 67%; bottom: 58%; }
-.ranch-label-sheep { right: 8.5%; bottom: 54%; }
-
-.ranch-info-card {
+.about-carousel-card {
   position: absolute;
   z-index: 40;
-  top: 14vh;
-  left: 48%;
-  width: min(38vw, 560px);
-  max-height: 66vh;
+  right: 4.5vw;
+  top: 13vh;
+  width: min(36vw, 540px);
+  max-height: 70vh;
   overflow: auto;
-  box-sizing: border-box;
   padding: 22px 24px 24px;
-  border: 1px solid rgba(66,55,42,.22);
+  box-sizing: border-box;
+  border: 1px solid rgba(65,52,39,.2);
   border-radius: 18px;
-  background: rgba(249,246,238,.96);
-  box-shadow: 0 22px 58px rgba(67,52,35,.14);
+  background: rgba(250,247,239,.97);
+  box-shadow: 0 24px 64px rgba(72,55,37,.16);
   backdrop-filter: blur(12px);
   opacity: 0;
-  transform: translateY(14px) scale(.98);
+  transform: translateY(12px) scale(.98);
   pointer-events: none;
-  transition: opacity .24s ease, transform .32s cubic-bezier(.2,.9,.24,1);
+  transition: opacity .22s ease, transform .28s ease;
 }
 
-.ranch-info-card.is-open {
+.about-carousel-card.is-open {
   opacity: 1;
-  transform: translateY(0) scale(1);
+  transform: none;
   pointer-events: auto;
 }
 
-.ranch-card-head {
+.about-carousel-card-head {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 24px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid rgba(66,55,42,.16);
+  gap: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(65,52,39,.15);
 }
-.ranch-card-head p { margin: 0 0 8px; font: 500 9px/1 "IBM Plex Mono", monospace; letter-spacing: .06em; color: rgba(40,35,29,.48); }
-.ranch-card-head h3 { margin: 0; font-size: 24px; font-weight: 500; letter-spacing: -.035em; }
-.ranch-card-close { border: 0; background: none; font-size: 22px; line-height: 1; color: rgba(40,35,29,.55); cursor: pointer; }
 
-.ranch-card-body { padding-top: 16px; }
-.ranch-card-item { padding: 14px 0; border-bottom: 1px solid rgba(66,55,42,.12); }
-.ranch-card-item:last-child { border-bottom: 0; padding-bottom: 0; }
-.ranch-card-item header { display: grid; grid-template-columns: 28px 1fr auto; align-items: baseline; gap: 8px; }
-.ranch-card-item header span { font: 500 10px/1 "IBM Plex Mono", monospace; color: rgba(40,35,29,.45); }
-.ranch-card-item header b { font-size: 13px; font-weight: 500; }
-.ranch-card-item header time { font: 500 8px/1 "IBM Plex Mono", monospace; color: rgba(40,35,29,.43); }
-.ranch-card-item p { margin: 9px 0 0 36px; font-size: 11px; line-height: 1.7; color: rgba(40,35,29,.62); }
+.about-carousel-card-head p {
+  margin: 0 0 7px;
+  color: rgba(41,35,28,.45);
+  font: 500 9px/1 "IBM Plex Mono", monospace;
+  letter-spacing: .07em;
+}
 
-.ranch-profile {
+.about-carousel-card-head h3 {
+  margin: 0;
+  font-size: 24px;
+  line-height: 1.1;
+  font-weight: 500;
+  letter-spacing: -.035em;
+}
+
+.about-carousel-close {
+  border: 0;
+  background: none;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  color: rgba(41,35,28,.55);
+}
+
+.about-carousel-card-body { padding-top: 14px; }
+
+.about-card-item {
+  padding: 13px 0;
+  border-bottom: 1px solid rgba(65,52,39,.11);
+}
+
+.about-card-item:last-child { border-bottom: 0; }
+
+.about-card-item header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 14px;
+}
+
+.about-card-item header b { font-size: 13px; font-weight: 500; }
+.about-card-item time { white-space: nowrap; color: rgba(41,35,28,.42); font: 500 8px/1 "IBM Plex Mono", monospace; }
+.about-card-item p { margin: 8px 0 0; color: rgba(41,35,28,.62); font-size: 11px; line-height: 1.75; }
+
+.about-card-profile {
   display: grid;
-  grid-template-columns: 86px 1fr;
-  gap: 18px;
+  grid-template-columns: 84px 1fr;
+  gap: 16px;
   align-items: start;
 }
-.ranch-profile img { width: 86px; aspect-ratio: 1; object-fit: cover; border: 1px solid rgba(66,55,42,.18); border-radius: 12px; filter: saturate(.75); }
-.ranch-profile h4 { margin: 2px 0 7px; font-size: 18px; font-weight: 500; }
-.ranch-profile p { margin: 0; font-size: 11px; line-height: 1.75; color: rgba(40,35,29,.62); }
-.ranch-profile-tags { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 7px; margin-top: 2px; }
 
-.ranch-chip-grid { display: flex; flex-wrap: wrap; gap: 8px; }
-.ranch-chip { padding: 8px 11px; border: 1px solid rgba(66,55,42,.16); border-radius: 999px; background: rgba(228,218,199,.36); font: 500 9px/1 "IBM Plex Mono", monospace; color: rgba(40,35,29,.75); }
-.ranch-skill-group + .ranch-skill-group { margin-top: 16px; }
-.ranch-skill-group h4 { margin: 0 0 9px; font-size: 12px; font-weight: 500; }
+.about-card-profile img {
+  width: 84px;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border: 1px solid rgba(65,52,39,.16);
+  border-radius: 12px;
+  filter: saturate(.75);
+}
 
-.ranch-instruction {
-  position: absolute;
-  z-index: 12;
-  left: 50%;
-  bottom: 5.6vh;
-  transform: translateX(-50%);
+.about-card-profile h4 { margin: 2px 0 7px; font-size: 17px; font-weight: 500; }
+.about-card-profile p { margin: 0; color: rgba(41,35,28,.62); font-size: 11px; line-height: 1.75; }
+
+.about-chip-row {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  color: rgba(40,35,29,.54);
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 14px;
+}
+
+.about-chip-row span {
+  padding: 8px 10px;
+  border: 1px solid rgba(65,52,39,.14);
+  border-radius: 999px;
+  background: rgba(229,218,199,.34);
+  color: rgba(41,35,28,.72);
   font: 500 9px/1 "IBM Plex Mono", monospace;
-  pointer-events: none;
-}
-.ranch-instruction::before { content: ""; width: 42px; height: 1px; background: currentColor; opacity: .48; }
-
-.ranch-glove {
-  position: fixed;
-  z-index: 9999;
-  width: 44px;
-  height: 44px;
-  pointer-events: none;
-  opacity: 0;
-  transform: translate(-8px, -8px) rotate(-12deg);
-  transition: opacity .12s ease, transform .14s ease;
-}
-.ranch-about.is-pointer-inside .ranch-glove { opacity: 1; }
-.ranch-about.is-grabbing .ranch-glove { transform: translate(-8px, -6px) rotate(4deg) scale(.92); }
-.ranch-glove svg { width: 100%; height: 100%; filter: drop-shadow(0 4px 4px rgba(48,39,29,.13)); }
-
-.about-scene.ranch-about .scene-back { z-index: 60; }
-
-@media (max-width: 900px) {
-  .ranch-head { width: 42vw; top: 11vh; }
-  .ranch-info-card { left: 44%; width: 52vw; }
-  .ranch-manager { left: 7%; width: 18vw; }
-  .ranch-cow { left: 28%; width: 22vw; }
-  .ranch-horse { left: 57%; width: 25vw; }
-  .ranch-sheep { left: 82%; width: 15vw; }
 }
 
-@media (max-width: 640px) {
-  .about-scene.ranch-about { overflow-y: auto; cursor: auto; }
-  .ranch-glove { display: none; }
-  .ranch-about-shell { position: relative; min-height: 900px; }
-  .ranch-head { left: 20px; top: 96px; width: calc(100% - 40px); }
-  .ranch-head h2 { font-size: 48px; }
-  .ranch-head p:last-child { font-size: 12px; }
-  .ranch-fence { bottom: 18%; height: 22%; }
-  .ranch-manager { left: 4%; bottom: 10%; width: 26vw; height: 34%; }
-  .ranch-cow { left: 29%; bottom: 31%; width: 31vw; height: 22%; }
-  .ranch-horse { left: 54%; bottom: 24%; width: 34vw; height: 25%; }
-  .ranch-sheep { left: 78%; bottom: 29%; width: 21vw; height: 16%; }
-  .ranch-label { display: none; }
-  .ranch-info-card { position: fixed; left: 14px; right: 14px; top: auto; bottom: 16px; width: auto; max-height: 58vh; }
-  .ranch-instruction { bottom: 2.6vh; width: max-content; max-width: 80vw; text-align: center; }
+.about-skill-group + .about-skill-group { margin-top: 16px; }
+.about-skill-group h4 { margin: 0; font-size: 12px; font-weight: 500; }
+
+.about-carousel-hint {
+  position: absolute;
+  left: 58%;
+  bottom: 4.5vh;
+  transform: translateX(-50%);
+  margin: 0;
+  color: rgba(41,35,28,.48);
+  font: 500 9px/1 "IBM Plex Mono", monospace;
+  letter-spacing: .06em;
+}
+
+.about-scene.about-carousel .scene-back { z-index: 60; }
+
+@media (max-width: 1000px) {
+  .about-carousel-head { width: 36vw; }
+  .about-carousel-stage { left: 61%; width: 70vw; }
+  .about-carousel-card { width: 44vw; }
+  .about-lamb-slot { transform: translate(-50%, -50%) rotate(var(--slot-angle)) translateY(-230%) rotate(calc(var(--slot-angle) * -1)); }
+}
+
+@media (max-width: 700px) {
+  .about-scene.about-carousel { overflow-y: auto; }
+  .about-carousel-shell { position: relative; min-height: 900px; }
+  .about-carousel-head { left: 20px; top: 88px; width: calc(100% - 40px); }
+  .about-carousel-head h2 { font-size: 48px; }
+  .about-carousel-stage { left: 50%; top: 55%; width: 96vw; }
+  .about-carousel-core { width: 48%; }
+  .about-lamb-slot { width: 100px; height: 100px; transform: translate(-50%, -50%) rotate(var(--slot-angle)) translateY(-195%) rotate(calc(var(--slot-angle) * -1)); }
+  .about-carousel-card { position: fixed; left: 14px; right: 14px; top: auto; bottom: 16px; width: auto; max-height: 58vh; }
+  .about-carousel-hint { left: 50%; bottom: 2.4vh; width: max-content; max-width: 90vw; text-align: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-carousel-orbit,
+  .about-lamb-upright { animation: none; }
 }
