@@ -1,0 +1,154 @@
+/* Ranch About layout isolation + proportion fixes */
+.about-scene.ranch-about {
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100vh !important;
+  min-height: 100vh !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  display: block !important;
+  background:
+    radial-gradient(circle at 74% 18%, rgba(255,255,255,.72), transparent 31%),
+    linear-gradient(rgba(90,76,58,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(90,76,58,.035) 1px, transparent 1px),
+    #f5f0e6 !important;
+  background-size: auto, 40px 40px, 40px 40px, auto !important;
+}
+
+.about-scene.ranch-about .about-grid {
+  display: none !important;
+}
+
+.about-scene.ranch-about .ranch-about-shell {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100vh !important;
+  min-height: 100vh !important;
+  overflow: hidden !important;
+}
+
+.about-scene.ranch-about .ranch-head {
+  left: 4.4vw !important;
+  top: 11.5vh !important;
+  width: min(30vw, 420px) !important;
+}
+
+.about-scene.ranch-about .ranch-head h2 {
+  font-size: clamp(42px, 4.6vw, 68px) !important;
+  line-height: .92 !important;
+}
+
+.about-scene.ranch-about .ranch-head p:last-child {
+  margin-top: 18px !important;
+  width: min(360px, 96%) !important;
+  font-size: 12px !important;
+  line-height: 1.75 !important;
+}
+
+.about-scene.ranch-about .ranch-hills {
+  left: -2% !important;
+  right: -2% !important;
+  bottom: 20% !important;
+  height: 38% !important;
+}
+
+.about-scene.ranch-about .ranch-fence {
+  left: -2% !important;
+  right: -2% !important;
+  bottom: 11.5% !important;
+  height: 31% !important;
+}
+
+.about-scene.ranch-about .ranch-manager {
+  left: 10.5% !important;
+  bottom: 5.8% !important;
+  width: min(14vw, 205px) !important;
+  height: 49% !important;
+}
+
+.about-scene.ranch-about .ranch-cow {
+  left: 30.5% !important;
+  bottom: 25.5% !important;
+  width: min(21vw, 325px) !important;
+  height: 31% !important;
+}
+
+.about-scene.ranch-about .ranch-horse {
+  left: 59% !important;
+  bottom: 18.5% !important;
+  width: min(23vw, 350px) !important;
+  height: 36% !important;
+}
+
+.about-scene.ranch-about .ranch-sheep {
+  left: 81% !important;
+  bottom: 22% !important;
+  width: min(14vw, 215px) !important;
+  height: 23% !important;
+}
+
+.about-scene.ranch-about .ranch-label-manager { left: 8.5% !important; bottom: 58% !important; }
+.about-scene.ranch-about .ranch-label-cow { left: 38% !important; bottom: 66% !important; }
+.about-scene.ranch-about .ranch-label-horse { left: 68% !important; bottom: 64% !important; }
+.about-scene.ranch-about .ranch-label-sheep { right: 8.2% !important; bottom: 60% !important; }
+
+.about-scene.ranch-about .ranch-info-card {
+  top: 12vh !important;
+  left: 48% !important;
+  width: min(39vw, 590px) !important;
+  max-height: 70vh !important;
+}
+
+.about-scene.ranch-about .ranch-instruction {
+  bottom: 3.1vh !important;
+}
+
+.about-scene.ranch-about .scene-back {
+  left: 28px !important;
+  bottom: 22px !important;
+  z-index: 70 !important;
+}
+
+.about-scene.ranch-about ~ .cursor-dot,
+body:has(.about-scene.ranch-about.is-visible) .cursor-dot {
+  opacity: 0 !important;
+}
+
+@media (max-width: 900px) {
+  .about-scene.ranch-about .ranch-head {
+    left: 24px !important;
+    top: 10vh !important;
+    width: 39vw !important;
+  }
+  .about-scene.ranch-about .ranch-head h2 { font-size: 48px !important; }
+  .about-scene.ranch-about .ranch-info-card { left: 43% !important; width: 54vw !important; }
+  .about-scene.ranch-about .ranch-manager { left: 6% !important; width: 19vw !important; }
+  .about-scene.ranch-about .ranch-cow { left: 27% !important; width: 25vw !important; }
+  .about-scene.ranch-about .ranch-horse { left: 56% !important; width: 28vw !important; }
+  .about-scene.ranch-about .ranch-sheep { left: 80% !important; width: 17vw !important; }
+}
+
+@media (max-width: 640px) {
+  .about-scene.ranch-about {
+    height: 100vh !important;
+    min-height: 100vh !important;
+    overflow-y: auto !important;
+  }
+  .about-scene.ranch-about .ranch-about-shell {
+    position: relative !important;
+    height: 900px !important;
+    min-height: 900px !important;
+  }
+  .about-scene.ranch-about .ranch-head {
+    left: 20px !important;
+    top: 82px !important;
+    width: calc(100% - 40px) !important;
+  }
+  .about-scene.ranch-about .ranch-head h2 { font-size: 44px !important; }
+  .about-scene.ranch-about .ranch-fence { bottom: 15% !important; height: 24% !important; }
+  .about-scene.ranch-about .ranch-manager { left: 3% !important; bottom: 8% !important; width: 28vw !important; height: 34% !important; }
+  .about-scene.ranch-about .ranch-cow { left: 27% !important; bottom: 28% !important; width: 34vw !important; height: 23% !important; }
+  .about-scene.ranch-about .ranch-horse { left: 53% !important; bottom: 21% !important; width: 37vw !important; height: 27% !important; }
+  .about-scene.ranch-about .ranch-sheep { left: 77% !important; bottom: 27% !important; width: 23vw !important; height: 17% !important; }
+}
