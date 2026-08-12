@@ -1,78 +1,53 @@
 import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
+import { GLTFLoader } from 'https://unpkg.com/three@0.160.0/examples/jsm/loaders/GLTFLoader.js';
 
 const host = document.querySelector('#star-stage');
+
 if (host) {
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(34, 1, 0.1, 100);
-  camera.position.z = 8.5;
+  const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
+  camera.position.set(0, 0.25, 7.2);
 
-  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'low-power' });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+  const renderer = new THREE.WebGLRenderer({
+    antialias: true,
+    alpha: true,
+    powerPreference: 'low-power'
+  });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.35));
   renderer.setClearColor(0x000000, 0);
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.08;
   renderer.domElement.className = 'star-fx-canvas';
   host.appendChild(renderer.domElement);
 
-  const shape = new THREE.Shape();
-  for (let i = 0; i < 20; i += 1) {
-    const angle = (i / 20) * Math.PI * 2 - Math.PI / 2;
-    const radius = i % 2 ? 0.92 : 2.35;
-    const x = Math.cos(angle) * radius;
-    const y = Math.sin(angle) * radius;
-    i ? shape.lineTo(x, y) : shape.moveTo(x, y);
-  }
-  shape.closePath();
+  const root = new THREE.Group();
+  scene.add(root);
 
-  const geometry = new THREE.ExtrudeGeometry(shape, {
-    depth: 0.42,
-    bevelEnabled: true,
-    bevelSegments: 3,
-    bevelSize: 0.17,
-    bevelThickness: 0.15
-  });
-  geometry.center();
+  scene.add(new THREE.HemisphereLight(0xfffbf4, 0xb7c9d9, 2.1));
 
-  const material = new THREE.MeshPhysicalMaterial({
-    color: 0xcbd1db,
-    metalness: 0.78,
-    roughness: 0.08,
-    clearcoat: 1,
-    clearcoatRoughness: 0.05,
-    iridescence: 1,
-    iridescenceIOR: 1.35,
-    iridescenceThicknessRange: [110, 820],
-    transparent: true,
-    opacity: 0.5,
-    depthWrite: false,
-    blending: THREE.AdditiveBlending,
-    side: THREE.DoubleSide
-  });
+  const key = new THREE.DirectionalLight(0xffffff, 3.2);
+  key.position.set(4, 7, 6);
+  scene.add(key);
 
-  const mesh = new THREE.Mesh(geometry, material);
-  mesh.rotation.set(-0.22, 0.36, -0.08);
-  scene.add(mesh);
+  const fill = new THREE.DirectionalLight(0xbfdcff, 1.8);
+  fill.position.set(-5, 2, 4);
+  scene.add(fill);
 
-  scene.add(new THREE.AmbientLight(0xffffff, 1.15));
-  [
-    [0x9fdfff, 3.3, -4, 5, 7],
-    [0xf2a5ff, 2.6, 5, -1, 4],
-    [0xffd88a, 2.1, 1, 5, 2]
-  ].forEach(([color, intensity, x, y, z]) => {
-    const light = new THREE.DirectionalLight(color, intensity);
-    light.position.set(x, y, z);
-    scene.add(light);
-  });
+  const rim = new THREE.DirectionalLight(0xffd9ef, 1.4);
+  rim.position.set(2, -1, -4);
+  scene.add(rim);
 
+  let model = null;
+  let mixer = null;
+  let modelLoaded = false;
+  let modelLoading = false;
+  let loadError = false;
   let pointerX = 0;
   let pointerY = 0;
   let running = false;
   let frameId = 0;
-
-  const onPointerMove = event => {
-    if (!running) return;
-    pointerX = (event.clientX / window.innerWidth - 0.5) * 0.28;
-    pointerY = (event.clientY / window.innerHeight - 0.5) * 0.18;
-  };
-  window.addEventListener('pointermove', onPointerMove, { passive: true });
+  let lastTime = performance.now();
 
   const resize = () => {
     const rect = host.getBoundingClientRect();
@@ -81,17 +56,97 @@ if (host) {
     camera.aspect = rect.width / rect.height;
     camera.updateProjectionMatrix();
   };
-  resize();
-  window.addEventListener('resize', resize, { passive: true });
 
-  const animate = () => {
+  const fitModel = object => {
+    object.updateMatrixWorld(true);
+    const box = new THREE.Box3().setFromObject(object);
+    const size = box.getSize(new THREE.Vector3());
+    const center = box.getCenter(new THREE.Vector3());
+    const maxDim = Math.max(size.x, size.y, size.z) || 1;
+
+    object.position.sub(center);
+    const targetSize = 4.7;
+    const scale = targetSize / maxDim;
+    object.scale.setScalar(scale);
+
+    object.updateMatrixWorld(true);
+    const fittedBox = new THREE.Box3().setFromObject(object);
+    const fittedCenter = fittedBox.getCenter(new THREE.Vector3());
+    object.position.x -= fittedCenter.x;
+    object.position.y -= fittedCenter.y;
+    object.position.y -= 0.18;
+  };
+
+  const loadModel = () => {
+    if (modelLoaded || modelLoading || loadError) return;
+    modelLoading = true;
+    host.classList.add('is-loading-model');
+
+    const loader = new GLTFLoader();
+    loader.load(
+      './assets/fountain.glb',
+      gltf => {
+        model = gltf.scene;
+        fitModel(model);
+
+        model.traverse(node => {
+          if (!node.isMesh) return;
+          node.castShadow = false;
+          node.receiveShadow = false;
+          if (node.material) {
+            const materials = Array.isArray(node.material) ? node.material : [node.material];
+            materials.forEach(material => {
+              if ('envMapIntensity' in material) material.envMapIntensity = 0.75;
+              material.needsUpdate = true;
+            });
+          }
+        });
+
+        root.add(model);
+
+        if (gltf.animations?.length) {
+          mixer = new THREE.AnimationMixer(model);
+          gltf.animations.forEach(clip => mixer.clipAction(clip).play());
+        }
+
+        modelLoaded = true;
+        modelLoading = false;
+        host.classList.remove('is-loading-model');
+        resize();
+      },
+      undefined,
+      error => {
+        console.error('Failed to load fountain.glb', error);
+        modelLoading = false;
+        loadError = true;
+        host.classList.remove('is-loading-model');
+        host.classList.add('model-load-failed');
+      }
+    );
+  };
+
+  const onPointerMove = event => {
+    if (!running || !modelLoaded) return;
+    pointerX = (event.clientX / window.innerWidth - 0.5) * 0.22;
+    pointerY = (event.clientY / window.innerHeight - 0.5) * 0.11;
+  };
+
+  const animate = now => {
     if (!running) return;
-    const dataMode = document.querySelector('.scene-home')?.classList.contains('data-mode');
-    const targetY = dataMode ? Math.PI + 0.35 : 0.36;
-    mesh.rotation.y += (targetY + pointerX - mesh.rotation.y) * 0.04;
-    mesh.rotation.x += (-0.22 + pointerY - mesh.rotation.x) * 0.04;
-    mesh.rotation.z += dataMode ? -0.0015 : 0.0007;
-    material.iridescenceIOR = 1.28 + Math.sin(performance.now() * 0.00055) * 0.08;
+
+    const delta = Math.min(0.05, (now - lastTime) / 1000);
+    lastTime = now;
+
+    if (mixer) mixer.update(delta);
+
+    if (model) {
+      const dataMode = document.querySelector('.scene-home')?.classList.contains('data-mode');
+      const baseY = dataMode ? Math.PI + 0.18 : 0;
+      root.rotation.y += (baseY + pointerX - root.rotation.y) * 0.035;
+      root.rotation.x += (pointerY * 0.35 - root.rotation.x) * 0.035;
+      if (!dataMode) root.rotation.y += delta * 0.075;
+    }
+
     renderer.render(scene, camera);
     frameId = requestAnimationFrame(animate);
   };
@@ -99,14 +154,21 @@ if (host) {
   const setRunning = next => {
     if (next === running) return;
     running = next;
+
     if (running) {
+      loadModel();
       resize();
+      lastTime = performance.now();
       frameId = requestAnimationFrame(animate);
     } else if (frameId) {
       cancelAnimationFrame(frameId);
       frameId = 0;
     }
   };
+
+  window.addEventListener('pointermove', onPointerMove, { passive: true });
+  window.addEventListener('resize', resize, { passive: true });
+  resize();
 
   const home = document.querySelector('.scene-home');
   if (home) {
