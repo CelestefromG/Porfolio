@@ -3,7 +3,6 @@
   if (!scene || scene.dataset.carouselReady === 'true') return;
   scene.dataset.carouselReady = 'true';
   scene.classList.add('about-carousel');
-
   scene.querySelector('.about-grid')?.remove();
 
   const items = [
@@ -28,12 +27,19 @@
   scene.insertAdjacentHTML('afterbegin', `
     <div class="about-carousel-shell">
       <header class="about-carousel-head">
-        <p class="eyebrow">04 / ABOUT · LITTLE LAMB CAROUSEL</p>
+        <p class="eyebrow">04 / ABOUT · CELESTE'S FOUNTAIN</p>
         <h2>关于我</h2>
-        <p>四只小羊分别装着我的个人信息、项目、经历和技能。<br>点击一只羊，旋转木马会暂停并打开对应内容。</p>
+        <p>四只小羊分别对应个人信息、项目、经历和技能。<br>点击小羊，喷泉旁会从对应方向展开内容。</p>
       </header>
-      <div class="about-carousel-stage" aria-label="About carousel">
-        <div class="about-carousel-core" aria-hidden="true"></div>
+      <div class="about-carousel-stage" aria-label="About fountain">
+        <div class="about-carousel-core" aria-hidden="true">
+          <img class="about-fountain-art" src="./assets/muma.png" alt="">
+          <div class="about-water-pool about-water-pool-upper"></div>
+          <div class="about-water-pool about-water-pool-lower"></div>
+          <div class="about-water-falls">
+            <i class="fall f1"></i><i class="fall f2"></i><i class="fall f3"></i><i class="fall f4"></i>
+          </div>
+        </div>
         <div class="about-carousel-orbit"></div>
       </div>
       <aside class="about-carousel-card" aria-live="polite" aria-hidden="true">
@@ -56,15 +62,16 @@
     const slot = document.createElement('button');
     slot.type = 'button';
     slot.className = 'about-lamb-slot';
-    slot.dataset.aboutKey = item.key;
     slot.setAttribute('aria-label', item.label);
     slot.innerHTML = `<span class="about-lamb-upright"><img src="${item.image}" alt="${item.label}"><b>${item.label}</b></span>`;
-    slot.addEventListener('click', () => openItem(item));
+    slot.addEventListener('click', () => openItem(item, slot));
     orbit.appendChild(slot);
     slots.push(slot);
   });
 
-  function openItem(item) {
+  function openItem(item, slot) {
+    const side = slot.getBoundingClientRect().left + slot.offsetWidth / 2 < innerWidth / 2 ? 'left' : 'right';
+    card.dataset.side = side;
     cardKicker.textContent = item.kicker;
     cardTitle.textContent = item.title;
     cardBody.innerHTML = item.html;
@@ -88,40 +95,34 @@
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function layoutCarousel() {
-    const w = stage.clientWidth;
-    const h = stage.clientHeight;
-    const radiusX = w * 0.19;
-    const radiusY = h * 0.018;
-    const centerY = h * 0.535;
+    const stageRect = stage.getBoundingClientRect();
+    const coreRect = core.getBoundingClientRect();
+    const centerX = coreRect.left - stageRect.left + coreRect.width / 2;
+    const centerY = coreRect.top - stageRect.top + coreRect.height * 0.55;
+    const radiusX = coreRect.width * 0.43;
+    const radiusY = coreRect.height * 0.045;
 
     slots.forEach((slot, index) => {
       const angle = phase + index * Math.PI / 2;
       const depth = (Math.sin(angle) + 1) / 2;
       const x = Math.cos(angle) * radiusX;
       const y = Math.sin(angle) * radiusY;
-      const scale = 0.86 + depth * 0.20;
+      const scale = 0.92 + depth * 0.18;
 
-      slot.style.left = '50%';
+      slot.style.left = `${centerX}px`;
       slot.style.top = `${centerY}px`;
       slot.style.transform = `translate(-50%,-50%) translate3d(${x}px,${y}px,0) scale(${scale})`;
-      slot.style.opacity = (0.68 + depth * 0.32).toFixed(3);
-      slot.style.zIndex = depth < 0.48 ? '7' : String(11 + Math.round(depth * 5));
+      slot.style.opacity = (0.76 + depth * 0.24).toFixed(3);
+      slot.style.zIndex = depth < 0.48 ? '7' : String(12 + Math.round(depth * 4));
     });
-
-    const sway = Math.sin(phase) * 4;
-    const squeeze = 0.99 + Math.cos(phase * 2) * 0.01;
-    core.style.transform = `translate(-50%,-50%) translate3d(${sway}px,0,0) scaleX(${squeeze})`;
   }
 
   function animate(now) {
     rafId = 0;
     if (!scene.classList.contains('is-visible')) return;
-
     const dt = Math.min(40, now - last);
     last = now;
-    if (!reducedMotion && !scene.classList.contains('is-carousel-paused') && !stage.matches(':hover')) {
-      phase += dt * 0.00020;
-    }
+    if (!reducedMotion && !scene.classList.contains('is-carousel-paused')) phase += dt * 0.00018;
     layoutCarousel();
     rafId = requestAnimationFrame(animate);
   }
