@@ -335,6 +335,60 @@
 .dongyang-instruction > b { font-weight: 500; }
 .dongyang-instruction > em { justify-self: end; font-style: normal; opacity: .48; }
 
+/* English-only typography: keep long labels from colliding with folders. */
+.dongyang-section.is-en .dongyang-heading {
+  top: 13.5vh;
+  width: min(31vw, 430px);
+}
+.dongyang-section.is-en .dongyang-heading h2 {
+  font-size: clamp(30px, 3.4vw, 52px);
+  line-height: .96;
+  letter-spacing: -.045em;
+}
+.dongyang-section.is-en .dongyang-heading > p:last-child {
+  width: min(420px, 100%);
+  margin-top: 14px;
+  font-size: 8px;
+  line-height: 1.55;
+  letter-spacing: .035em;
+}
+.dongyang-section.is-en .dongyang-meta {
+  top: 14vh;
+  font-size: 8px;
+}
+.dongyang-section.is-en .dongyang-meta b {
+  font-size: 10px;
+}
+.dongyang-section.is-en .dongyang-file-content {
+  grid-template-columns: .86fr 1.14fr;
+  gap: 3vw;
+}
+.dongyang-section.is-en .dongyang-file-copy > span {
+  margin-bottom: 11px;
+  font-size: 7px;
+}
+.dongyang-section.is-en .dongyang-file-copy h3 {
+  font-size: clamp(19px, 2.25vw, 34px);
+  line-height: 1.06;
+  letter-spacing: -.035em;
+  font-weight: 600;
+}
+.dongyang-section.is-en .dongyang-file-copy p {
+  margin-top: 13px;
+  max-width: 360px;
+  font-size: 8px;
+  line-height: 1.5;
+}
+.dongyang-section.is-en .dongyang-folder-front > b {
+  font-size: clamp(14px, 1.45vw, 22px);
+  line-height: 1.08;
+  letter-spacing: -.025em;
+}
+.dongyang-section.is-en .dongyang-folder-front > span,
+.dongyang-section.is-en .dongyang-folder-front > em {
+  font-size: 8px;
+}
+
 body.is-dongyang-section .site-header {
   color: #111214;
   border-bottom-color: rgba(17,18,20,.1);
@@ -349,6 +403,8 @@ body.is-dongyang-section .cursor-dot { color: #111214; }
   .dongyang-stack { width: 86vw; transform: translate(-50%, -33%); }
   .dongyang-file-content { grid-template-columns: .8fr 1.2fr; gap: 26px; }
   .dongyang-folder-front { grid-template-columns: 74px 1fr auto; }
+  .dongyang-section.is-en .dongyang-heading { width: 40vw; }
+  .dongyang-section.is-en .dongyang-file-content { grid-template-columns: .9fr 1.1fr; gap: 20px; }
 }
 
 @media (max-width: 640px) {
@@ -372,6 +428,9 @@ body.is-dongyang-section .cursor-dot { color: #111214; }
   .dongyang-folder-front > em { display: none; }
   .dongyang-folder.is-open .dongyang-folder-front { transform: translateY(238px) rotateX(-5deg); }
   .dongyang-instruction { left: 18px; right: 18px; }
+  .dongyang-section.is-en .dongyang-heading { left: 18px; top: 10vh; width: calc(100vw - 36px); }
+  .dongyang-section.is-en .dongyang-heading h2 { font-size: 34px; }
+  .dongyang-section.is-en .dongyang-file-copy h3 { font-size: 22px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
