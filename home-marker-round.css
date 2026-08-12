@@ -1,0 +1,18 @@
+/* HOME — round connector markers */
+.cursor-dot{
+  width:10px!important;height:10px!important;border-radius:50%!important;
+  border:1px solid rgba(11,12,14,.78)!important;background:rgba(243,242,239,.72)!important;
+  box-shadow:0 0 0 2px rgba(243,242,239,.52);transform:translate(-50%,-50%);
+}
+.cursor-dot.is-hover{
+  width:26px!important;height:26px!important;border-radius:50%!important;
+  background:rgba(255,255,255,.2)!important;box-shadow:0 0 0 1px rgba(11,12,14,.12);
+}
+.chapter .node{
+  width:12px!important;height:12px!important;border-radius:50%!important;
+  background:var(--paper)!important;border:1px solid rgba(11,12,14,.82)!important;
+  box-shadow:inset 0 0 0 3px var(--paper)!important;
+}
+.chapter:hover .node{
+  background:rgba(11,12,14,.82)!important;transform:scale(1.22)!important;
+}
