@@ -67,11 +67,7 @@
       </header>
 
       <div class="about-carousel-stage" aria-label="About carousel">
-        <div class="about-carousel-core" aria-hidden="true">
-          <div class="carousel-apple-top"><i></i></div>
-          <div class="carousel-pole"></div>
-          <div class="carousel-apple-base"><span>CELESTE</span></div>
-        </div>
+        <div class="about-carousel-core" aria-hidden="true"></div>
         <div class="about-carousel-orbit"></div>
       </div>
 
@@ -88,6 +84,7 @@
   `);
 
   const stage = scene.querySelector('.about-carousel-stage');
+  const core = scene.querySelector('.about-carousel-core');
   const orbit = scene.querySelector('.about-carousel-orbit');
   const slots = [];
 
@@ -142,39 +139,48 @@
   let last = performance.now();
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  const layoutLambs = () => {
+  const layoutCarousel = () => {
     const w = stage.clientWidth;
     const h = stage.clientHeight;
-    const radiusX = w * 0.31;
-    const radiusY = h * 0.055;
-    const centerY = h * 0.53;
+
+    // Keep the lambs right against the carousel rail instead of floating outside it.
+    const radiusX = w * 0.205;
+    const radiusY = h * 0.018;
+    const centerY = h * 0.535;
 
     slots.forEach((slot, index) => {
       const angle = phase + index * (Math.PI * 2 / slots.length);
       const x = Math.cos(angle) * radiusX;
       const y = Math.sin(angle) * radiusY;
       const depth = (Math.sin(angle) + 1) / 2;
-      const scale = 0.78 + depth * 0.24;
-      const opacity = 0.58 + depth * 0.42;
+      const scale = 0.82 + depth * 0.22;
+      const opacity = 0.64 + depth * 0.36;
 
       slot.style.left = '50%';
       slot.style.top = `${centerY}px`;
       slot.style.transform = `translate(-50%, -50%) translate3d(${x}px, ${y}px, 0) scale(${scale})`;
       slot.style.opacity = opacity.toFixed(3);
-      slot.style.zIndex = String(5 + Math.round(depth * 12));
+
+      // Back lambs pass behind the carousel artwork; front lambs sit over the rail.
+      slot.style.zIndex = depth < 0.48 ? '7' : String(11 + Math.round(depth * 5));
     });
+
+    // A subtle horizontal turn cue tied to the same phase keeps the carousel and lambs moving as one system.
+    const sway = Math.sin(phase) * 5;
+    const squeeze = 0.986 + Math.cos(phase * 2) * 0.014;
+    core.style.transform = `translate(-50%, -50%) translate3d(${sway}px, 0, 0) scaleX(${squeeze})`;
   };
 
   const animate = now => {
     const dt = Math.min(40, now - last);
     last = now;
     const paused = scene.classList.contains('is-carousel-paused') || stage.matches(':hover');
-    if (!paused && !reducedMotion) phase += dt * 0.00022;
-    layoutLambs();
+    if (!paused && !reducedMotion) phase += dt * 0.00020;
+    layoutCarousel();
     requestAnimationFrame(animate);
   };
 
-  layoutLambs();
+  layoutCarousel();
   requestAnimationFrame(animate);
-  window.addEventListener('resize', layoutLambs, { passive: true });
+  window.addEventListener('resize', layoutCarousel, { passive: true });
 })();
