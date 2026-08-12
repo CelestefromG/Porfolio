@@ -87,12 +87,14 @@
     </div>
   `);
 
+  const stage = scene.querySelector('.about-carousel-stage');
   const orbit = scene.querySelector('.about-carousel-orbit');
-  items.forEach((item, index) => {
+  const slots = [];
+
+  items.forEach(item => {
     const slot = document.createElement('button');
     slot.type = 'button';
     slot.className = 'about-lamb-slot';
-    slot.style.setProperty('--slot-angle', `${index * 90}deg`);
     slot.dataset.aboutKey = item.key;
     slot.setAttribute('aria-label', item.label);
     slot.innerHTML = `
@@ -101,6 +103,7 @@
         <b>${item.label}</b>
       </span>`;
     orbit.appendChild(slot);
+    slots.push(slot);
   });
 
   const card = scene.querySelector('.about-carousel-card');
@@ -123,7 +126,7 @@
     scene.classList.remove('is-carousel-paused');
   };
 
-  orbit.querySelectorAll('.about-lamb-slot').forEach(slot => {
+  slots.forEach(slot => {
     slot.addEventListener('click', () => {
       const item = items.find(entry => entry.key === slot.dataset.aboutKey);
       if (item) openItem(item);
@@ -134,4 +137,44 @@
   scene.addEventListener('keydown', event => {
     if (event.key === 'Escape') closeCard();
   });
+
+  let phase = 0;
+  let last = performance.now();
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const layoutLambs = () => {
+    const w = stage.clientWidth;
+    const h = stage.clientHeight;
+    const radiusX = w * 0.31;
+    const radiusY = h * 0.055;
+    const centerY = h * 0.53;
+
+    slots.forEach((slot, index) => {
+      const angle = phase + index * (Math.PI * 2 / slots.length);
+      const x = Math.cos(angle) * radiusX;
+      const y = Math.sin(angle) * radiusY;
+      const depth = (Math.sin(angle) + 1) / 2;
+      const scale = 0.78 + depth * 0.24;
+      const opacity = 0.58 + depth * 0.42;
+
+      slot.style.left = '50%';
+      slot.style.top = `${centerY}px`;
+      slot.style.transform = `translate(-50%, -50%) translate3d(${x}px, ${y}px, 0) scale(${scale})`;
+      slot.style.opacity = opacity.toFixed(3);
+      slot.style.zIndex = String(5 + Math.round(depth * 12));
+    });
+  };
+
+  const animate = now => {
+    const dt = Math.min(40, now - last);
+    last = now;
+    const paused = scene.classList.contains('is-carousel-paused') || stage.matches(':hover');
+    if (!paused && !reducedMotion) phase += dt * 0.00022;
+    layoutLambs();
+    requestAnimationFrame(animate);
+  };
+
+  layoutLambs();
+  requestAnimationFrame(animate);
+  window.addEventListener('resize', layoutLambs, { passive: true });
 })();
