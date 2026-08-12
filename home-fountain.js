@@ -11,29 +11,30 @@ if (host) {
   const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
   camera.position.set(0, 0.3, 7.4);
 
-  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'low-power' });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.35));
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   renderer.setClearColor(0x000000, 0);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.08;
+  renderer.toneMappingExposure = 1.02;
   renderer.domElement.className = 'star-fx-canvas fountain-fx-canvas';
+  renderer.domElement.style.filter = 'saturate(1.08) contrast(1.045)';
   host.appendChild(renderer.domElement);
 
   const root = new THREE.Group();
   scene.add(root);
 
-  scene.add(new THREE.HemisphereLight(0xfffbf4, 0xaabed2, 2.25));
+  scene.add(new THREE.HemisphereLight(0xfffbf4, 0xaabed2, 1.75));
 
-  const key = new THREE.DirectionalLight(0xffffff, 3.0);
+  const key = new THREE.DirectionalLight(0xffffff, 2.45);
   key.position.set(4, 7, 6);
   scene.add(key);
 
-  const fill = new THREE.DirectionalLight(0xbfdcff, 1.65);
+  const fill = new THREE.DirectionalLight(0xbfdcff, 1.15);
   fill.position.set(-5, 2, 4);
   scene.add(fill);
 
-  const rim = new THREE.DirectionalLight(0xffd9ef, 1.25);
+  const rim = new THREE.DirectionalLight(0xffd9ef, 0.85);
   rim.position.set(2, -1, -4);
   scene.add(rim);
 
@@ -63,13 +64,19 @@ if (host) {
     const maxDim = Math.max(size.x, size.y, size.z) || 1;
 
     object.position.sub(center);
-    object.scale.setScalar(3.6 / maxDim);
+    object.scale.setScalar(3.2 / maxDim);
     object.updateMatrixWorld(true);
 
     const fitted = new THREE.Box3().setFromObject(object);
     const fittedCenter = fitted.getCenter(new THREE.Vector3());
     object.position.x -= fittedCenter.x;
     object.position.y -= fittedCenter.y + 0.12;
+  };
+
+  const tuneTexture = texture => {
+    if (!texture?.isTexture) return;
+    texture.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+    texture.needsUpdate = true;
   };
 
   const loadModel = () => {
@@ -87,9 +94,11 @@ if (host) {
           if (!node.isMesh) return;
           node.castShadow = false;
           node.receiveShadow = false;
+
           const materials = Array.isArray(node.material) ? node.material : [node.material];
           materials.filter(Boolean).forEach(material => {
-            if ('envMapIntensity' in material) material.envMapIntensity = 0.7;
+            if ('envMapIntensity' in material) material.envMapIntensity = 0.62;
+            ['map', 'normalMap', 'roughnessMap', 'metalnessMap', 'aoMap', 'emissiveMap', 'alphaMap'].forEach(key => tuneTexture(material[key]));
             material.needsUpdate = true;
           });
         });
