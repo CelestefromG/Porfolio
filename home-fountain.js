@@ -5,7 +5,6 @@ const host = document.querySelector('#star-stage');
 const home = document.querySelector('.scene-home');
 
 if (host) {
-  // Ensure no stale star canvas survives in the host.
   host.replaceChildren();
 
   const scene = new THREE.Scene();
@@ -64,7 +63,7 @@ if (host) {
     const maxDim = Math.max(size.x, size.y, size.z) || 1;
 
     object.position.sub(center);
-    object.scale.setScalar(4.8 / maxDim);
+    object.scale.setScalar(3.6 / maxDim);
     object.updateMatrixWorld(true);
 
     const fitted = new THREE.Box3().setFromObject(object);
@@ -79,7 +78,7 @@ if (host) {
     host.classList.add('is-loading-model');
 
     new GLTFLoader().load(
-      './assets/fountain.glb',
+      './assets/fountain.glb?v=11946400f00a8e84a60e66bd78f13bfb552e3058',
       gltf => {
         model = gltf.scene;
         fitModel(model);
