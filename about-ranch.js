@@ -5,6 +5,7 @@
   scene.classList.add('about-timeline-scene');
   scene.querySelector('.about-grid')?.remove();
 
+  const photos = ['./assets/photo1.png', './assets/photo2.png', './assets/photo3.png'];
   const rows = [
     {
       type: 'PROFILE',
@@ -67,9 +68,19 @@
   scene.insertAdjacentHTML('afterbegin', `
     <div class="about-timeline-shell">
       <header class="about-timeline-head">
-        <p class="eyebrow">04 / ABOUT</p>
-        <h2>关于我</h2>
-        <p>保持好奇，快速学习，并把复杂问题整理成清晰的结构。</p>
+        <div class="about-head-copy">
+          <p class="eyebrow">04 / ABOUT</p>
+          <h2>关于我</h2>
+          <p>保持好奇，快速学习，并把复杂问题整理成清晰的结构。</p>
+        </div>
+        <button class="about-photo-stack" type="button" aria-label="切换照片">
+          <span class="about-photo-frame about-photo-frame-back"></span>
+          <span class="about-photo-frame about-photo-frame-mid"></span>
+          <span class="about-photo-frame about-photo-frame-front">
+            <img src="${photos[0]}" alt="Celeste photo 1">
+          </span>
+          <small>CLICK · 1 / 3</small>
+        </button>
       </header>
       <div class="about-timeline-list">
         ${rows.map((row, index) => `
@@ -85,6 +96,21 @@
       </div>
       <p class="about-timeline-hint">SCROLL · 条目会向中间聚拢</p>
     </div>`);
+
+  const photoStack = scene.querySelector('.about-photo-stack');
+  const photo = photoStack.querySelector('img');
+  const photoCounter = photoStack.querySelector('small');
+  let photoIndex = 0;
+
+  photoStack.addEventListener('click', () => {
+    photoIndex = (photoIndex + 1) % photos.length;
+    photoStack.classList.remove('is-switching');
+    void photoStack.offsetWidth;
+    photoStack.classList.add('is-switching');
+    photo.src = photos[photoIndex];
+    photo.alt = `Celeste photo ${photoIndex + 1}`;
+    photoCounter.textContent = `CLICK · ${photoIndex + 1} / ${photos.length}`;
+  });
 
   const timelineRows = [...scene.querySelectorAll('.about-timeline-row')];
   let ticking = false;
