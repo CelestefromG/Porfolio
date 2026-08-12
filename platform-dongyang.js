@@ -150,6 +150,7 @@
   function renderLanguage() {
     const lang = isEnglish() ? 'en' : 'zh';
     const copy = text[lang];
+    section.classList.toggle('is-en', lang === 'en');
     section.querySelector('[data-dy-title]').innerHTML = copy.title;
     section.querySelector('[data-dy-intro]').textContent = copy.intro;
     section.querySelector('[data-dy-meta]').textContent = copy.meta;
