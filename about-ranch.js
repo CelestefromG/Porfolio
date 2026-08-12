@@ -1,140 +1,118 @@
 (() => {
   const scene = document.querySelector('.about-scene');
-  if (!scene || scene.dataset.carouselReady === 'true') return;
-  scene.dataset.carouselReady = 'true';
-  scene.classList.add('about-carousel');
+  if (!scene || scene.dataset.timelineReady === 'true') return;
+  scene.dataset.timelineReady = 'true';
+  scene.classList.add('about-timeline-scene');
   scene.querySelector('.about-grid')?.remove();
 
-  const items = [
+  const rows = [
     {
-      key: 'profile', image: './assets/lamb1.png', label: '个人信息', kicker: '01 / PERSONAL INFO', title: '陈思睿 · Celeste',
-      html: `<div class="about-card-profile"><img src="https://avatars.githubusercontent.com/u/205961239?v=4" alt="Celeste Chen"><div><h4>好奇心强 · 学习欲旺盛 · 适应力强</h4><p>伦敦国王学院数字人文硕士，本科网络与新媒体。我的经历横跨用户研究、数据分析、新媒体内容与视觉表达。我喜欢快速理解陌生问题，再把复杂信息整理成清晰、可执行的结构。</p></div></div><div class="about-chip-row"><span>用户研究</span><span>数据分析</span><span>内容运营</span><span>视觉表达</span><span>结构化沟通</span></div>`
+      type: 'PROFILE',
+      org: '陈思睿 / CELESTE',
+      role: 'Digital Humanities MA',
+      place: 'London · UK',
+      time: '2025–2026',
+      body: '伦敦国王学院数字人文硕士，本科网络与新媒体。我对陌生问题保持强烈好奇心，也习惯快速学习、调整方法并进入新的工作语境。我的经历横跨用户研究、数据分析、内容运营与视觉表达，擅长把复杂信息拆解成清晰、可执行的结构。'
     },
     {
-      key: 'projects', image: './assets/lamb2.png', label: '项目经历', kicker: '02 / PROJECTS', title: '项目经历',
-      html: `<article class="about-card-item"><header><b>中国方言语音聚类与地理可视化研究</b><time>2025</time></header><p>独立完成研究设计、语料收集、数据处理与结果分析；使用 Python 与 Wav2Vec 2.0 提取语音特征、聚类，并制作交互式方言地图。</p></article><article class="about-card-item"><header><b>JSTOR 用户中心研究</b><time>2025</time></header><p>通过半结构化访谈与可用性测试收集反馈，负责访谈设计、资料编码、Python 数据整理与可视化，并将发现转化为网站体验优化建议。</p></article>`
+      type: 'EXPERIENCE 01',
+      org: 'MARINELIGHT LTD',
+      role: '海外市场销售',
+      place: 'London · UK',
+      time: '2026–至今',
+      body: '在 Old Spitalfields Market 面向海外顾客进行现场销售与需求沟通，推动成交转化，同时负责商品陈列、盘点与库存记录。在高频、即时反馈的线下环境中提升了跨文化沟通、判断和执行能力。'
     },
     {
-      key: 'work', image: './assets/lamb3.png', label: '工作经历', kicker: '03 / EXPERIENCE', title: '工作经历',
-      html: `<article class="about-card-item"><header><b>MARINELIGHT LTD · 海外市场销售</b><time>2026–至今</time></header><p>在 Old Spitalfields Market 接待海外顾客，推动现场销售转化，并负责商品盘点、陈列与库存记录。</p></article><article class="about-card-item"><header><b>上海市奇富科技有限公司 · 企业文化</b><time>2024–2025</time></header><p>负责企业内宣与员工活动策划执行，完成宣传文案、公众号长图设计、内容发布、现场记录和活动复盘。</p></article><article class="about-card-item"><header><b>三秦青年融媒体中心 · 新媒体运营</b><time>2024</time></header><p>负责抖音、微信公众号及 Bilibili 的选题、视频剪辑与发布；制作视频约 70 条，并协助新账号两周增粉 1000+。</p></article>`
+      type: 'EXPERIENCE 02',
+      org: '上海市奇富科技有限公司',
+      role: '企业文化运营',
+      place: 'Shanghai · CN',
+      time: '2024–2025',
+      body: '参与企业内宣和员工活动的策划与执行，负责宣传文案、公众号长图设计、内容发布、现场记录和活动复盘。工作强调信息组织、视觉排版与多方协同。'
     },
     {
-      key: 'skills', image: './assets/lamb4.png', label: '技能点', kicker: '04 / SKILLS', title: '技能点',
-      html: `<section class="about-skill-group"><h4>研究与数据</h4><div class="about-chip-row"><span>Python</span><span>Pandas</span><span>用户研究</span><span>访谈设计</span><span>定性编码</span><span>数据可视化</span></div></section><section class="about-skill-group"><h4>内容与视觉</h4><div class="about-chip-row"><span>平台运营</span><span>文案策划</span><span>长图排版</span><span>PS</span><span>PR</span><span>视频剪辑</span></div></section><section class="about-skill-group"><h4>网页与交互</h4><div class="about-chip-row"><span>HTML</span><span>CSS</span><span>JavaScript</span><span>交互展示</span></div></section>`
+      type: 'EXPERIENCE 03',
+      org: '三秦青年融媒体中心',
+      role: '新媒体运营',
+      place: 'Xi’an · CN',
+      time: '2024',
+      body: '负责抖音、微信公众号及 Bilibili 的选题、视频剪辑与发布，累计制作视频约 70 条，并参与新账号冷启动。工作内容覆盖选题判断、内容加工、平台发布与基础数据反馈。'
+    },
+    {
+      type: 'PROJECT 01',
+      org: '中国方言语音聚类研究',
+      role: '独立研究项目',
+      place: 'KCL · London',
+      time: '2026',
+      body: '围绕中国方言语音的声学相似性与地理关系展开研究，使用 Python 与 Wav2Vec 2.0 / XLS-R 提取语音表示，完成距离计算、聚类、相关分析和交互式地理可视化，并讨论模型在中国方言任务中的局限。'
+    },
+    {
+      type: 'PROJECT 02',
+      org: 'JSTOR 中文用户研究',
+      role: 'UX Research',
+      place: 'KCL · London',
+      time: '2025',
+      body: '通过半结构化访谈和可用性测试收集中文用户反馈，负责研究设计、访谈资料整理与编码、数据可视化，并将用户痛点转化为具体的网站体验优化建议。'
+    },
+    {
+      type: 'SKILLS',
+      org: '研究 · 数据 · 内容 · 视觉',
+      role: 'Toolbox',
+      place: 'Cross-disciplinary',
+      time: 'NOW',
+      body: 'Python / Pandas · 用户研究 · 访谈设计 · 定性编码 · 数据可视化 · HTML / CSS / JavaScript · 平台运营 · 文案策划 · Photoshop · Premiere Pro · 视频剪辑与信息排版。'
     }
   ];
 
   scene.insertAdjacentHTML('afterbegin', `
-    <div class="about-carousel-shell">
-      <header class="about-carousel-head">
-        <p class="eyebrow">04 / ABOUT · CELESTE'S FOUNTAIN</p>
+    <div class="about-timeline-shell">
+      <header class="about-timeline-head">
+        <p class="eyebrow">04 / ABOUT</p>
         <h2>关于我</h2>
-        <p>四只小羊分别对应个人信息、项目、经历和技能。<br>点击小羊，喷泉旁会从对应方向展开内容。</p>
+        <p>保持好奇，快速学习，并把复杂问题整理成清晰的结构。</p>
       </header>
-      <div class="about-carousel-stage" aria-label="About fountain">
-        <div class="about-carousel-core" aria-hidden="true">
-          <img class="about-fountain-art" src="./assets/muma.png" alt="">
-          <div class="about-water-pool about-water-pool-upper"></div>
-          <div class="about-water-pool about-water-pool-lower"></div>
-          <div class="about-water-falls">
-            <i class="fall f1"></i><i class="fall f2"></i><i class="fall f3"></i><i class="fall f4"></i>
-          </div>
-        </div>
-        <div class="about-carousel-orbit"></div>
+      <div class="about-timeline-list">
+        ${rows.map((row, index) => `
+          <article class="about-timeline-row" data-index="${index}">
+            <div class="about-timeline-left">
+              <small>${row.type}</small>
+              <h3>${row.org}</h3>
+              <p>${row.role}</p>
+              <div class="about-timeline-meta"><span>${row.place}</span><time>${row.time}</time></div>
+            </div>
+            <div class="about-timeline-right"><p>${row.body}</p></div>
+          </article>`).join('')}
       </div>
-      <aside class="about-carousel-card" aria-live="polite" aria-hidden="true">
-        <div class="about-carousel-card-head"><div><p></p><h3></h3></div><button type="button" class="about-carousel-close" aria-label="关闭">×</button></div>
-        <div class="about-carousel-card-body"></div>
-      </aside>
-      <p class="about-carousel-hint">CLICK A LAMB · 点击小羊查看内容</p>
+      <p class="about-timeline-hint">SCROLL · 条目会向中间聚拢</p>
     </div>`);
 
-  const stage = scene.querySelector('.about-carousel-stage');
-  const core = scene.querySelector('.about-carousel-core');
-  const orbit = scene.querySelector('.about-carousel-orbit');
-  const card = scene.querySelector('.about-carousel-card');
-  const cardKicker = card.querySelector('.about-carousel-card-head p');
-  const cardTitle = card.querySelector('.about-carousel-card-head h3');
-  const cardBody = card.querySelector('.about-carousel-card-body');
-  const slots = [];
+  const timelineRows = [...scene.querySelectorAll('.about-timeline-row')];
+  let ticking = false;
 
-  items.forEach(item => {
-    const slot = document.createElement('button');
-    slot.type = 'button';
-    slot.className = 'about-lamb-slot';
-    slot.setAttribute('aria-label', item.label);
-    slot.innerHTML = `<span class="about-lamb-upright"><img src="${item.image}" alt="${item.label}"><b>${item.label}</b></span>`;
-    slot.addEventListener('click', () => openItem(item, slot));
-    orbit.appendChild(slot);
-    slots.push(slot);
-  });
+  function updateRows() {
+    ticking = false;
+    const sceneRect = scene.getBoundingClientRect();
+    const viewportH = scene.clientHeight || innerHeight;
+    const settleLine = viewportH * 0.53;
+    const enterLine = viewportH * 0.92;
 
-  function openItem(item, slot) {
-    const side = slot.getBoundingClientRect().left + slot.offsetWidth / 2 < innerWidth / 2 ? 'left' : 'right';
-    card.dataset.side = side;
-    cardKicker.textContent = item.kicker;
-    cardTitle.textContent = item.title;
-    cardBody.innerHTML = item.html;
-    card.classList.add('is-open');
-    card.setAttribute('aria-hidden', 'false');
-    scene.classList.add('is-carousel-paused');
-  }
-
-  function closeCard() {
-    card.classList.remove('is-open');
-    card.setAttribute('aria-hidden', 'true');
-    scene.classList.remove('is-carousel-paused');
-  }
-
-  card.querySelector('.about-carousel-close').addEventListener('click', closeCard);
-  scene.addEventListener('keydown', event => { if (event.key === 'Escape') closeCard(); });
-
-  let phase = 0;
-  let last = performance.now();
-  let rafId = 0;
-  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  function layoutCarousel() {
-    const stageRect = stage.getBoundingClientRect();
-    const coreRect = core.getBoundingClientRect();
-    const centerX = coreRect.left - stageRect.left + coreRect.width / 2;
-    const centerY = coreRect.top - stageRect.top + coreRect.height * 0.55;
-    const radiusX = coreRect.width * 0.43;
-    const radiusY = coreRect.height * 0.045;
-
-    slots.forEach((slot, index) => {
-      const angle = phase + index * Math.PI / 2;
-      const depth = (Math.sin(angle) + 1) / 2;
-      const x = Math.cos(angle) * radiusX;
-      const y = Math.sin(angle) * radiusY;
-      const scale = 0.92 + depth * 0.18;
-
-      slot.style.left = `${centerX}px`;
-      slot.style.top = `${centerY}px`;
-      slot.style.transform = `translate(-50%,-50%) translate3d(${x}px,${y}px,0) scale(${scale})`;
-      slot.style.opacity = (0.76 + depth * 0.24).toFixed(3);
-      slot.style.zIndex = depth < 0.48 ? '7' : String(12 + Math.round(depth * 4));
+    timelineRows.forEach(row => {
+      const rect = row.getBoundingClientRect();
+      const center = rect.top - sceneRect.top + rect.height / 2;
+      const progress = Math.max(0, Math.min(1, (enterLine - center) / (enterLine - settleLine)));
+      const eased = 1 - Math.pow(1 - progress, 3);
+      row.style.setProperty('--gather', eased.toFixed(4));
     });
   }
 
-  function animate(now) {
-    rafId = 0;
-    if (!scene.classList.contains('is-visible')) return;
-    const dt = Math.min(40, now - last);
-    last = now;
-    if (!reducedMotion && !scene.classList.contains('is-carousel-paused')) phase += dt * 0.00018;
-    layoutCarousel();
-    rafId = requestAnimationFrame(animate);
+  function requestUpdate() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(updateRows);
   }
 
-  function startAnimation() {
-    if (rafId || !scene.classList.contains('is-visible')) return;
-    last = performance.now();
-    layoutCarousel();
-    rafId = requestAnimationFrame(animate);
-  }
-
-  new MutationObserver(startAnimation).observe(scene, { attributes: true, attributeFilter: ['class'] });
-  window.addEventListener('resize', layoutCarousel, { passive: true });
-  startAnimation();
+  scene.addEventListener('scroll', requestUpdate, { passive: true });
+  window.addEventListener('resize', requestUpdate, { passive: true });
+  new MutationObserver(requestUpdate).observe(scene, { attributes: true, attributeFilter: ['class'] });
+  requestUpdate();
 })();
