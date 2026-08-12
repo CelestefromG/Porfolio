@@ -17,23 +17,15 @@
 
 .about-carousel-stage{position:absolute;left:55%;top:52%;width:min(55vw,760px);aspect-ratio:1/1;transform:translate(-50%,-50%)}
 
-/* Use the user's actual carousel artwork. */
-.about-carousel-core{position:absolute;left:50%;top:50%;width:58%;height:66%;transform:translate(-50%,-50%);z-index:4;pointer-events:none;background:url('./assets/muma.png') center/contain no-repeat;filter:drop-shadow(0 18px 20px rgba(82,61,39,.10))}
+.about-carousel-core{position:absolute;left:50%;top:50%;width:58%;height:66%;transform:translate(-50%,-50%);z-index:8;pointer-events:none;background:url('./assets/muma.png') center/contain no-repeat;filter:drop-shadow(0 18px 20px rgba(82,61,39,.10))}
 .about-carousel-core>*{display:none!important}
 
-/* The orbit is intentionally close to the carousel, like the reference image. */
-.about-carousel-orbit{position:absolute;left:50%;top:50%;width:65%;aspect-ratio:1/1;transform:translate(-50%,-50%);border:0;border-radius:50%;animation:aboutOrbit 30s linear infinite;z-index:8}
-.about-scene.is-carousel-paused .about-carousel-orbit,.about-carousel-stage:hover .about-carousel-orbit{animation-play-state:paused}
-@keyframes aboutOrbit{to{transform:translate(-50%,-50%) rotate(360deg)}}
+/* Slots are positioned by JS on a shallow horizontal ellipse. */
+.about-carousel-orbit{position:absolute;inset:0;z-index:9;pointer-events:none}
+.about-lamb-slot{position:absolute;width:clamp(108px,9vw,142px);height:clamp(108px,9vw,142px);padding:0;border:0;background:none;cursor:pointer;pointer-events:auto;will-change:transform,opacity;transition:filter .2s ease}
+.about-lamb-upright{position:absolute;inset:0;display:grid;place-items:center;filter:drop-shadow(0 8px 8px rgba(71,54,36,.10));transition:filter .2s ease}
+.about-lamb-slot:hover .about-lamb-upright{filter:drop-shadow(0 13px 11px rgba(71,54,36,.16))}
 
-.about-lamb-slot{--slot-angle:0deg;position:absolute;left:50%;top:50%;width:clamp(108px,9vw,142px);height:clamp(108px,9vw,142px);padding:0;border:0;background:none;transform:translate(-50%,-50%) rotate(var(--slot-angle)) translateY(-178%) rotate(calc(var(--slot-angle)*-1));transform-origin:center;cursor:pointer}
-.about-lamb-upright{position:absolute;inset:0;display:grid;place-items:center;animation:aboutCounterOrbit 30s linear infinite;filter:drop-shadow(0 8px 8px rgba(71,54,36,.10));transition:transform .25s ease,filter .25s ease}
-.about-scene.is-carousel-paused .about-lamb-upright,.about-carousel-stage:hover .about-lamb-upright{animation-play-state:paused}
-@keyframes aboutCounterOrbit{to{transform:rotate(-360deg)}}
-.about-lamb-slot:hover .about-lamb-upright{transform:scale(1.10);filter:drop-shadow(0 13px 11px rgba(71,54,36,.16))}
-
-/* No card/background is added around the PNG. The uploaded PNGs currently contain white pixels,
-   so multiply makes that white disappear visually against the cream page until they are re-exported with alpha. */
 .about-lamb-upright img{width:100%;height:100%;object-fit:contain;display:block;background:transparent!important;mix-blend-mode:multiply}
 .about-lamb-upright b{position:absolute;left:50%;bottom:-9px;transform:translateX(-50%);white-space:nowrap;padding:6px 10px;border:1px solid rgba(65,52,39,.2);border-radius:999px;background:rgba(249,245,237,.90);font:500 10px/1 "Noto Sans SC",sans-serif;color:rgba(41,35,28,.72)}
 
@@ -53,6 +45,5 @@
 .about-carousel-hint{position:absolute;left:55%;bottom:4vh;transform:translateX(-50%);margin:0;color:rgba(41,35,28,.46);font:500 9px/1 "IBM Plex Mono",monospace;letter-spacing:.06em}
 .about-scene.about-carousel .scene-back{z-index:60}
 
-@media(max-width:1000px){.about-carousel-head{width:34vw}.about-carousel-stage{left:59%;width:65vw}.about-carousel-card{width:44vw}.about-lamb-slot{transform:translate(-50%,-50%) rotate(var(--slot-angle)) translateY(-165%) rotate(calc(var(--slot-angle)*-1))}}
-@media(max-width:700px){.about-scene.about-carousel{overflow-y:auto}.about-carousel-shell{position:relative;min-height:900px}.about-carousel-head{left:20px;top:88px;width:calc(100% - 40px)}.about-carousel-head h2{font-size:46px}.about-carousel-stage{left:50%;top:57%;width:98vw}.about-carousel-core{width:61%;height:67%}.about-lamb-slot{width:96px;height:96px;transform:translate(-50%,-50%) rotate(var(--slot-angle)) translateY(-155%) rotate(calc(var(--slot-angle)*-1))}.about-carousel-card{position:fixed;left:14px;right:14px;top:auto;bottom:16px;width:auto;max-height:58vh}.about-carousel-hint{left:50%;bottom:2.4vh;width:max-content;max-width:90vw;text-align:center}}
-@media(prefers-reduced-motion:reduce){.about-carousel-orbit,.about-lamb-upright{animation:none}}
+@media(max-width:1000px){.about-carousel-head{width:34vw}.about-carousel-stage{left:59%;width:65vw}.about-carousel-card{width:44vw}}
+@media(max-width:700px){.about-scene.about-carousel{overflow-y:auto}.about-carousel-shell{position:relative;min-height:900px}.about-carousel-head{left:20px;top:88px;width:calc(100% - 40px)}.about-carousel-head h2{font-size:46px}.about-carousel-stage{left:50%;top:57%;width:98vw}.about-carousel-core{width:61%;height:67%}.about-lamb-slot{width:96px;height:96px}.about-carousel-card{position:fixed;left:14px;right:14px;top:auto;bottom:16px;width:auto;max-height:58vh}.about-carousel-hint{left:50%;bottom:2.4vh;width:max-content;max-width:90vw;text-align:center}}
