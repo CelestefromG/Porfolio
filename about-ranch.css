@@ -10,19 +10,21 @@
 .about-scene.about-carousel .about-grid{display:none!important}
 .about-carousel-shell{position:absolute;inset:0;min-height:100vh;overflow:hidden}
 
-.about-carousel-head{position:absolute;left:4.3vw;top:10.5vh;z-index:15;width:min(28vw,390px)}
+.about-carousel-head{position:absolute;left:4.3vw;top:10.5vh;z-index:15;width:min(27vw,380px)}
 .about-carousel-head .eyebrow{margin:0 0 10px;font:500 9px/1.3 "IBM Plex Mono",monospace;letter-spacing:.08em;color:rgba(41,35,28,.52)}
-.about-carousel-head h2{margin:0;font-size:clamp(42px,4.6vw,66px);line-height:.92;letter-spacing:-.06em;font-weight:500}
+.about-carousel-head h2{margin:0;font-size:clamp(42px,4.4vw,64px);line-height:.92;letter-spacing:-.06em;font-weight:500}
 .about-carousel-head>p:last-child{margin:16px 0 0;font-size:11px;line-height:1.8;color:rgba(41,35,28,.58)}
 
-.about-carousel-stage{position:absolute;left:55%;top:52%;width:min(55vw,760px);aspect-ratio:1/1;transform:translate(-50%,-50%)}
+/* Larger stage so the uploaded carousel becomes the visual focus. */
+.about-carousel-stage{position:absolute;left:57%;top:52%;width:min(64vw,900px);aspect-ratio:1/1;transform:translate(-50%,-50%)}
 
-.about-carousel-core{position:absolute;left:50%;top:50%;width:58%;height:66%;transform:translate(-50%,-50%);z-index:8;pointer-events:none;background:url('./assets/muma.png') center/contain no-repeat;filter:drop-shadow(0 18px 20px rgba(82,61,39,.10))}
+/* Use the user's actual carousel artwork at a much larger scale. */
+.about-carousel-core{position:absolute;left:50%;top:50%;width:74%;height:84%;transform:translate(-50%,-50%);z-index:8;pointer-events:none;background:url('./assets/muma.png') center/contain no-repeat;filter:drop-shadow(0 20px 24px rgba(82,61,39,.11))}
 .about-carousel-core>*{display:none!important}
 
 /* Slots are positioned by JS on a shallow horizontal ellipse. */
 .about-carousel-orbit{position:absolute;inset:0;z-index:9;pointer-events:none}
-.about-lamb-slot{position:absolute;width:clamp(108px,9vw,142px);height:clamp(108px,9vw,142px);padding:0;border:0;background:none;cursor:pointer;pointer-events:auto;will-change:transform,opacity;transition:filter .2s ease}
+.about-lamb-slot{position:absolute;width:clamp(102px,8vw,132px);height:clamp(102px,8vw,132px);padding:0;border:0;background:none;cursor:pointer;pointer-events:auto;will-change:transform,opacity;transition:filter .2s ease}
 .about-lamb-upright{position:absolute;inset:0;display:grid;place-items:center;filter:drop-shadow(0 8px 8px rgba(71,54,36,.10));transition:filter .2s ease}
 .about-lamb-slot:hover .about-lamb-upright{filter:drop-shadow(0 13px 11px rgba(71,54,36,.16))}
 
@@ -42,8 +44,8 @@
 .about-card-item header b{font-size:13px;font-weight:500}.about-card-item time{white-space:nowrap;color:rgba(41,35,28,.42);font:500 8px/1 "IBM Plex Mono",monospace}.about-card-item p{margin:8px 0 0;color:rgba(41,35,28,.62);font-size:11px;line-height:1.75}
 .about-card-profile{display:grid;grid-template-columns:84px 1fr;gap:16px;align-items:start}.about-card-profile img{width:84px;aspect-ratio:1;object-fit:cover;border:1px solid rgba(65,52,39,.16);border-radius:12px;filter:saturate(.75)}.about-card-profile h4{margin:2px 0 7px;font-size:17px;font-weight:500}.about-card-profile p{margin:0;color:rgba(41,35,28,.62);font-size:11px;line-height:1.75}
 .about-chip-row{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}.about-chip-row span{padding:8px 10px;border:1px solid rgba(65,52,39,.14);border-radius:999px;background:rgba(229,218,199,.34);color:rgba(41,35,28,.72);font:500 9px/1 "IBM Plex Mono",monospace}.about-skill-group+.about-skill-group{margin-top:16px}.about-skill-group h4{margin:0;font-size:12px;font-weight:500}
-.about-carousel-hint{position:absolute;left:55%;bottom:4vh;transform:translateX(-50%);margin:0;color:rgba(41,35,28,.46);font:500 9px/1 "IBM Plex Mono",monospace;letter-spacing:.06em}
+.about-carousel-hint{position:absolute;left:57%;bottom:3.5vh;transform:translateX(-50%);margin:0;color:rgba(41,35,28,.46);font:500 9px/1 "IBM Plex Mono",monospace;letter-spacing:.06em}
 .about-scene.about-carousel .scene-back{z-index:60}
 
-@media(max-width:1000px){.about-carousel-head{width:34vw}.about-carousel-stage{left:59%;width:65vw}.about-carousel-card{width:44vw}}
-@media(max-width:700px){.about-scene.about-carousel{overflow-y:auto}.about-carousel-shell{position:relative;min-height:900px}.about-carousel-head{left:20px;top:88px;width:calc(100% - 40px)}.about-carousel-head h2{font-size:46px}.about-carousel-stage{left:50%;top:57%;width:98vw}.about-carousel-core{width:61%;height:67%}.about-lamb-slot{width:96px;height:96px}.about-carousel-card{position:fixed;left:14px;right:14px;top:auto;bottom:16px;width:auto;max-height:58vh}.about-carousel-hint{left:50%;bottom:2.4vh;width:max-content;max-width:90vw;text-align:center}}
+@media(max-width:1000px){.about-carousel-head{width:32vw}.about-carousel-stage{left:59%;width:72vw}.about-carousel-core{width:76%;height:86%}.about-carousel-card{width:44vw}}
+@media(max-width:700px){.about-scene.about-carousel{overflow-y:auto}.about-carousel-shell{position:relative;min-height:900px}.about-carousel-head{left:20px;top:88px;width:calc(100% - 40px)}.about-carousel-head h2{font-size:46px}.about-carousel-stage{left:50%;top:58%;width:106vw}.about-carousel-core{width:78%;height:86%}.about-lamb-slot{width:92px;height:92px}.about-carousel-card{position:fixed;left:14px;right:14px;top:auto;bottom:16px;width:auto;max-height:58vh}.about-carousel-hint{left:50%;bottom:2.4vh;width:max-content;max-width:90vw;text-align:center}}
