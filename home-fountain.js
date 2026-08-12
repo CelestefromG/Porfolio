@@ -63,7 +63,7 @@ if (host) {
     const maxDim = Math.max(size.x, size.y, size.z) || 1;
 
     object.position.sub(center);
-    object.scale.setScalar(4.8 / maxDim);
+    object.scale.setScalar(3.6 / maxDim);
     object.updateMatrixWorld(true);
 
     const fitted = new THREE.Box3().setFromObject(object);
