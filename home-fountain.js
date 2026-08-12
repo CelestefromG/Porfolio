@@ -5,7 +5,6 @@ const host = document.querySelector('#star-stage');
 const home = document.querySelector('.scene-home');
 
 if (host) {
-  // Ensure no stale star canvas survives in the host.
   host.replaceChildren();
 
   const scene = new THREE.Scene();
@@ -79,7 +78,7 @@ if (host) {
     host.classList.add('is-loading-model');
 
     new GLTFLoader().load(
-      './assets/fountain.glb',
+      './assets/fountain.glb?v=11946400f00a8e84a60e66bd78f13bfb552e3058',
       gltf => {
         model = gltf.scene;
         fitModel(model);
