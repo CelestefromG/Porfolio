@@ -1,2 +1,1 @@
-// Longform/tape experience disabled.
-// The visual-design scene now uses the lightweight six-image gallery only.
+import './longform-lite.js?v=20260814-1';
