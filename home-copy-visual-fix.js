@@ -15,6 +15,13 @@
     title.textContent = '陈思睿的作品集';
   };
 
+  const applyContactPhoto = () => {
+    const photo = document.querySelector('.id-card-main img');
+    if (!photo) return;
+    photo.src = './assets/photo1.png';
+    photo.alt = 'Celeste Chen';
+  };
+
   const resolveVisualImage = index => {
     if (imageCache.has(index)) return imageCache.get(index);
 
@@ -83,10 +90,12 @@
   document.querySelector('.lang-toggle')?.addEventListener('click', () => {
     setTimeout(() => {
       applyHeroCopy();
+      applyContactPhoto();
       applyPosterImages();
     }, 20);
   });
 
   applyHeroCopy();
+  applyContactPhoto();
   applyPosterImages();
 })();
