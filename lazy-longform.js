@@ -1,1 +1,1 @@
-import './longform-lite.js?v=20260814-1';
+const p=document.querySelector('.poster-scene');const b=document.querySelector('[data-chapter="poster"]');const load=()=>import('./longform-config.js?v=20260814-r1').then(()=>import('./longform-tape.js?v=20260814-r1'));b?.addEventListener('click',load,{once:true});if(p){const o=new MutationObserver(()=>{if(p.classList.contains('is-visible')){load();o.disconnect()}});o.observe(p,{attributes:true,attributeFilter:['class']})}
