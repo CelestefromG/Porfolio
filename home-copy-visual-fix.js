@@ -1,5 +1,11 @@
 (() => {
-  const visualImages = Array.from({ length: 6 }, (_, index) => `./assets/visual${index + 1}.png`);
+  const imageCache = new Map();
+  const imageCandidates = index => [
+    `./assets/visual${index + 1}.png`,
+    `./visual${index + 1}.png`,
+    `./assets/visual${index + 1}`,
+    `./visual${index + 1}`
+  ];
 
   const isEnglish = () => document.querySelector('.lang-en')?.classList.contains('is-active');
 
@@ -9,14 +15,39 @@
     title.textContent = '作品集 / 视觉 / 数据';
   };
 
+  const resolveVisualImage = index => {
+    if (imageCache.has(index)) return imageCache.get(index);
+
+    const promise = new Promise(resolve => {
+      const candidates = imageCandidates(index);
+      let cursor = 0;
+      const tryNext = () => {
+        if (cursor >= candidates.length) {
+          resolve(candidates[0]);
+          return;
+        }
+        const src = candidates[cursor++];
+        const image = new Image();
+        image.onload = () => resolve(src);
+        image.onerror = tryNext;
+        image.src = src;
+      };
+      tryNext();
+    });
+
+    imageCache.set(index, promise);
+    return promise;
+  };
+
   const applyPosterImages = () => {
     const cards = [...document.querySelectorAll('.poster-scene .gallery-card')].slice(0, 6);
-    cards.forEach((card, index) => {
+    cards.forEach(async (card, index) => {
       const art = card.querySelector('.gallery-art');
       if (!art) return;
+      const src = await resolveVisualImage(index);
       art.classList.add('has-real-image');
-      art.style.backgroundImage = `url("${visualImages[index]}")`;
-      art.dataset.visualImage = visualImages[index];
+      art.style.backgroundImage = `url("${src}")`;
+      art.dataset.visualImage = src;
     });
   };
 
@@ -32,11 +63,13 @@
     const index = cards.indexOf(card);
     if (index < 0 || index > 5) return;
 
-    requestAnimationFrame(() => {
-      const visual = document.querySelector('.project-dialog .dialog-visual');
-      if (!visual) return;
-      visual.classList.add('has-real-image');
-      visual.style.backgroundImage = `url("${visualImages[index]}")`;
+    resolveVisualImage(index).then(src => {
+      requestAnimationFrame(() => {
+        const visual = document.querySelector('.project-dialog .dialog-visual');
+        if (!visual) return;
+        visual.classList.add('has-real-image');
+        visual.style.backgroundImage = `url("${src}")`;
+      });
     });
   }, true);
 
