@@ -1,6 +1,1 @@
-/* Enlarge the interactive tape model without changing texture proportions. */
-.longform-tape-panel .longform-canvas-host {
-  transform: scale(1.5);
-  transform-origin: 50% 50%;
-  will-change: transform;
-}
+/* Longform tape scaling disabled for performance. */
