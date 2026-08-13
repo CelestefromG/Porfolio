@@ -18,8 +18,10 @@
   const applyContactPhoto = () => {
     const photo = document.querySelector('.id-card-main img');
     if (!photo) return;
-    photo.src = './assets/photo1.png';
+    photo.src = './assets/photo3.png?v=20260814-1';
     photo.alt = 'Celeste Chen';
+    photo.style.filter = 'none';
+    photo.style.webkitFilter = 'none';
   };
 
   const resolveVisualImage = index => {
