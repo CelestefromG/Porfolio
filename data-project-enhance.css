@@ -1,0 +1,6 @@
+.project-dialog .dialog-visual{display:flex;align-items:center;justify-content:center;background:#ece9e2;overflow:hidden}
+.project-dialog .data-dialog-image{width:100%;height:100%;object-fit:contain;display:block;background:#ece9e2}
+.project-dialog .data-project-cta{margin-top:24px;display:inline-flex;align-items:center;justify-content:space-between;gap:28px;min-width:180px;padding:12px 14px;border:1px solid rgba(17,18,20,.7);text-decoration:none;font:500 9px/1 "IBM Plex Mono",monospace;letter-spacing:.05em;transition:background .2s ease,color .2s ease,transform .2s ease}
+.project-dialog .data-project-cta:hover{background:#111214;color:#f3f2ef;transform:translateY(-2px)}
+.project-dialog .data-project-cta b{font-size:14px;font-weight:400}
+@media(max-width:720px){.project-dialog .data-dialog-image{object-fit:contain}.project-dialog .data-project-cta{width:100%;min-width:0}}
