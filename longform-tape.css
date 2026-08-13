@@ -1,2 +1,1 @@
-@import url('./longform-original-a.css?v=20260814-rb');
-.longform-rewind,.longform-back-to-posters{position:absolute;bottom:95px;z-index:28;padding:10px 13px!important;border:1px solid #111!important;background:rgba(243,242,239,.82)!important;font:500 8px/1 "IBM Plex Mono",monospace!important}.longform-rewind{right:136px}.longform-back-to-posters{right:4.2vw}.poster-scroll-cue{position:absolute;right:4.2vw;bottom:36px;z-index:9;font:500 8px/1 "IBM Plex Mono",monospace}.poster-scene.has-longform-archive .scene-back{position:fixed;left:28px;bottom:28px;z-index:95}
+@import url('https://cdn.jsdelivr.net/gh/CelestefromG/Porfolio@ab93338251dd08aa83e03338b3e7aa3423a16fdd/longform-tape.css');
