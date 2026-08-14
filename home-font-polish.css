@@ -8,3 +8,8 @@
 .douyin-flip-sheet.is-dragging{cursor:pointer!important}
 .douyin-dragbook-section[data-turned="true"] .douyin-drag-hint b::after{content:'点击右页翻回'!important}
 .douyin-dragbook-section:not([data-turned="true"]) .douyin-drag-hint b::after{content:'点击右页翻页'!important}
+
+/* Poster detail: real poster image must replace the legacy pattern layer. */
+.dialog-visual.has-real-image::before{display:none!important}
+.dialog-visual.has-real-image{background:#f5f3ef!important}
+.dialog-visual.has-real-image>img{position:relative!important;z-index:2!important;display:block!important;width:100%!important;height:100%!important;object-fit:contain!important;object-position:center!important}
