@@ -32,15 +32,6 @@
     }
   };
 
-  const getVisiblePosterSrc = card => {
-    const art = card.querySelector('.gallery-art');
-    if (!art) return '';
-    if (art.dataset.visualImage) return art.dataset.visualImage;
-    const bg = getComputedStyle(art).backgroundImage;
-    const match = bg && bg.match(/url\(["']?(.*?)["']?\)/);
-    return match ? match[1] : '';
-  };
-
   const isEnglish = () => document.documentElement.lang === 'en';
 
   document.addEventListener('click', event => {
@@ -50,8 +41,8 @@
     const art = card.querySelector('.gallery-art');
     const code = art?.dataset.code;
     const meta = posterMeta[code];
-    const src = getVisiblePosterSrc(card);
-    if (!meta || !src) return;
+    const posterNumber = code?.match(/^VIS-0([1-6])$/)?.[1];
+    if (!meta || !posterNumber) return;
 
     event.preventDefault();
     event.stopPropagation();
@@ -74,20 +65,13 @@
 
     visual.replaceChildren();
     visual.classList.add('has-real-image');
-    visual.style.removeProperty('--dialog-bg');
-    visual.style.removeProperty('--dialog-pattern');
-    visual.style.setProperty('background', '#f5f3ef', 'important');
+    visual.style.cssText += ';background:#f5f3ef!important;';
 
     const img = document.createElement('img');
-    img.src = src;
+    img.src = `./assets/poster${posterNumber}.png?v=20260814-7`;
     img.alt = title;
-    img.style.width = '100%';
-    img.style.height = '100%';
-    img.style.display = 'block';
-    img.style.objectFit = 'contain';
-    img.style.objectPosition = 'center';
-    img.style.position = 'relative';
-    img.style.zIndex = '2';
+    img.decoding = 'async';
+    img.style.cssText = 'display:block!important;width:100%!important;height:100%!important;object-fit:contain!important;object-position:center!important;position:relative!important;z-index:20!important;opacity:1!important;visibility:visible!important;';
     visual.appendChild(img);
 
     if (!dialog.open) dialog.showModal();
