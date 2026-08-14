@@ -1,5 +1,5 @@
 (() => {
-  const imageSrc = index => `./assets/poster${index + 1}.png?v=20260814-5`;
+  const imageSrc = index => `./assets/poster${index + 1}.png?v=20260814-6`;
 
   const isEnglish = () => document.querySelector('.lang-en')?.classList.contains('is-active');
 
