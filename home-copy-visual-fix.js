@@ -1,5 +1,5 @@
 (() => {
-  const imageSrc = index => `./assets/poster${index + 1}.png?v=20260814-7`;
+  const imageSrc = index => `./assets/poster${index + 1}.png?v=20260814-8`;
 
   const isEnglish = () => document.querySelector('.lang-en')?.classList.contains('is-active');
 
@@ -34,10 +34,7 @@
 
   const posterTrack = document.querySelector('.poster-scene .gallery-track');
   if (posterTrack) {
-    new MutationObserver(() => requestAnimationFrame(applyPosterImages)).observe(posterTrack, {
-      childList: true,
-      subtree: true
-    });
+    new MutationObserver(() => requestAnimationFrame(applyPosterImages)).observe(posterTrack, { childList: true, subtree: true });
   }
 
   document.querySelector('.lang-toggle')?.addEventListener('click', () => setTimeout(() => {
