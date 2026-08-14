@@ -1,76 +1,8 @@
-/* Exact star-surface and chapter connector alignment fixes. */
-.star-stage::before,
-.star-stage::after {
-  content: none !important;
-  display: none !important;
-}
-
-.star-stage canvas {
-  position: absolute !important;
-  inset: 0;
-  width: 100% !important;
-  height: 100% !important;
-}
-
-.star-stage canvas:first-child { z-index: 1; }
-.star-stage .star-fx-canvas {
-  z-index: 2;
-  pointer-events: none;
-  mix-blend-mode: screen;
-}
-
-/* Bring all connector terminals back onto the central star. */
-.chapter-data { left: 12vw; top: 55vh; }
-.chapter-data::before {
-  left: 100%; top: 11px; width: 19vw;
-  transform-origin: left center;
-  transform: rotate(-8deg);
-}
-.chapter-data .node {
-  left: calc(100% + 18.65vw);
-  top: calc(11px - 2.65vw);
-}
-
-.chapter-poster { right: 4vw; top: 27vh; }
-.chapter-poster::before {
-  right: 100%; top: 11px; width: 20vw;
-  transform-origin: right center;
-  transform: rotate(-25deg);
-}
-.chapter-poster .node {
-  right: calc(100% + 19.55vw);
-  top: calc(11px + 8.45vw);
-}
-
-.chapter-video { right: 4vw; bottom: 18vh; }
-.chapter-video::before {
-  right: 100%; top: 11px; width: 20vw;
-  transform-origin: right center;
-  transform: rotate(30deg);
-}
-.chapter-video .node {
-  right: calc(100% + 19.55vw);
-  top: calc(11px - 10vw);
-}
-
-.chapter-about { left: 12vw; bottom: 13vh; }
-.chapter-about::before {
-  left: 100%; top: 9px; width: 20vw;
-  transform-origin: left center;
-  transform: rotate(-25deg);
-}
-.chapter-about .node {
-  left: calc(100% + 19.55vw);
-  top: calc(9px - 8.45vw);
-}
-
-@media (max-width: 1100px) {
-  .chapter-data { left: 8vw; }
-  .chapter-poster, .chapter-video { right: 2vw; }
-  .chapter-about { left: 8vw; }
-}
-
-@media (max-width: 900px) {
-  .chapter::before,
-  .chapter .node { display: none !important; }
-}
+/* Home chapter connector layout: one source of truth. */
+.star-stage::before,.star-stage::after{content:none!important;display:none!important}.star-stage canvas{position:absolute!important;inset:0;width:100%!important;height:100%!important}.star-stage canvas:first-child{z-index:1}.star-stage .star-fx-canvas{z-index:2;pointer-events:none;mix-blend-mode:screen}
+.chapter{min-width:0!important}.chapter-data{left:8vw!important;top:50vh!important;width:175px!important}.chapter-data::before{left:calc(100% + 8px)!important;right:auto!important;top:30px!important;width:13vw!important;transform-origin:left center!important;transform:rotate(-10deg)!important}.chapter-data .node{left:calc(100% + 8px + 13vw)!important;right:auto!important;top:calc(30px - 2.29vw)!important;transform:translate(-50%,-50%)!important}
+.chapter-poster{right:8vw!important;top:18vh!important;width:165px!important}.chapter-poster::before{right:calc(100% + 8px)!important;left:auto!important;top:30px!important;width:12vw!important;transform-origin:right center!important;transform:rotate(12deg)!important}.chapter-poster .node{right:calc(100% + 8px + 12vw)!important;left:auto!important;top:calc(30px - 2.49vw)!important;transform:translate(50%,-50%)!important}
+.chapter-video{right:8vw!important;bottom:18vh!important;width:165px!important}.chapter-video::before{right:calc(100% + 8px)!important;left:auto!important;top:30px!important;width:12vw!important;transform-origin:right center!important;transform:rotate(-12deg)!important}.chapter-video .node{right:calc(100% + 8px + 12vw)!important;left:auto!important;top:calc(30px + 2.49vw)!important;transform:translate(50%,-50%)!important}
+.chapter-about{left:8vw!important;bottom:14vh!important;width:82px!important}.chapter-about::before{left:78px!important;right:auto!important;top:30px!important;width:12vw!important;transform-origin:left center!important;transform:rotate(15deg)!important}.chapter-about .node{left:calc(78px + 12vw)!important;right:auto!important;top:calc(30px + 3.11vw)!important;transform:translate(-50%,-50%)!important}
+@media(max-width:1100px){.chapter-data{left:5vw!important}.chapter-poster,.chapter-video{right:5vw!important}.chapter-about{left:5vw!important}}
+@media(max-width:900px){.chapter::before,.chapter .node{display:none!important}}
