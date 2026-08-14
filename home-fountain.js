@@ -152,7 +152,7 @@ if (host) {
         resize();
 
         if (!reduceMotion && !introPlayed) {
-          root.scale.setScalar(1.42);
+          root.scale.setScalar(1);
           root.rotation.set(0, 0, 0);
           introStart = performance.now();
           introActive = true;
@@ -190,15 +190,9 @@ if (host) {
         const elapsed = (now - introStart) / 1000;
         if (elapsed < 1.8) {
           const p = easeOut(elapsed / 1.8);
-          root.scale.setScalar(1.42);
+          root.scale.setScalar(1);
           root.rotation.x = 0;
           root.rotation.y = p * Math.PI * 2;
-        } else if (elapsed < 2.6) {
-          const p = easeOut((elapsed - 1.8) / 0.8);
-          root.scale.setScalar(1.42 + (1 - 1.42) * p);
-          root.rotation.x = 0;
-          root.rotation.y = Math.PI * 2;
-          if (elapsed >= 2.25) revealChapters();
         } else {
           root.scale.setScalar(1);
           root.rotation.set(0, 0, 0);
