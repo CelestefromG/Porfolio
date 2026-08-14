@@ -3,9 +3,13 @@ import { GLTFLoader } from 'https://esm.sh/three@0.160.0/examples/jsm/loaders/GL
 
 const host = document.querySelector('#star-stage');
 const home = document.querySelector('.scene-home');
+const chapters = home ? [...home.querySelectorAll('.chapter')] : [];
+const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
 if (host) {
   host.replaceChildren();
+
+  if (!reduceMotion) chapters.forEach(chapter => { chapter.style.opacity = '0'; });
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
@@ -47,6 +51,38 @@ if (host) {
   let pointerX = 0;
   let pointerY = 0;
   let lastTime = performance.now();
+  let introStart = 0;
+  let introActive = false;
+  let introRevealDone = false;
+  let introPlayed = false;
+
+  const easeOut = t => 1 - Math.pow(1 - Math.max(0, Math.min(1, t)), 3);
+
+  const revealChapters = () => {
+    if (introRevealDone) return;
+    introRevealDone = true;
+    const offsets = [
+      ['-13vw', '2vh'],
+      ['12vw', '-5vh'],
+      ['13vw', '5vh'],
+      ['-12vw', '6vh']
+    ];
+    chapters.forEach((chapter, index) => {
+      chapter.style.opacity = '';
+      if (reduceMotion) return;
+      const [x, y] = offsets[index] || ['0', '0'];
+      const animation = chapter.animate([
+        { opacity: 0, transform: `translate(${x}, ${y}) scale(.96)` },
+        { opacity: 1, transform: 'translate(0, 0) scale(1)' }
+      ], {
+        duration: 950,
+        delay: index * 70,
+        easing: 'cubic-bezier(.22,1,.36,1)',
+        fill: 'both'
+      });
+      animation.onfinish = () => animation.cancel();
+    });
+  };
 
   const resize = () => {
     const rect = host.getBoundingClientRect();
@@ -114,19 +150,29 @@ if (host) {
         loading = false;
         host.classList.remove('is-loading-model');
         resize();
+
+        if (!reduceMotion && !introPlayed) {
+          root.scale.setScalar(1.42);
+          root.rotation.set(0, 0, 0);
+          introStart = performance.now();
+          introActive = true;
+        } else {
+          revealChapters();
+        }
       },
       undefined,
       error => {
         loading = false;
         host.classList.remove('is-loading-model');
         host.classList.add('model-load-failed');
+        revealChapters();
         console.error('Failed to load assets/fountain.glb', error);
       }
     );
   };
 
   const onPointerMove = event => {
-    if (!running || !loaded) return;
+    if (!running || !loaded || introActive) return;
     pointerX = (event.clientX / window.innerWidth - 0.5) * 0.22;
     pointerY = (event.clientY / window.innerHeight - 0.5) * 0.11;
   };
@@ -140,11 +186,33 @@ if (host) {
     if (mixer) mixer.update(delta);
 
     if (model) {
-      const dataMode = home?.classList.contains('data-mode');
-      const baseY = dataMode ? Math.PI + 0.18 : 0;
-      root.rotation.y += (baseY + pointerX - root.rotation.y) * 0.035;
-      root.rotation.x += (pointerY * 0.32 - root.rotation.x) * 0.035;
-      if (!dataMode) root.rotation.y += delta * 0.055;
+      if (introActive) {
+        const elapsed = (now - introStart) / 1000;
+        if (elapsed < 1.8) {
+          const p = easeOut(elapsed / 1.8);
+          root.scale.setScalar(1.42);
+          root.rotation.x = 0;
+          root.rotation.y = p * Math.PI * 2;
+        } else if (elapsed < 2.6) {
+          const p = easeOut((elapsed - 1.8) / 0.8);
+          root.scale.setScalar(1.42 + (1 - 1.42) * p);
+          root.rotation.x = 0;
+          root.rotation.y = Math.PI * 2;
+          if (elapsed >= 2.25) revealChapters();
+        } else {
+          root.scale.setScalar(1);
+          root.rotation.set(0, 0, 0);
+          introActive = false;
+          introPlayed = true;
+          revealChapters();
+        }
+      } else {
+        const dataMode = home?.classList.contains('data-mode');
+        const baseY = dataMode ? Math.PI + 0.18 : 0;
+        root.rotation.y += (baseY + pointerX - root.rotation.y) * 0.035;
+        root.rotation.x += (pointerY * 0.32 - root.rotation.x) * 0.035;
+        if (!dataMode) root.rotation.y += delta * 0.055;
+      }
     }
 
     renderer.render(scene, camera);
