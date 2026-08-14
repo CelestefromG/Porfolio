@@ -1,1 +1,10 @@
 .chapter-index{margin-bottom:5px!important}.chapter strong{font-family:'PingFang SC','Microsoft YaHei','Noto Sans SC',Arial,sans-serif!important;font-size:clamp(16px,1.35vw,24px)!important;line-height:1.08!important;font-weight:500!important;letter-spacing:.01em!important;white-space:nowrap}.chapter small{margin-top:6px!important;line-height:1.35!important}.chapter-data strong{font-size:0!important}.chapter-data strong:after{content:'数据与用户研究';font-size:clamp(15px,1.28vw,23px)}html[lang='en'] .chapter-data strong:after{content:'DATA & UX'}.branch-back{display:inline-flex!important;grid-template-columns:none!important;align-items:center!important;gap:12px!important;width:auto!important;margin-top:18px!important;padding:12px 18px!important;border:1px solid currentColor!important;background:transparent!important}.branch-back:hover{background:#111!important;color:#f3f2ef!important}.branch-back span,.branch-back b{opacity:1!important}.branch-back b{transform:none!important}
+
+/* Platform Operations: keep Dongyang and the book on the same paper surface. */
+.dongyang-section,.dongyang-sticky,.douyin-dragbook-section{background-color:#f2efe7!important}
+.douyin-dragbook-section{background-image:linear-gradient(rgba(25,28,33,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(25,28,33,.055) 1px,transparent 1px)!important;background-size:30px 30px!important}
+.douyin-dragbook-section::before{background:linear-gradient(to bottom,rgba(255,255,255,.3),transparent 32%)!important}
+.douyin-flip-sheet{cursor:pointer!important;touch-action:manipulation!important}
+.douyin-flip-sheet.is-dragging{cursor:pointer!important}
+.douyin-dragbook-section[data-turned="true"] .douyin-drag-hint b::after{content:'点击右页翻回'!important}
+.douyin-dragbook-section:not([data-turned="true"]) .douyin-drag-hint b::after{content:'点击右页翻页'!important}
