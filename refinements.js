@@ -14,6 +14,6 @@
   }, { once: true });
 
   window.addEventListener('load', () => {
-    import('./longform-restore.js?v=20260814-r2');
+    import('./longform-restore.js?v=20260814-r3');
   }, { once: true });
 })();
