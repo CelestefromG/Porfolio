@@ -1,6 +1,6 @@
 (() => {
   const imageCache = new Map();
-  const imageSrc = index => `./assets/poster${index + 1}.png?v=20260814-2`;
+  const imageSrc = index => `./assets/poster${index + 1}.png?v=20260814-3`;
   let pendingDialogIndex = null;
 
   const isEnglish = () => document.querySelector('.lang-en')?.classList.contains('is-active');
@@ -45,12 +45,17 @@
     const visual = dialog?.querySelector('.dialog-visual');
     if (!visual) return;
     const src = imageSrc(index);
-    visual.classList.add('has-real-image');
-    visual.style.setProperty('background-image', `url("${src}")`, 'important');
-    visual.style.setProperty('background-size', 'contain', 'important');
-    visual.style.setProperty('background-position', 'center', 'important');
-    visual.style.setProperty('background-repeat', 'no-repeat', 'important');
-    visual.dataset.visualImage = src;
+    const wanted = `url("${src}")`;
+    if (visual.style.getPropertyValue('background-image') !== wanted) {
+      visual.classList.add('has-real-image');
+      visual.style.setProperty('background', 'none', 'important');
+      visual.style.setProperty('background-image', wanted, 'important');
+      visual.style.setProperty('background-size', 'contain', 'important');
+      visual.style.setProperty('background-position', 'center', 'important');
+      visual.style.setProperty('background-repeat', 'no-repeat', 'important');
+      visual.style.setProperty('background-color', '#f5f3ef', 'important');
+      visual.dataset.visualImage = src;
+    }
   };
 
   const posterTrack = document.querySelector('.poster-scene .gallery-track');
@@ -69,10 +74,12 @@
     if (index < 0 || index > 5) return;
     pendingDialogIndex = index;
     requestAnimationFrame(() => requestAnimationFrame(() => applyDialogImage(index)));
-    setTimeout(() => applyDialogImage(index), 80);
+    setTimeout(() => applyDialogImage(index), 120);
+    setTimeout(() => applyDialogImage(index), 300);
   }, true);
 
   const dialog = document.querySelector('.project-dialog');
+  const visual = dialog?.querySelector('.dialog-visual');
   if (dialog) {
     new MutationObserver(() => {
       if (dialog.hasAttribute('open') && pendingDialogIndex != null) {
@@ -80,15 +87,27 @@
       }
     }).observe(dialog, { attributes: true, attributeFilter: ['open'] });
 
+    if (visual) {
+      new MutationObserver(() => {
+        if (dialog.hasAttribute('open') && pendingDialogIndex != null) {
+          const src = imageSrc(pendingDialogIndex);
+          if (!visual.style.getPropertyValue('background-image').includes(src)) {
+            requestAnimationFrame(() => applyDialogImage(pendingDialogIndex));
+          }
+        }
+      }).observe(visual, { attributes: true, attributeFilter: ['style','class'] });
+    }
+
     dialog.addEventListener('close', () => {
       pendingDialogIndex = null;
-      const visual = dialog.querySelector('.dialog-visual');
       if (!visual) return;
       visual.classList.remove('has-real-image');
+      visual.style.removeProperty('background');
       visual.style.removeProperty('background-image');
       visual.style.removeProperty('background-size');
       visual.style.removeProperty('background-position');
       visual.style.removeProperty('background-repeat');
+      visual.style.removeProperty('background-color');
       delete visual.dataset.visualImage;
     });
   }
