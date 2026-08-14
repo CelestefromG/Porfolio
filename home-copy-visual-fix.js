@@ -1,11 +1,6 @@
 (() => {
   const imageCache = new Map();
-  const imageCandidates = index => [
-    `./assets/visual${index + 1}.png`,
-    `./visual${index + 1}.png`,
-    `./assets/visual${index + 1}`,
-    `./visual${index + 1}`
-  ];
+  const imageCandidates = index => [`./assets/poster${index + 1}.png?v=20260814-1`];
 
   const isEnglish = () => document.querySelector('.lang-en')?.classList.contains('is-active');
 
@@ -26,26 +21,9 @@
 
   const resolveVisualImage = index => {
     if (imageCache.has(index)) return imageCache.get(index);
-
-    const promise = new Promise(resolve => {
-      const candidates = imageCandidates(index);
-      let cursor = 0;
-      const tryNext = () => {
-        if (cursor >= candidates.length) {
-          resolve(candidates[0]);
-          return;
-        }
-        const src = candidates[cursor++];
-        const image = new Image();
-        image.onload = () => resolve(src);
-        image.onerror = tryNext;
-        image.src = src;
-      };
-      tryNext();
-    });
-
-    imageCache.set(index, promise);
-    return promise;
+    const src = imageCandidates(index)[0];
+    imageCache.set(index, Promise.resolve(src));
+    return imageCache.get(index);
   };
 
   const applyPosterImages = () => {
@@ -61,9 +39,7 @@
   };
 
   const posterTrack = document.querySelector('.poster-scene .gallery-track');
-  if (posterTrack) {
-    new MutationObserver(applyPosterImages).observe(posterTrack, { childList: true });
-  }
+  if (posterTrack) new MutationObserver(applyPosterImages).observe(posterTrack, { childList: true });
 
   document.addEventListener('click', event => {
     const card = event.target.closest('.poster-scene .gallery-card');
@@ -71,15 +47,12 @@
     const cards = [...document.querySelectorAll('.poster-scene .gallery-card')];
     const index = cards.indexOf(card);
     if (index < 0 || index > 5) return;
-
-    resolveVisualImage(index).then(src => {
-      requestAnimationFrame(() => {
-        const visual = document.querySelector('.project-dialog .dialog-visual');
-        if (!visual) return;
-        visual.classList.add('has-real-image');
-        visual.style.backgroundImage = `url("${src}")`;
-      });
-    });
+    resolveVisualImage(index).then(src => requestAnimationFrame(() => {
+      const visual = document.querySelector('.project-dialog .dialog-visual');
+      if (!visual) return;
+      visual.classList.add('has-real-image');
+      visual.style.backgroundImage = `url("${src}")`;
+    }));
   }, true);
 
   document.querySelector('.project-dialog')?.addEventListener('close', () => {
@@ -89,13 +62,11 @@
     visual.style.backgroundImage = '';
   });
 
-  document.querySelector('.lang-toggle')?.addEventListener('click', () => {
-    setTimeout(() => {
-      applyHeroCopy();
-      applyContactPhoto();
-      applyPosterImages();
-    }, 20);
-  });
+  document.querySelector('.lang-toggle')?.addEventListener('click', () => setTimeout(() => {
+    applyHeroCopy();
+    applyContactPhoto();
+    applyPosterImages();
+  }, 20));
 
   applyHeroCopy();
   applyContactPhoto();
