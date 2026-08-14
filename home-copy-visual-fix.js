@@ -1,5 +1,5 @@
 (() => {
-  const imageSrc = index => `./assets/poster${index + 1}.png?v=20260814-4`;
+  const imageSrc = index => `./assets/poster${index + 1}.png?v=20260814-5`;
 
   const isEnglish = () => document.querySelector('.lang-en')?.classList.contains('is-active');
 
@@ -32,27 +32,6 @@
     });
   };
 
-  const showPosterDetail = index => {
-    if (index < 0 || index > 5) return;
-    const visual = document.querySelector('.project-dialog .dialog-visual');
-    if (!visual) return;
-
-    visual.classList.add('has-real-image');
-    visual.style.setProperty('background', '#f5f3ef', 'important');
-    visual.style.setProperty('background-image', 'none', 'important');
-    visual.replaceChildren();
-
-    const img = document.createElement('img');
-    img.src = imageSrc(index);
-    img.alt = `Poster ${index + 1}`;
-    img.style.width = '100%';
-    img.style.height = '100%';
-    img.style.display = 'block';
-    img.style.objectFit = 'contain';
-    img.style.objectPosition = 'center';
-    visual.appendChild(img);
-  };
-
   const posterTrack = document.querySelector('.poster-scene .gallery-track');
   if (posterTrack) {
     new MutationObserver(() => requestAnimationFrame(applyPosterImages)).observe(posterTrack, {
@@ -60,25 +39,6 @@
       subtree: true
     });
   }
-
-  document.addEventListener('click', event => {
-    const card = event.target.closest('.poster-scene .gallery-card');
-    if (!card) return;
-    const cards = [...document.querySelectorAll('.poster-scene .gallery-card')];
-    const index = cards.indexOf(card);
-    if (index < 0 || index > 5) return;
-
-    requestAnimationFrame(() => showPosterDetail(index));
-  });
-
-  document.querySelector('.project-dialog')?.addEventListener('close', () => {
-    const visual = document.querySelector('.project-dialog .dialog-visual');
-    if (!visual) return;
-    visual.replaceChildren();
-    visual.classList.remove('has-real-image');
-    visual.style.removeProperty('background');
-    visual.style.removeProperty('background-image');
-  });
 
   document.querySelector('.lang-toggle')?.addEventListener('click', () => setTimeout(() => {
     applyHeroCopy();
