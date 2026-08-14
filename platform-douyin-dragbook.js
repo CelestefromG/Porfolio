@@ -27,8 +27,7 @@
         <img src="${small}" alt="${alt} detail image">
       </figure>
       <div class="douyin-page-index"><span>SHORT VIDEO / WECHAT EDITORIAL</span><b>${page}</b></div>
-    </div>
-  `;
+    </div>`;
 
   const section = document.createElement('section');
   section.className = 'douyin-dragbook-section';
@@ -38,168 +37,65 @@
       <header class="douyin-dragbook-heading">
         <p class="eyebrow">03D / NEWS & NEW MEDIA</p>
         <h2 data-douyin-title>新闻与新媒体内容</h2>
-        <p data-douyin-intro>短视频与公众号内容编辑。长按右页并向左拖动，翻阅一次案例页。</p>
+        <p data-douyin-intro>短视频与公众号内容编辑。点击右页翻阅案例页。</p>
       </header>
-
-      <div class="douyin-role-note">
-        <b>SHORT VIDEO / WECHAT EDITORIAL</b>
-        <span data-douyin-role>职责：选题 · 剪辑 · 图文排版</span>
-      </div>
-
+      <div class="douyin-role-note"><b>SHORT VIDEO / WECHAT EDITORIAL</b><span data-douyin-role>职责：选题 · 剪辑 · 图文排版</span></div>
       <div class="douyin-book-wrap">
         <div class="douyin-book-shell"></div>
         <div class="douyin-book-pages">
-          <div class="douyin-page douyin-page-left">
-            ${framedPage({
-              main: assets.leftMain,
-              small: assets.leftSmall,
-              mainName: 'sanqin-left-main.png',
-              smallName: 'sanqin-left-small.png',
-              page: '01',
-              alt: 'News and new media left page'
-            })}
-          </div>
-
-          <div class="douyin-page douyin-page-right">
-            ${framedPage({
-              main: assets.rightMain,
-              small: assets.rightSmall,
-              mainName: 'sanqin-right-main.png',
-              smallName: 'sanqin-right-small.png',
-              page: '04',
-              alt: 'News and new media next right page'
-            })}
-          </div>
-
-          <div class="douyin-flip-sheet" role="button" tabindex="0" aria-label="Drag to turn the page">
-            <div class="douyin-flip-face douyin-flip-front">
-              ${framedPage({
-                main: assets.frontMain,
-                small: assets.frontSmall,
-                mainName: 'sanqin-front-main.png',
-                smallName: 'sanqin-front-small.png',
-                page: '02',
-                alt: 'News and new media page front'
-              })}
-            </div>
-            <div class="douyin-flip-face douyin-flip-back">
-              ${framedPage({
-                main: assets.backMain,
-                small: assets.backSmall,
-                mainName: 'sanqin-back-main.png',
-                smallName: 'sanqin-back-small.png',
-                page: '03',
-                alt: 'News and new media page back'
-              })}
-            </div>
+          <div class="douyin-page douyin-page-left">${framedPage({main:assets.leftMain,small:assets.leftSmall,mainName:'sanqin-left-main.png',smallName:'sanqin-left-small.png',page:'01',alt:'News and new media left page'})}</div>
+          <div class="douyin-page douyin-page-right">${framedPage({main:assets.rightMain,small:assets.rightSmall,mainName:'sanqin-right-main.png',smallName:'sanqin-right-small.png',page:'04',alt:'News and new media next right page'})}</div>
+          <div class="douyin-flip-sheet" role="button" tabindex="0" aria-label="Click to turn the page">
+            <div class="douyin-flip-face douyin-flip-front">${framedPage({main:assets.frontMain,small:assets.frontSmall,mainName:'sanqin-front-main.png',smallName:'sanqin-front-small.png',page:'02',alt:'News and new media page front'})}</div>
+            <div class="douyin-flip-face douyin-flip-back">${framedPage({main:assets.backMain,small:assets.backSmall,mainName:'sanqin-back-main.png',smallName:'sanqin-back-small.png',page:'03',alt:'News and new media page back'})}</div>
           </div>
         </div>
-
         <div class="douyin-book-spine" aria-hidden="true"></div>
-        <div class="douyin-rings" aria-hidden="true">
-          <i class="douyin-ring"></i><i class="douyin-ring"></i><i class="douyin-ring"></i>
-          <i class="douyin-ring"></i><i class="douyin-ring"></i><i class="douyin-ring"></i>
-        </div>
+        <div class="douyin-rings" aria-hidden="true"><i class="douyin-ring"></i><i class="douyin-ring"></i><i class="douyin-ring"></i><i class="douyin-ring"></i><i class="douyin-ring"></i><i class="douyin-ring"></i></div>
       </div>
-
       <div class="douyin-drag-hint"><span></span><b></b></div>
-    </div>
-  `;
+    </div>`;
   dongyangSection.insertAdjacentElement('afterend', section);
 
   const sheet = section.querySelector('.douyin-flip-sheet');
   const images = [...section.querySelectorAll('.douyin-photo-frame img')];
   let progress = 0;
   let target = 0;
-  let dragging = false;
-  let pointerId = null;
-  let startX = 0;
-  let startProgress = 0;
   let raf = 0;
 
   images.forEach(image => {
     const frame = image.closest('.douyin-photo-frame');
     const placeholder = frame?.querySelector('.douyin-photo-placeholder');
     image.addEventListener('load', () => placeholder?.setAttribute('hidden', ''));
-    image.addEventListener('error', () => {
-      image.hidden = true;
-      placeholder?.removeAttribute('hidden');
-    });
+    image.addEventListener('error', () => { image.hidden = true; placeholder?.removeAttribute('hidden'); });
   });
-
-  const clamp = value => Math.min(1, Math.max(0, value));
 
   function render() {
     raf = 0;
-    if (!dragging) {
-      progress += (target - progress) * .16;
-      if (Math.abs(target - progress) > .001) raf = requestAnimationFrame(render);
-      else progress = target;
-    }
+    progress += (target - progress) * .16;
+    if (Math.abs(target - progress) > .001) raf = requestAnimationFrame(render);
+    else progress = target;
     sheet.style.setProperty('--turn-progress', progress.toFixed(4));
     section.dataset.turned = progress > .5 ? 'true' : 'false';
   }
 
-  function requestRender() {
-    if (!raf) raf = requestAnimationFrame(render);
-  }
-
-  function beginDrag(event) {
-    if (event.button !== undefined && event.button !== 0) return;
-    dragging = true;
-    pointerId = event.pointerId;
-    startX = event.clientX;
-    startProgress = progress;
-    target = progress;
-    sheet.classList.add('is-dragging');
-    sheet.setPointerCapture?.(pointerId);
-    event.preventDefault();
-  }
-
-  function moveDrag(event) {
-    if (!dragging || event.pointerId !== pointerId) return;
-    const width = Math.max(1, sheet.getBoundingClientRect().width);
-    const delta = (startX - event.clientX) / width;
-    progress = clamp(startProgress + delta);
-    target = progress;
-    sheet.style.setProperty('--turn-progress', progress.toFixed(4));
-    section.dataset.turned = progress > .5 ? 'true' : 'false';
-    event.preventDefault();
-  }
-
-  function endDrag(event) {
-    if (!dragging || (event.pointerId !== undefined && event.pointerId !== pointerId)) return;
-    dragging = false;
-    sheet.classList.remove('is-dragging');
-    sheet.releasePointerCapture?.(pointerId);
-    pointerId = null;
-    target = progress >= .5 ? 1 : 0;
+  function requestRender() { if (!raf) raf = requestAnimationFrame(render); }
+  function togglePage() {
+    target = target > .5 ? 0 : 1;
+    section.dataset.turned = target > .5 ? 'true' : 'false';
     requestRender();
   }
 
-  sheet.addEventListener('pointerdown', beginDrag);
-  sheet.addEventListener('pointermove', moveDrag);
-  sheet.addEventListener('pointerup', endDrag);
-  sheet.addEventListener('pointercancel', endDrag);
-  sheet.addEventListener('lostpointercapture', endDrag);
+  sheet.addEventListener('click', event => { event.preventDefault(); togglePage(); });
   sheet.addEventListener('keydown', event => {
     if (event.key !== 'Enter' && event.key !== ' ') return;
     event.preventDefault();
-    target = target > .5 ? 0 : 1;
-    requestRender();
+    togglePage();
   });
 
   const copy = {
-    zh: {
-      title: '新闻与新媒体内容',
-      intro: '短视频与公众号内容编辑。长按右页并向左拖动，翻阅一次案例页。',
-      role: '职责：选题 · 剪辑 · 图文排版'
-    },
-    en: {
-      title: 'NEWS & NEW MEDIA CONTENT',
-      intro: 'Short-video and WeChat editorial work. Press and drag the right page left to turn it once.',
-      role: 'ROLE: TOPIC SELECTION · EDITING · EDITORIAL LAYOUT'
-    }
+    zh: { title:'新闻与新媒体内容', intro:'短视频与公众号内容编辑。点击右页翻阅案例页。', role:'职责：选题 · 剪辑 · 图文排版' },
+    en: { title:'NEWS & NEW MEDIA CONTENT', intro:'Short-video and WeChat editorial work. Click the right page to turn it.', role:'ROLE: TOPIC SELECTION · EDITING · EDITORIAL LAYOUT' }
   };
 
   function renderLanguage() {
