@@ -1,1 +1,13 @@
 @import url('https://cdn.jsdelivr.net/gh/CelestefromG/Porfolio@ab93338251dd08aa83e03338b3e7aa3423a16fdd/longform-tape.css');
+
+/* Keep the poster gallery and longform tape on one continuous paper background. */
+.poster-scene,
+.poster-showcase-panel,
+.longform-tape-panel,
+.longform-tape-panel .longform-stage,
+.longform-tape-panel .longform-canvas-host {
+  background-color: #f5f3ef !important;
+}
+.longform-tape-panel {
+  background-image: none !important;
+}
