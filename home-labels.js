@@ -36,6 +36,12 @@
     }
   ];
 
+  /* Detail view uses the current poster1.png–poster6.png assets.
+     Keep `src` above untouched so thumbnail behaviour remains exactly as before. */
+  visualWorks.forEach((work, index) => {
+    work.detailSrc = `./assets/poster${index + 1}.png?v=${CACHE_BUST}`;
+  });
+
   let activeVisualIndex = null;
 
   const isEnglish = () => document.querySelector('.lang-en')?.classList.contains('is-active');
@@ -270,7 +276,7 @@
     };
 
     if (image) {
-      image.src = work.src;
+      image.src = work.detailSrc;
       image.alt = copy.title;
     }
     if (title) title.textContent = copy.title;
