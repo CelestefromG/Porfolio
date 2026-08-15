@@ -7,32 +7,56 @@
     {
       src: `./assets/poster1?v=${CACHE_BUST}`,
       zh: { title: '古风海报', date: '2024.12', project: '校公众号制作', style: '古风' },
-      en: { title: 'Chinese-style Poster', date: '2024.12', project: 'University WeChat Account', style: 'Chinese Style' }
+      en: { title: 'Chinese-style Poster', date: '2024.12', project: 'University WeChat Account', style: 'Chinese Style' },
+      detail: {
+        zh: { date: '2026', tools: 'AI · PS', project: '个人学习' },
+        en: { date: '2026', tools: 'AI · PS', project: 'Personal Study' }
+      }
     },
     {
       src: `./assets/poster2?v=${CACHE_BUST}`,
       zh: { title: '视觉作品 02', date: '待补充', project: '待补充', style: '视觉设计' },
-      en: { title: 'Visual Work 02', date: 'To be added', project: 'To be added', style: 'Visual Design' }
+      en: { title: 'Visual Work 02', date: 'To be added', project: 'To be added', style: 'Visual Design' },
+      detail: {
+        zh: { date: '2026', tools: 'AI · PS', project: '个人学习' },
+        en: { date: '2026', tools: 'AI · PS', project: 'Personal Study' }
+      }
     },
     {
       src: `./assets/poster3?v=${CACHE_BUST}`,
       zh: { title: '视觉作品 03', date: '待补充', project: '待补充', style: '视觉设计' },
-      en: { title: 'Visual Work 03', date: 'To be added', project: 'To be added', style: 'Visual Design' }
+      en: { title: 'Visual Work 03', date: 'To be added', project: 'To be added', style: 'Visual Design' },
+      detail: {
+        zh: { date: '2022', tools: 'PS', project: '学校公众号' },
+        en: { date: '2022', tools: 'PS', project: 'University WeChat Account' }
+      }
     },
     {
       src: `./assets/visual4?v=${CACHE_BUST}`,
       zh: { title: '视觉作品 04', date: '待补充', project: '待补充', style: '视觉设计' },
-      en: { title: 'Visual Work 04', date: 'To be added', project: 'To be added', style: 'Visual Design' }
+      en: { title: 'Visual Work 04', date: 'To be added', project: 'To be added', style: 'Visual Design' },
+      detail: {
+        zh: { date: '2024', tools: 'PS', project: '学校公众号' },
+        en: { date: '2024', tools: 'PS', project: 'University WeChat Account' }
+      }
     },
     {
       src: `./assets/visual5?v=${CACHE_BUST}`,
       zh: { title: '视觉作品 05', date: '待补充', project: '待补充', style: '视觉设计' },
-      en: { title: 'Visual Work 05', date: 'To be added', project: 'To be added', style: 'Visual Design' }
+      en: { title: 'Visual Work 05', date: 'To be added', project: 'To be added', style: 'Visual Design' },
+      detail: {
+        zh: { date: '2024', tools: 'PS', project: '校友会日历' },
+        en: { date: '2024', tools: 'PS', project: 'Alumni Association Calendar' }
+      }
     },
     {
       src: `./assets/visual6?v=${CACHE_BUST}`,
       zh: { title: '视觉作品 06', date: '待补充', project: '待补充', style: '视觉设计' },
-      en: { title: 'Visual Work 06', date: 'To be added', project: 'To be added', style: 'Visual Design' }
+      en: { title: 'Visual Work 06', date: 'To be added', project: 'To be added', style: 'Visual Design' },
+      detail: {
+        zh: { date: '2024', tools: 'PS', project: '学校公众号' },
+        en: { date: '2024', tools: 'PS', project: 'University WeChat Account' }
+      }
     }
   ];
 
@@ -46,6 +70,7 @@
 
   const isEnglish = () => document.querySelector('.lang-en')?.classList.contains('is-active');
   const workCopy = index => visualWorks[index]?.[isEnglish() ? 'en' : 'zh'];
+  const detailCopy = index => visualWorks[index]?.detail?.[isEnglish() ? 'en' : 'zh'];
 
   const injectStyles = () => {
     if (document.querySelector('#poster-expand-styles')) return;
@@ -207,8 +232,8 @@
           <h3 class="poster-expanded-title"></h3>
           <div class="poster-expanded-meta">
             <div><small data-meta-label="date"></small><strong data-meta-value="date"></strong></div>
+            <div><small data-meta-label="tools"></small><strong data-meta-value="tools"></strong></div>
             <div><small data-meta-label="project"></small><strong data-meta-value="project"></strong></div>
-            <div><small data-meta-label="style"></small><strong data-meta-value="style"></strong></div>
           </div>
         </div>
       </div>
@@ -264,15 +289,16 @@
     const view = document.querySelector('.poster-expanded-view');
     const work = visualWorks[index];
     const copy = workCopy(index);
-    if (!view || !work || !copy) return;
+    const detail = detailCopy(index);
+    if (!view || !work || !copy || !detail) return;
 
     const english = isEnglish();
     const image = view.querySelector('.poster-expanded-image');
     const title = view.querySelector('.poster-expanded-title');
     const labels = {
       date: english ? 'DATE' : '制作日期',
-      project: english ? 'PROJECT' : '项目',
-      style: english ? 'STYLE' : '风格'
+      tools: english ? 'TOOLS' : '使用工具',
+      project: english ? 'PROJECT' : '项目'
     };
 
     if (image) {
@@ -285,7 +311,7 @@
       const labelNode = view.querySelector(`[data-meta-label="${key}"]`);
       const valueNode = view.querySelector(`[data-meta-value="${key}"]`);
       if (labelNode) labelNode.textContent = label;
-      if (valueNode) valueNode.textContent = copy[key];
+      if (valueNode) valueNode.textContent = detail[key];
     });
   };
 
