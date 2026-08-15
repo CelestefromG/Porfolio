@@ -305,7 +305,7 @@
       image.src = work.detailSrc;
       image.alt = copy.title;
     }
-    if (title) title.textContent = copy.title;
+    if (title) title.textContent = index === 0 ? (english ? 'Visual Work 01' : '视觉作品 01') : copy.title;
 
     Object.entries(labels).forEach(([key, label]) => {
       const labelNode = view.querySelector(`[data-meta-label="${key}"]`);
