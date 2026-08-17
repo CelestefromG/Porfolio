@@ -11,3 +11,43 @@
 .longform-tape-panel {
   background-image: none !important;
 }
+
+/* Clean footer: no black sample bar; keep only progress, credit and actions. */
+.longform-tape-menu {
+  display: none !important;
+}
+.longform-credit {
+  position: absolute;
+  left: 50%;
+  bottom: 38px;
+  z-index: 28;
+  margin: 0;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  pointer-events: none;
+  font: 500 8px/1.2 "IBM Plex Mono", monospace;
+  letter-spacing: .08em;
+  color: #111318;
+  opacity: .42;
+}
+.longform-progress {
+  bottom: 36px !important;
+}
+.longform-rewind,
+.longform-back-to-posters {
+  bottom: 32px !important;
+}
+
+@media (max-width: 620px) {
+  .longform-credit {
+    bottom: 24px;
+    font-size: 7px;
+  }
+  .longform-progress {
+    bottom: 72px !important;
+  }
+  .longform-rewind,
+  .longform-back-to-posters {
+    bottom: 24px !important;
+  }
+}
