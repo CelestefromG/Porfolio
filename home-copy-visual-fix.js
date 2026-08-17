@@ -5,8 +5,8 @@
 
   const applyHeroCopy = () => {
     const title = document.querySelector('.hero-copy [data-i18n="heroTitle"]');
-    if (!title || isEnglish()) return;
-    title.textContent = '陈思睿的作品集';
+    if (!title) return;
+    title.textContent = isEnglish() ? 'Celeste’s Portfolio' : '陈思睿的作品集';
   };
 
   const applyContactPhoto = () => {
