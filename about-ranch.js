@@ -69,9 +69,9 @@
         <p class="about-section-kicker">01 / PROFILE</p>
         <div class="about-profile-grid">
           <div><span>姓名</span><strong>陈思睿 / Celeste Chen</strong></div>
-          <div><span>电话</span><strong>+44 7344 361482</strong></div>
+          <div><span>电话</span><strong>+44 7344 361482<br>+86 17307690635</strong></div>
           <div><span>邮箱</span><strong>CelesteC2003@outlook.com</strong></div>
-          <div><span>理想城市</span><strong>上海 · 杭州 · 厦门</strong></div>
+          <div><span>理想城市</span><strong>上海 · 杭州 · 厦门 · 伦敦</strong></div>
           <div><span>理想岗位</span><strong>数据运营 · 数据分析 · 用户研究</strong></div>
         </div>
       </section>
