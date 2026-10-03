@@ -6,7 +6,7 @@
   const applyHeroCopy = () => {
     const title = document.querySelector('.hero-copy [data-i18n="heroTitle"]');
     if (!title) return;
-    title.textContent = isEnglish() ? 'Celeste’s Portfolio' : '陈思睿的作品集';
+    title.innerHTML = isEnglish() ? 'Data Analysis · UX Research<br>Content Operations' : '数据分析 · 用户研究<br>内容运营';
   };
 
   const applyContactPhoto = () => {
