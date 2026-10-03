@@ -7,6 +7,8 @@
     const title = document.querySelector('.hero-copy [data-i18n="heroTitle"]');
     if (!title) return;
     title.textContent = isEnglish() ? 'Celeste’s Portfolio' : '陈思睿的作品集';
+    const sub = document.querySelector('.hero-copy [data-i18n="heroSub"]');
+    if (sub) sub.textContent = isEnglish() ? 'Data Analysis · UX Research · Content Operations' : '数据分析 · 用户研究 · 内容运营';
   };
 
   const applyContactPhoto = () => {
