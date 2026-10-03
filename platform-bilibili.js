@@ -8,19 +8,16 @@
   const channels = [
     {
       video: `./assets/Bilibili_Video1.mp4?v=${cacheVersion}`,
-      poster: `./assets/poster1.png?v=${cacheVersion}`,
       zh: 'MMD 渲染记录 01',
       en: 'MMD Rendering Study 01'
     },
     {
       video: `./assets/Bilibili_Video2.mp4?v=${cacheVersion}`,
-      poster: `./assets/visual5?v=${cacheVersion}`,
       zh: 'MMD 镜头实验 02',
       en: 'MMD Camera Experiment 02'
     },
     {
       video: `./assets/Bilibili_Video3.mp4?v=${cacheVersion}`,
-      poster: `./assets/visual6?v=${cacheVersion}`,
       zh: 'MMD 氛围渲染 03',
       en: 'MMD Atmosphere Render 03'
     }
@@ -83,7 +80,7 @@
     signal.className = 'bili-signal';
     signal.dataset.signalIndex = String(index);
     signal.innerHTML = `
-      <img src="${channel.poster}" loading="lazy" decoding="async" alt="Bilibili MMD preview ${index + 1}">
+      <div class="bili-signal-placeholder" aria-hidden="true">BILIBILI / VIDEO</div>
       <video muted loop playsinline preload="none" data-src="${channel.video}" aria-label="Bilibili MMD video ${index + 1}"></video>
     `;
     screen.appendChild(signal);
