@@ -93,3 +93,5 @@
   .about-reveal{transform:none!important;opacity:1!important}
   .about-photo-stack.is-switching .about-photo-frame-front{animation:none}
 }
+
+.about-profile-grid .about-resume-row{grid-column:1/-1;max-width:70%}.about-resume-link{display:inline-flex;align-items:center;color:inherit;text-decoration:none;border-bottom:1px solid rgba(24,23,19,.35);padding-bottom:2px;transition:opacity .2s ease}.about-resume-link:hover{opacity:.55}
