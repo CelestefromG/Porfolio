@@ -73,6 +73,7 @@
           <div><span>邮箱</span><strong>CelesteC2003@outlook.com</strong></div>
           <div><span>理想城市</span><strong>上海 · 杭州 · 厦门 · 伦敦</strong></div>
           <div><span>理想岗位</span><strong>数据运营 · 数据分析 · 用户研究</strong></div>
+          <div class="about-resume-row"><span>简历</span><strong><a class="about-resume-link" href="./resume.html" target="_blank" rel="noopener">查看简历 ↗</a></strong></div>
         </div>
       </section>
 
